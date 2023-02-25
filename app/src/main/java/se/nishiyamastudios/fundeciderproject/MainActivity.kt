@@ -14,6 +14,10 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        //TODO: Koppla till Firebase
+        //TODO: Skapa login fragment (navigation?)
+        //TODO: Koppla till google places api
+
         bottomNavigationView = findViewById(R.id.bottom_navigation_view)
 
         val badge = bottomNavigationView.getOrCreateBadge(R.id.page1)
