@@ -5,21 +5,21 @@
     <item android:id="@+id/page1"
         android:enabled="true"
         android:icon="@drawable/icon_selection"
-        android:title="Page 1">
+        android:title="Favorites">
 
     </item>
 
     <item android:id="@+id/page2"
         android:enabled="true"
         android:icon="@drawable/icon_selection"
-        android:title="Page 2">
+        android:title="Blacklist">
 
     </item>
 
     <item android:id="@+id/page3"
         android:enabled="true"
-        android:icon="@drawable/icon_selection"
-        android:title="Page 3">
+        android:icon="@drawable/round_stop_24"
+        android:title="Logout">
 
     </item>
 
