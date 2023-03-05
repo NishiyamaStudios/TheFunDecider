@@ -8,7 +8,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var bottomNavigationView: BottomNavigationView
+    //private lateinit var bottomNavigationView: BottomNavigationView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -18,10 +18,11 @@ class MainActivity : AppCompatActivity() {
         //TODO: Skapa login fragment (navigation?)
         //TODO: Koppla till google places api
 
+        /*
         bottomNavigationView = findViewById(R.id.bottom_navigation_view)
 
         val badge = bottomNavigationView.getOrCreateBadge(R.id.page1)
-        badge.isVisible = true
+        badge.isVisible = false
         badge.number = 90
 
         val textview = findViewById<TextView>(R.id.myTextTV)
@@ -45,6 +46,7 @@ class MainActivity : AppCompatActivity() {
             }
 
         }
-
+*/
     }
+
 }
