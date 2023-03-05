@@ -51,6 +51,7 @@ class StartFragment : Fragment() {
                     true
                 }
                 R.id.page3 -> {
+                    findNavController().navigate(R.id.action_startFragment_to_loginFragment)
                     true
                 }
                 else -> {

@@ -4,7 +4,7 @@
 
     <item android:id="@+id/page1"
         android:enabled="true"
-        android:icon="@drawable/icon_selection"
+        android:icon="@drawable/baseline_star_24"
         android:title="Favorites">
 
     </item>
