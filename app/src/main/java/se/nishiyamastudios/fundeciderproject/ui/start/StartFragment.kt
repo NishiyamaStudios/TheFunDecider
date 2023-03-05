@@ -36,6 +36,7 @@ class StartFragment : Fragment() {
 
         //private lateinit var bottomNavigationView: BottomNavigationView
 
+        /*
 
         val bottomNavigationView = requireView().findViewById<BottomNavigationView>(R.id.bottom_navigation_view)
 
@@ -59,6 +60,8 @@ class StartFragment : Fragment() {
                 }
             }
         }
+
+         */
 
         /*
        bottomNavigationView = findViewById(R.id.bottom_navigation_view)

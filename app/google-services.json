@@ -1,0 +1,127 @@
+{
+  "project_info": {
+    "project_number": "860312548596",
+    "firebase_url": "https://pia11firebase-62c09-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "pia11firebase-62c09",
+    "storage_bucket": "pia11firebase-62c09.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:860312548596:android:c9ead9fe3123678bb69aa1",
+        "android_client_info": {
+          "package_name": "se.nishiyamastudios.fundeciderproject"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "860312548596-5n7nlpnrljdp96ualb5n7m8c0f3rqg59.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCoZKGlfn8RhPIxeCqAPum7tLV3YweJDQA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "860312548596-5n7nlpnrljdp96ualb5n7m8c0f3rqg59.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:860312548596:android:a28424dda11a9a7cb69aa1",
+        "android_client_info": {
+          "package_name": "se.nishiyamastudios.pia11feb02shopping"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "860312548596-5n7nlpnrljdp96ualb5n7m8c0f3rqg59.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCoZKGlfn8RhPIxeCqAPum7tLV3YweJDQA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "860312548596-5n7nlpnrljdp96ualb5n7m8c0f3rqg59.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:860312548596:android:23c55c6f6485abb1b69aa1",
+        "android_client_info": {
+          "package_name": "se.nishiyamastudios.pia11jan30firebase"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "860312548596-5n7nlpnrljdp96ualb5n7m8c0f3rqg59.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCoZKGlfn8RhPIxeCqAPum7tLV3YweJDQA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "860312548596-5n7nlpnrljdp96ualb5n7m8c0f3rqg59.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:860312548596:android:a947a1db0a678a18b69aa1",
+        "android_client_info": {
+          "package_name": "se.nishiyamastudios.pia11man20feb_kamera_firebasestorage"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "860312548596-5n7nlpnrljdp96ualb5n7m8c0f3rqg59.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCoZKGlfn8RhPIxeCqAPum7tLV3YweJDQA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "860312548596-5n7nlpnrljdp96ualb5n7m8c0f3rqg59.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

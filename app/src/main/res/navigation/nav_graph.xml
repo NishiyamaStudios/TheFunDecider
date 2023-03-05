@@ -9,12 +9,16 @@
         android:id="@+id/loginFragment"
         android:name="se.nishiyamastudios.fundeciderproject.ui.login.LoginFragment"
         android:label="fragment_login"
-        tools:layout="@layout/fragment_login" />
+        tools:layout="@layout/fragment_login">
+        <action
+            android:id="@+id/action_loginFragment_to_startFragment"
+            app:destination="@id/startFragment" />
+    </fragment>
     <fragment
         android:id="@+id/startFragment"
         android:name="se.nishiyamastudios.fundeciderproject.ui.start.StartFragment"
         android:label="StartFragment"
-        tools:layout="@layout/fragment_start" >
+        tools:layout="@layout/fragment_start">
         <action
             android:id="@+id/action_startFragment_to_detailsFragment"
             app:destination="@id/detailsFragment" />
@@ -26,18 +30,35 @@
             app:destination="@id/favoritesFragment" />
         <action
             android:id="@+id/action_startFragment_to_loginFragment"
-            app:destination="@id/loginFragment" />
+            app:destination="@id/loginFragment"
+            app:popUpToInclusive="false" />
     </fragment>
     <fragment
         android:id="@+id/blacklistFragment"
         android:name="se.nishiyamastudios.fundeciderproject.ui.blacklist.BlacklistFragment"
         android:label="fragment_blacklist"
-        tools:layout="@layout/fragment_blacklist" />
+        tools:layout="@layout/fragment_blacklist">
+        <action
+            android:id="@+id/action_blacklistFragment_to_favoritesFragment"
+            app:destination="@id/favoritesFragment" />
+        <action
+            android:id="@+id/action_blacklistFragment_to_loginFragment"
+            app:destination="@id/loginFragment"
+            app:popUpToInclusive="false" />
+    </fragment>
     <fragment
         android:id="@+id/favoritesFragment"
         android:name="se.nishiyamastudios.fundeciderproject.ui.favorites.FavoritesFragment"
         android:label="fragment_favorites"
-        tools:layout="@layout/fragment_favorites" />
+        tools:layout="@layout/fragment_favorites">
+        <action
+            android:id="@+id/action_favoritesFragment_to_blacklistFragment"
+            app:destination="@id/blacklistFragment" />
+        <action
+            android:id="@+id/action_favoritesFragment_to_loginFragment"
+            app:destination="@id/loginFragment"
+            app:popUpToInclusive="false" />
+    </fragment>
     <fragment
         android:id="@+id/detailsFragment"
         android:name="se.nishiyamastudios.fundeciderproject.ui.details.DetailsFragment"
