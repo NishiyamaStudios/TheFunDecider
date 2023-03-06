@@ -6,27 +6,39 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
 import se.nishiyamastudios.fundeciderproject.R
+import se.nishiyamastudios.fundeciderproject.databinding.FragmentDetailsBinding
+import se.nishiyamastudios.fundeciderproject.databinding.FragmentFavoritesBinding
+import se.nishiyamastudios.fundeciderproject.ui.login.LoginViewModel
 
 class FavoritesFragment : Fragment() {
+
+    var _binding : FragmentFavoritesBinding? = null
+    val binding get() = _binding!!
+
+    val viewModel by viewModels<LoginViewModel>()
 
     companion object {
         fun newInstance() = FavoritesFragment()
     }
 
-    private lateinit var viewModel: FavoritesViewModel
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_favorites, container, false)
+
+        _binding = FragmentFavoritesBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(FavoritesViewModel::class.java)
-        // TODO: Use the ViewModel
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
     }
 
 }

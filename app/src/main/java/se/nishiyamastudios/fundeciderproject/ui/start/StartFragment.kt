@@ -7,91 +7,51 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import se.nishiyamastudios.fundeciderproject.R
+import se.nishiyamastudios.fundeciderproject.databinding.FragmentDetailsBinding
+import se.nishiyamastudios.fundeciderproject.databinding.FragmentStartBinding
+import se.nishiyamastudios.fundeciderproject.ui.login.LoginViewModel
 
 class StartFragment : Fragment() {
 
-    //private lateinit var bottomNavigationView: BottomNavigationView
+    var _binding : FragmentStartBinding? = null
+    val binding get() = _binding!!
+
+    val viewModel by viewModels<LoginViewModel>()
 
     companion object {
         fun newInstance() = StartFragment()
     }
-
-    private lateinit var viewModel: StartViewModel
 
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_start, container, false)
+
+        _binding = FragmentStartBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(StartViewModel::class.java)
-        // TODO: Use the ViewModel
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 
-        //private lateinit var bottomNavigationView: BottomNavigationView
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-        /*
+        val activity  = view.context as? AppCompatActivity
 
-        val bottomNavigationView = requireView().findViewById<BottomNavigationView>(R.id.bottom_navigation_view)
-
-        bottomNavigationView.setOnItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.page1 -> {
-                    findNavController().navigate(R.id.action_startFragment_to_favoritesFragment)
-                    Log.i("PIA11DEBUG", "page1 blev tryckt på!")
-                    true
-                }
-                R.id.page2 -> {
-                    findNavController().navigate(R.id.action_startFragment_to_blacklistFragment)
-                    true
-                }
-                R.id.page3 -> {
-                    findNavController().navigate(R.id.action_startFragment_to_loginFragment)
-                    true
-                }
-                else -> {
-                    false
-                }
-            }
+        if (activity != null) {
+            val navView = activity.findViewById<BottomNavigationView>(R.id.bottom_navigation_view)
+            navView.visibility = View.VISIBLE
         }
 
-         */
-
-        /*
-       bottomNavigationView = findViewById(R.id.bottom_navigation_view)
-
-       val badge = bottomNavigationView.getOrCreateBadge(R.id.page1)
-       badge.isVisible = true
-       badge.number = 90
-
-       val textview = findViewById<TextView>(R.id.myTextTV)
-
-       bottomNavigationView.setOnItemSelectedListener { item ->
-           when(item.itemId) {
-               R.id.page1 -> {
-                   textview.setText("Pag1")
-                   Log.i("PIA11DEBUG","page1 blev tryckt på!")
-                   true
-               }
-               R.id.page2 -> {
-                   true
-               }
-               R.id.page3 -> {
-                   true
-               }
-               else -> {
-                   false
-               }
-           }
-
-       }
-*/
 
     }
 
