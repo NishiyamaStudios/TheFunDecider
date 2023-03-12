@@ -27,6 +27,7 @@ class MainActivity : AppCompatActivity() {
         //TODO: Koppla till Firebase
         //TODO: Skapa login fragment (navigation?)
         //TODO: Koppla till google places api
+        //TODO: Se över att förenkla navigation, behövs all kod? Använd nav_graph PopUp behavior..
 
         Firebase.auth.addAuthStateListener {
 
