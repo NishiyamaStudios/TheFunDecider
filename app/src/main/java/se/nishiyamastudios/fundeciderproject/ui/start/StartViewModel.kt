@@ -16,16 +16,7 @@ class StartViewModel : ViewModel() {
 
     private val client = OkHttpClient()
 
-    // Variables used in getPlacesResponse function are initialized empty to prevent crash if JSON value is not available
-    var name = ""
-    var street = ""
-    var houseNumber = ""
-    var postcode = ""
-    var phone = ""
-    var email = ""
-    var website = ""
-    var openingHours = ""
-    var placeId = ""
+
 
     /*
     fun getPlaces(url: String) {
@@ -42,7 +33,7 @@ class StartViewModel : ViewModel() {
 
      */
 
-    fun getPlacesResponse(url: String): MutableList<PlaceDetails> {
+    fun getPlaces(url: String): MutableList<PlaceDetails> {
         val request = Request.Builder()
             .url(url)
             .build()
@@ -51,69 +42,81 @@ class StartViewModel : ViewModel() {
             override fun onFailure(call: Call, e: IOException) { Log.i("FUNDEBUG",e.toString())}
             override fun onResponse(call: Call, response: Response) {
 
+                // Get API response as a JSON object.
                 val jsonObject = JSONTokener(response.body()?.string()).nextValue() as JSONObject
 
-                Log.i("FUNDEBUG","JSON-Object: " + jsonObject.toString())
+                // Get the features array from the JSON object.
                 val jsonArray = jsonObject.getJSONArray("features")
 
-                Log.i("FUNDEBUG","JSON-Array: " + jsonArray.toString())
-
-
+                // Get objects and properties from features array.
                 for (i in 0 until jsonArray.length()) {
 
+                    //
                     val properties = jsonArray.getJSONObject(i).getJSONObject("properties")
                     val dataSource = properties.getJSONObject("datasource")
                     val rawData = dataSource.getJSONObject("raw")
 
-                    // Some places might not have all the data, this prevents a crash in such instances
+                    // Variables used in getPlacesResponse function are initialized empty
+                    // to prevent crash if JSON value is not available and to not get false values
+                    var name = ""
+                    var street = ""
+                    var houseNumber = ""
+                    var postcode = ""
+                    var phone = ""
+                    var email = ""
+                    var website = ""
+                    var openingHours = ""
+                    var placeId = ""
+
+                    // Some places might not have all the data and since we are OK with this,
+                    // this ugly try-catch ladder prevents a crash in such instances.
                     try {
                         name = properties.getString("name")
                     } catch (e: Exception) {
-                        // Variable value is set to empty if JSON attribute is missing.
+                        // Variable value is already set to empty if JSON attribute is missing.
                     }
                     try {
                         street = properties.getString("street")
                     } catch (e: Exception) {
-                        // Variable value is set to empty if JSON attribute is missing.
+                        // Variable value is already set to empty if JSON attribute is missing.
                     }
                     try {
                         houseNumber = properties.getString("housenumber")
                     } catch (e: Exception) {
-                        // Variable value is set to empty if JSON attribute is missing.
+                        // Variable value is already set to empty if JSON attribute is missing.
                     }
                     try {
                         postcode = properties.getString("postcode")
                     } catch (e: Exception) {
-                        // Variable value is set to empty if JSON attribute is missing.
+                        // Variable value is already set to empty if JSON attribute is missing.
                     }
                     try {
                         phone = rawData.getString("phone")
                     } catch (e: Exception) {
-                        // Variable value is set to empty if JSON attribute is missing.
+                        // Variable value is already set to empty if JSON attribute is missing.
                     }
                     try {
                         email = rawData.getString("email")
                     } catch (e: Exception) {
-                        // Variable value is set to empty if JSON attribute is missing.
+                        // Variable value is already set to empty if JSON attribute is missing.
                     }
                     try {
                         website = rawData.getString("website")
                     } catch (e: Exception) {
-                        // Variable value is set to empty if JSON attribute is missing.
+                        // Variable value is already set to empty if JSON attribute is missing.
                     }
                     try {
                         openingHours = rawData.getString("opening_hours")
                     } catch (e: Exception) {
-                        // Variable value is set to empty if JSON attribute is missing.
+                        // Variable value is already set to empty if JSON attribute is missing.
                     }
                     try {
                         placeId = properties.getString("place_id")
                     } catch (e: Exception) {
-                        // Variable value is set to empty if JSON attribute is missing.
+                        // Variable value is already set to empty if JSON attribute is missing.
                     }
 
-                    //myMutableList.add(name3)
-
+                    // Temporary place holder before adding to our list of places.
                     val currentPlace = PlaceDetails(
                         name,
                         street,
@@ -132,6 +135,7 @@ class StartViewModel : ViewModel() {
                     Log.i("FUNDEBUG","currentPlaces street: " + currentPlace.street)
                     Log.i("FUNDEBUG","currentPlaces placeid: " + currentPlace.placeid)
 
+                    // Add the place to our mutable list of places.
                     places.add(currentPlace)
 
 
@@ -156,6 +160,11 @@ class StartViewModel : ViewModel() {
         })
 
         return places
+    }
+
+    fun getRandomPlace(places: MutableList<PlaceDetails>): PlaceDetails {
+        places.shuffle()
+        return places[0]
     }
 
 }

@@ -1,22 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <item
+        android:id="@+id/page0"
+        android:enabled="false"
+        android:icon="@drawable/baseline_star_24"
+        android:title="HighlightedButton"
+        android:visible="false">
 
-    <item android:id="@+id/page1"
+    </item>
+    <item
+        android:id="@+id/page1"
         android:enabled="true"
         android:icon="@drawable/baseline_star_24"
         android:title="Favorites">
 
     </item>
 
-    <item android:id="@+id/page2"
+    <item
+        android:id="@+id/page2"
         android:enabled="true"
         android:icon="@drawable/baseline_playlist_remove_24"
         android:title="Blacklist">
 
     </item>
 
-    <item android:id="@+id/page3"
+    <item
+        android:id="@+id/page3"
         android:enabled="true"
         android:icon="@drawable/round_stop_24"
         android:title="Logout">

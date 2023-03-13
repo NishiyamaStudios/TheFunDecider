@@ -6,6 +6,8 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.webkit.RenderProcessGoneDetail
+import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.FragmentContainerView
 import androidx.fragment.app.commit
 import androidx.navigation.NavOptions
@@ -44,6 +46,8 @@ class MainActivity : AppCompatActivity() {
                 }
             }
 
+        bottomNavigationView.isSelected = false
+
         val badge = bottomNavigationView.getOrCreateBadge(R.id.page1)
         badge.isVisible = false
         badge.number = 90
@@ -56,7 +60,7 @@ class MainActivity : AppCompatActivity() {
                     val targetFragment = "fragment_favorites"
                     navigateAndKeepStack(sourceFragment, targetFragment)
 
-                    true
+                    false
                 }
                 R.id.page2 -> {
 
@@ -64,7 +68,7 @@ class MainActivity : AppCompatActivity() {
                     val targetFragment = "fragment_blacklist"
                     navigateAndKeepStack(sourceFragment, targetFragment)
 
-                    true
+                    false
                 }
                 R.id.page3 -> {
 
@@ -73,7 +77,7 @@ class MainActivity : AppCompatActivity() {
                     bottomNavigationView.visibility = View.GONE
                     navigateAndClearStack(currentDestinationLabel)
 
-                    true
+                    false
                 }
                 else -> {
                     false

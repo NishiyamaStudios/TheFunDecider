@@ -67,10 +67,10 @@ class StartFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val myplaces = model.getPlacesResponse("https://api.geoapify.com/v2/places?categories=catering.restaurant&filter=place:51fab165f6780b2a4059a2e9e94ccbcb4b40f00101f901f3b6a20000000000c002069203064d616c6dc3b6&limit=2&apiKey=d357192221064b8da71d4143f306b152")
+        val myPlaces = model.getPlaces("https://api.geoapify.com/v2/places?categories=catering.restaurant&filter=place:51fab165f6780b2a4059a2e9e94ccbcb4b40f00101f901f3b6a20000000000c002069203064d616c6dc3b6&limit=20&apiKey=d357192221064b8da71d4143f306b152")
 
         val placesObserver = Observer<List<Places>> {
-            binding.selectedPlaceTV.text = myplaces.get(0).name
+            binding.selectedPlaceTV.text = myPlaces[0].name
         }
 
         // Set bottom navigation view to visible after logging in
@@ -80,23 +80,22 @@ class StartFragment : Fragment() {
             navView.visibility = View.VISIBLE
         }
 
-        /*
-        val client: OkHttpClient = OkHttpClient().newBuilder()
-            .build()
-        val request: Request = OkHttpClient.Builder()
-            .url("https://api.geoapify.com/v2/place-details?id=id%3D514d368a517c511e40594bfd7b574ec84740f00103f90135335d1c00000000920313416e61746f6d697363686573204d757365756d&apiKey=a672cf88394141c290c00df4ebaf739f")
-            .method("GET", null)
-            .build()
-        val response: Response = client.newCall(request).execute()
-
-         */
 
         binding.getPlacesButton.setOnClickListener {
             //model.getPlaces("https://api.geoapify.com/v2/places?categories=catering.restaurant&filter=place:51fab165f6780b2a4059a2e9e94ccbcb4b40f00101f901f3b6a20000000000c002069203064d616c6dc3b6&limit=2&apiKey=d357192221064b8da71d4143f306b152")
             Log.i("FUNDEBUG", "I Gotted IT!")
 
-            myplaces.shuffle()
-            binding.selectedPlaceTV.text = myplaces.get(0).placeid
+            val myRandomPlace = model.getRandomPlace(myPlaces)
+            binding.selectedPlaceTV.text = myRandomPlace.name
+
+            Log.i("FUNDEBUG", "Random name: " + myRandomPlace.name)
+            Log.i("FUNDEBUG", "Random street: " + myRandomPlace.street + myRandomPlace.housenumber)
+            Log.i("FUNDEBUG", "Random postcode: " + myRandomPlace.postcode)
+            Log.i("FUNDEBUG", "Random email: " + myRandomPlace.email)
+            Log.i("FUNDEBUG", "Random phone: " + myRandomPlace.phone)
+            Log.i("FUNDEBUG", "Random website: " + myRandomPlace.website)
+            Log.i("FUNDEBUG", "Random openinghours: " + myRandomPlace.openinghours)
+            Log.i("FUNDEBUG", "Random placeId: " + myRandomPlace.placeid)
 
         }
 
