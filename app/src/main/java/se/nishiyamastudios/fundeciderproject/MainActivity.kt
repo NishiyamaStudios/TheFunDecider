@@ -7,9 +7,11 @@ import android.util.Log
 import android.view.View
 import android.webkit.RenderProcessGoneDetail
 import android.widget.TextView
+import androidx.activity.viewModels
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.FragmentContainerView
 import androidx.fragment.app.commit
+import androidx.lifecycle.ViewModelStore
 import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -52,10 +54,13 @@ class MainActivity : AppCompatActivity() {
         badge.isVisible = false
         badge.number = 90
 
+        val fbUtil by viewModels<FirebaseUtility>()
+
         bottomNavigationView.setOnItemSelectedListener { item ->
             when(item.itemId) {
                 R.id.page1 -> {
 
+                    fbUtil.loadFavorites()
                     val sourceFragment = findNavController(R.id.fragNavCon).currentDestination?.label.toString()
                     val targetFragment = "fragment_favorites"
                     navigateAndKeepStack(sourceFragment, targetFragment)

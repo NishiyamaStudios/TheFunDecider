@@ -7,6 +7,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
+import se.nishiyamastudios.fundeciderproject.FirebaseListObject
+import se.nishiyamastudios.fundeciderproject.FirebaseUtility
 import se.nishiyamastudios.fundeciderproject.R
 import se.nishiyamastudios.fundeciderproject.databinding.FragmentDetailsBinding
 import se.nishiyamastudios.fundeciderproject.databinding.FragmentFavoritesBinding
@@ -17,7 +21,10 @@ class FavoritesFragment : Fragment() {
     var _binding : FragmentFavoritesBinding? = null
     val binding get() = _binding!!
 
-    val viewModel by viewModels<LoginViewModel>()
+    val viewModel by viewModels<FavoritesViewModel>()
+    val fbUtil by viewModels<FirebaseUtility>()
+
+    var favoritesadapter = FavoritesAdapter()
 
     companion object {
         fun newInstance() = FavoritesFragment()
@@ -27,6 +34,8 @@ class FavoritesFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
+        favoritesadapter.frag = this
 
         _binding = FragmentFavoritesBinding.inflate(inflater, container, false)
         return binding.root
@@ -39,6 +48,18 @@ class FavoritesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding.favoritesRV.adapter = favoritesadapter
+        binding.favoritesRV.layoutManager = LinearLayoutManager(requireContext())
+
+        val favoritesObserver = Observer<List<FirebaseListObject>> {
+            favoritesadapter.notifyDataSetChanged()
+        }
+
+        fbUtil.favoritePlaces.observe(viewLifecycleOwner, favoritesObserver)
+
+        fbUtil.loadFavorites()
+
     }
 
 }

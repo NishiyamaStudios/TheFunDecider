@@ -16,9 +16,11 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import okhttp3.*
 import org.json.JSONObject
 import org.json.JSONTokener
+import se.nishiyamastudios.fundeciderproject.FirebaseUtility
 import se.nishiyamastudios.fundeciderproject.PlaceDetails
 import se.nishiyamastudios.fundeciderproject.R
 import se.nishiyamastudios.fundeciderproject.databinding.FragmentStartBinding
+import se.nishiyamastudios.fundeciderproject.ui.favorites.FavoritesViewModel
 import se.nishiyamastudios.fundeciderproject.ui.login.LoginViewModel
 import java.io.IOException
 import kotlin.random.Random
@@ -38,6 +40,7 @@ class StartFragment : Fragment() {
     private val random = Random
 
     val model by viewModels<StartViewModel>()
+    val fbUtil by viewModels<FirebaseUtility>()
 
 
     companion object {
@@ -96,6 +99,17 @@ class StartFragment : Fragment() {
             Log.i("FUNDEBUG", "Random website: " + myRandomPlace.website)
             Log.i("FUNDEBUG", "Random openinghours: " + myRandomPlace.openinghours)
             Log.i("FUNDEBUG", "Random placeId: " + myRandomPlace.placeid)
+
+            binding.addFavoriteButton.setOnClickListener {
+
+                if (binding.selectedPlaceTV.text != "") {
+                    val placeName = myRandomPlace.name
+                    val placeId = myRandomPlace.placeid
+
+                    fbUtil.addFavoriteOrBlacklistItem("funfavorite",placeName, placeId)
+
+                }
+            }
 
         }
 
