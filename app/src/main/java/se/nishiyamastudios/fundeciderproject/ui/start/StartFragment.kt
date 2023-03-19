@@ -106,8 +106,18 @@ class StartFragment : Fragment() {
                     val placeName = myRandomPlace.name
                     val placeId = myRandomPlace.placeid
 
-                    fbUtil.addFavoriteOrBlacklistItem("funfavorite",placeName, placeId)
+                    fbUtil.addFavoriteOrBlacklistItem("funfavorite", placeName, placeId)
 
+                }
+            }
+
+            binding.addBlacklistButton.setOnClickListener {
+
+                if (binding.selectedPlaceTV.text != "") {
+                    val placeName = myRandomPlace.name
+                    val placeId = myRandomPlace.placeid
+
+                    fbUtil.addFavoriteOrBlacklistItem("funblacklist", placeName, placeId)
                 }
             }
 

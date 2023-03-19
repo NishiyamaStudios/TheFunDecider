@@ -58,6 +58,14 @@ class MainActivity : AppCompatActivity() {
 
         bottomNavigationView.setOnItemSelectedListener { item ->
             when(item.itemId) {
+                R.id.page0 -> {
+
+                    val sourceFragment = findNavController(R.id.fragNavCon).currentDestination?.label.toString()
+                    val targetFragment = "StartFargment"
+                    navigateAndKeepStack(sourceFragment, targetFragment)
+
+                    true
+                }
                 R.id.page1 -> {
 
                     fbUtil.loadFavorites()
@@ -65,20 +73,22 @@ class MainActivity : AppCompatActivity() {
                     val targetFragment = "fragment_favorites"
                     navigateAndKeepStack(sourceFragment, targetFragment)
 
-                    false
+                    true
                 }
                 R.id.page2 -> {
 
+                    fbUtil.loadBlacklist()
                     val sourceFragment = findNavController(R.id.fragNavCon).currentDestination?.label.toString()
                     val targetFragment = "fragment_blacklist"
                     navigateAndKeepStack(sourceFragment, targetFragment)
 
-                    false
+                    true
                 }
                 R.id.page3 -> {
 
                     val currentDestinationLabel = findNavController(R.id.fragNavCon).currentDestination?.label.toString()
                     Firebase.auth.signOut()
+                    bottomNavigationView.getMenu().findItem(R.id.page0).setChecked(true);
                     bottomNavigationView.visibility = View.GONE
                     navigateAndClearStack(currentDestinationLabel)
 
@@ -119,6 +129,7 @@ class MainActivity : AppCompatActivity() {
             "fragment_favorites" ->
                 when (targetFragment) {
                     "fragment_blacklist" -> findNavController(R.id.fragNavCon).navigate(R.id.action_favoritesFragment_to_blacklistFragment)
+                    //"StartFragment" -> findNavController(R.id.fragNavCon).navigate(R.id.ac)
                 }
             "fragment_blacklist" ->
                 when (targetFragment) {

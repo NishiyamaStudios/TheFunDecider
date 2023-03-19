@@ -14,6 +14,10 @@ class  FirebaseUtility : ViewModel() {
         MutableLiveData<List<FirebaseListObject>>()
     }
 
+    val blacklistPlaces: MutableLiveData<List<FirebaseListObject>> by lazy {
+        MutableLiveData<List<FirebaseListObject>>()
+    }
+
     val errorMessage: MutableLiveData<String> by lazy {
         MutableLiveData<String>()
     }
@@ -50,7 +54,7 @@ class  FirebaseUtility : ViewModel() {
                 tempShop.fbid = childsnap.key
                 shoplist.add(tempShop)
             }
-            favoritePlaces.value = shoplist
+            blacklistPlaces.value = shoplist
         }
 
     }

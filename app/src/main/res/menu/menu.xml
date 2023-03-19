@@ -3,12 +3,11 @@
 
     <item
         android:id="@+id/page0"
-        android:enabled="false"
+        android:checkable="true"
+        android:enabled="true"
         android:icon="@drawable/baseline_star_24"
-        android:title="HighlightedButton"
-        android:visible="false">
-
-    </item>
+        android:title="Start"
+        android:visible="true"></item>
     <item
         android:id="@+id/page1"
         android:enabled="true"
