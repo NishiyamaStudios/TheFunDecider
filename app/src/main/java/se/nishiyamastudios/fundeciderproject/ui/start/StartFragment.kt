@@ -1,5 +1,6 @@
 package se.nishiyamastudios.fundeciderproject.ui.start
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -9,20 +10,18 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.net.PlacesClient
+import com.google.android.libraries.places.ktx.api.model.place
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import kotlinx.coroutines.selects.select
 import okhttp3.*
-import org.json.JSONObject
-import org.json.JSONTokener
 import se.nishiyamastudios.fundeciderproject.FirebaseUtility
 import se.nishiyamastudios.fundeciderproject.PlaceDetails
 import se.nishiyamastudios.fundeciderproject.R
 import se.nishiyamastudios.fundeciderproject.databinding.FragmentStartBinding
-import se.nishiyamastudios.fundeciderproject.ui.favorites.FavoritesViewModel
-import se.nishiyamastudios.fundeciderproject.ui.login.LoginViewModel
-import java.io.IOException
+import java.io.FileOutputStream
+import java.io.ObjectOutputStream
 import kotlin.random.Random
 
 class StartFragment : Fragment() {
@@ -37,6 +36,8 @@ class StartFragment : Fragment() {
     private lateinit var placesClient: PlacesClient
     private lateinit var selectedCategory: String
     private lateinit var placeNames: MutableList<String>
+    private lateinit var currentPlace: PlaceDetails
+    private lateinit var placeName: String
     private val random = Random
 
     val model by viewModels<StartViewModel>()
@@ -46,6 +47,7 @@ class StartFragment : Fragment() {
     companion object {
         fun newInstance() = StartFragment()
     }
+
 
 
     override fun onCreateView(
@@ -60,6 +62,7 @@ class StartFragment : Fragment() {
 
         placesClient = Places.createClient(requireContext())
 
+
     }
 
     override fun onDestroyView() {
@@ -70,11 +73,12 @@ class StartFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val myPlaces = model.getPlaces("https://api.geoapify.com/v2/places?categories=catering.restaurant&filter=place:51fab165f6780b2a4059a2e9e94ccbcb4b40f00101f901f3b6a20000000000c002069203064d616c6dc3b6&limit=20&apiKey=d357192221064b8da71d4143f306b152")
-
+        /*
         val placesObserver = Observer<List<Places>> {
             binding.selectedPlaceTV.text = myPlaces[0].name
         }
+
+         */
 
         // Set bottom navigation view to visible after logging in
         val activity  = view.context as? AppCompatActivity
@@ -83,12 +87,20 @@ class StartFragment : Fragment() {
             navView.visibility = View.VISIBLE
         }
 
-
         binding.getPlacesButton.setOnClickListener {
             //model.getPlaces("https://api.geoapify.com/v2/places?categories=catering.restaurant&filter=place:51fab165f6780b2a4059a2e9e94ccbcb4b40f00101f901f3b6a20000000000c002069203064d616c6dc3b6&limit=2&apiKey=d357192221064b8da71d4143f306b152")
             Log.i("FUNDEBUG", "I Gotted IT!")
 
+            val myPlaces =
+                model.getPlaces("https://api.geoapify.com/v2/places?categories=catering.restaurant&filter=place:51fab165f6780b2a4059a2e9e94ccbcb4b40f00101f901f3b6a20000000000c002069203064d616c6dc3b6&limit=20&apiKey=d357192221064b8da71d4143f306b152")
+            Thread.sleep(2_000)
+
             val myRandomPlace = model.getRandomPlace(myPlaces)
+
+            currentPlace = myRandomPlace
+
+            placeName = myRandomPlace.name
+
             binding.selectedPlaceTV.text = myRandomPlace.name
 
             Log.i("FUNDEBUG", "Random name: " + myRandomPlace.name)
@@ -100,11 +112,13 @@ class StartFragment : Fragment() {
             Log.i("FUNDEBUG", "Random openinghours: " + myRandomPlace.openinghours)
             Log.i("FUNDEBUG", "Random placeId: " + myRandomPlace.placeid)
 
+        }
+
             binding.addFavoriteButton.setOnClickListener {
 
                 if (binding.selectedPlaceTV.text != "") {
-                    val placeName = myRandomPlace.name
-                    val placeId = myRandomPlace.placeid
+                    val placeName = currentPlace.name
+                    val placeId = currentPlace.placeid
 
                     fbUtil.addFavoriteOrBlacklistItem("funfavorite", placeName, placeId)
 
@@ -114,8 +128,8 @@ class StartFragment : Fragment() {
             binding.addBlacklistButton.setOnClickListener {
 
                 if (binding.selectedPlaceTV.text != "") {
-                    val placeName = myRandomPlace.name
-                    val placeId = myRandomPlace.placeid
+                    val placeName = currentPlace.name
+                    val placeId = currentPlace.placeid
 
                     fbUtil.addFavoriteOrBlacklistItem("funblacklist", placeName, placeId)
                 }
@@ -123,7 +137,5 @@ class StartFragment : Fragment() {
 
         }
 
-
     }
 
-}

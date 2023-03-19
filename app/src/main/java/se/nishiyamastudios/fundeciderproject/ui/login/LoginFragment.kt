@@ -21,6 +21,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import se.nishiyamastudios.fundeciderproject.R
 import se.nishiyamastudios.fundeciderproject.databinding.FragmentLoginBinding
+import se.nishiyamastudios.fundeciderproject.ui.start.StartFragment
 
 class LoginFragment : Fragment() {
 
@@ -67,7 +68,13 @@ class LoginFragment : Fragment() {
 
             if (Firebase.auth.currentUser != null) {
 
-                findNavController().navigate(R.id.action_loginFragment_to_startFragment)
+                val activity  = it.context as? AppCompatActivity
+
+                if (activity != null) {
+
+                    activity.supportFragmentManager.beginTransaction().replace(R.id.fragNavCon, StartFragment()).commit()
+                }
+
 
             }
         }

@@ -163,8 +163,15 @@ class StartViewModel : ViewModel() {
     }
 
     fun getRandomPlace(places: MutableList<PlaceDetails>): PlaceDetails {
-        places.shuffle()
-        return places[0]
+
+        return try {
+            places.shuffle()
+            places[0]
+        } catch (e : Exception) {
+            Thread.sleep(1000)
+            places.shuffle()
+            places[0]
+        }
     }
 
 }
