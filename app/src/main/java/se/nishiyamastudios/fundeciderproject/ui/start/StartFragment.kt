@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -76,12 +77,16 @@ class StartFragment : Fragment() {
 
          */
 
+
+
         val autoCompleteTextView = binding.AutoCompleteTextview
 
-        val Subjects = arrayOf("Android", "Flutter", "React Native")
+        val Subjects = arrayOf("Restaurant", "Bar", "Café")
 
         val adapter = ArrayAdapter(requireContext(), R.layout.dropdown_item, Subjects)
         autoCompleteTextView.setAdapter(adapter)
+
+
 
 
         // Set bottom navigation view to visible after logging in
