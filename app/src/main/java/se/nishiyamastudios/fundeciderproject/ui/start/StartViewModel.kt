@@ -17,22 +17,6 @@ class StartViewModel : ViewModel() {
     private val client = OkHttpClient()
 
 
-
-    /*
-    fun getPlaces(url: String) {
-        val request = Request.Builder()
-            .url(url)
-            .build()
-
-        client.newCall(request).enqueue(object : Callback {
-            override fun onFailure(call: Call, e: IOException) { Log.i("FUNDEBUG",e.toString())}
-            override fun onResponse(call: Call, response: Response) = println(response.body()?.string())
-
-        })
-    }
-
-     */
-
     fun getPlaces(url: String): MutableList<PlaceDetails> {
         val request = Request.Builder()
             .url(url)

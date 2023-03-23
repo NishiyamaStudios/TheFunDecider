@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Fundecider</string>
+    <string name="dropDownLabel">You choose!</string>
 </resources>
