@@ -1,13 +1,16 @@
 package se.nishiyamastudios.fundeciderproject.ui.start
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.AdapterView.OnItemClickListener
 import android.widget.ArrayAdapter
-import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -122,6 +125,20 @@ class StartFragment : Fragment() {
             Log.i("FUNDEBUG", "Random placeId: " + myRandomPlace.placeid)
 
         }
+
+        binding.AutoCompleteTextview.onItemClickListener =
+            OnItemClickListener { parent, view, position, id ->
+                val category = autoCompleteTextView.text.toString().lowercase()
+                binding.getPlacesButton.setText("Find your new favorite " + category +"!")
+               /*
+                Toast.makeText(
+                    ApplicationProvider.getApplicationContext<Context>(),
+                    "" + autoCompleteTextView.text.toString(),
+                    Toast.LENGTH_SHORT
+                ).show()
+
+                */
+            }
 
             binding.addFavoriteButton.setOnClickListener {
 
