@@ -8,21 +8,11 @@
     tools:context=".ui.start.StartFragment">
 
 
-    <TextView
-        android:id="@+id/selectedPlaceTV"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/getPlacesButton"
-        tools:text="selected place" />
-
     <Button
         android:id="@+id/getPlacesButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="91dp"
+        android:layout_marginBottom="40dp"
         android:text="Get place!"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -34,28 +24,26 @@
         style="@style/Widget.Material3.Button.IconButton"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginStart="16dp"
         android:insetTop="0dp"
         android:insetBottom="0dp"
         app:icon="@drawable/baseline_star_24"
         app:iconPadding="0dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
     <Button
         android:id="@+id/shareButton"
         style="@style/Widget.Material3.Button.IconButton"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_marginStart="270dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginEnd="16dp"
         android:insetTop="0dp"
         android:insetBottom="0dp"
         app:icon="@drawable/outline_share_24"
         app:iconPadding="0dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
     <Button
         android:id="@+id/addBlacklistButton"
@@ -63,13 +51,12 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
         android:insetTop="0dp"
         android:insetBottom="0dp"
         app:icon="@drawable/baseline_playlist_remove_24"
         app:iconPadding="0dp"
         app:layout_constraintStart_toEndOf="@+id/addFavoriteButton"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/TextInputLayout"
@@ -77,12 +64,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="80dp"
         android:layout_marginEnd="16dp"
         android:hint="Destiny needs a little help"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/addFavoriteButton">
+        app:layout_constraintTop_toTopOf="parent">
 
         <AutoCompleteTextView
             android:id="@+id/AutoCompleteTextview"
@@ -93,17 +80,53 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="32dp"
+        android:layout_marginBottom="160dp"
         android:background="@drawable/border"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toTopOf="@+id/getPlacesButton"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/TextInputLayout"></LinearLayout>
+        app:layout_constraintTop_toBottomOf="@+id/TextInputLayout">
+
+        <TextView
+            android:id="@+id/selectedPlaceTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|center_vertical"
+            android:layout_marginTop="30dp"
+            android:paddingLeft="5dp"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            tools:text="selected place" />
+
+        <TextView
+            android:id="@+id/placeStreetTV"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|center_vertical"
+            android:layout_marginTop="20dp"
+            android:clickable="true"
+            android:contextClickable="true"
+            android:gravity="center_horizontal"
+            android:text="TextView" />
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="TextView" />
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="TextView" />
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,16 +1,15 @@
 package se.nishiyamastudios.fundeciderproject.ui.start
 
-import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
 import android.widget.AdapterView.OnItemClickListener
 import android.widget.ArrayAdapter
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -37,7 +36,6 @@ class StartFragment : Fragment() {
     private lateinit var selectedCategory: String
     private lateinit var placeNames: MutableList<String>
     private lateinit var currentPlace: PlaceDetails
-    private lateinit var placeName: String
     private val random = Random
 
     val model by viewModels<StartViewModel>()
@@ -89,9 +87,6 @@ class StartFragment : Fragment() {
         val adapter = ArrayAdapter(requireContext(), R.layout.dropdown_item, Subjects)
         autoCompleteTextView.setAdapter(adapter)
 
-
-
-
         // Set bottom navigation view to visible after logging in
         val activity  = view.context as? AppCompatActivity
         if (activity != null) {
@@ -108,21 +103,28 @@ class StartFragment : Fragment() {
             Thread.sleep(2_000)
 
             val myRandomPlace = model.getRandomPlace(myPlaces)
-
             currentPlace = myRandomPlace
 
-            placeName = myRandomPlace.name
+            val placeName = currentPlace.name
+            val placeStreet = currentPlace.street
+            val placeStreetNumber = currentPlace.housenumber
+            val placePhone = currentPlace.phone
+            val placeEmail = currentPlace.email
+            val placeWebsite = currentPlace.website
+            val placeOpeningHours = currentPlace.openinghours
 
-            binding.selectedPlaceTV.text = myRandomPlace.name
 
-            Log.i("FUNDEBUG", "Random name: " + myRandomPlace.name)
-            Log.i("FUNDEBUG", "Random street: " + myRandomPlace.street + myRandomPlace.housenumber)
-            Log.i("FUNDEBUG", "Random postcode: " + myRandomPlace.postcode)
-            Log.i("FUNDEBUG", "Random email: " + myRandomPlace.email)
-            Log.i("FUNDEBUG", "Random phone: " + myRandomPlace.phone)
-            Log.i("FUNDEBUG", "Random website: " + myRandomPlace.website)
-            Log.i("FUNDEBUG", "Random openinghours: " + myRandomPlace.openinghours)
-            Log.i("FUNDEBUG", "Random placeId: " + myRandomPlace.placeid)
+            binding.selectedPlaceTV.text = placeName
+            binding.placeStreetTV.text = placeStreet + " " +placeStreetNumber
+
+            Log.i("FUNDEBUG", "Random name: " + currentPlace.name)
+            Log.i("FUNDEBUG", "Random street: " + currentPlace.street + currentPlace.housenumber)
+            Log.i("FUNDEBUG", "Random postcode: " + currentPlace.postcode)
+            Log.i("FUNDEBUG", "Random email: " + currentPlace.email)
+            Log.i("FUNDEBUG", "Random phone: " + currentPlace.phone)
+            Log.i("FUNDEBUG", "Random website: " + currentPlace.website)
+            Log.i("FUNDEBUG", "Random openinghours: " + currentPlace.openinghours)
+            Log.i("FUNDEBUG", "Random placeId: " + currentPlace.placeid)
 
         }
 
@@ -160,6 +162,13 @@ class StartFragment : Fragment() {
                     fbUtil.addFavoriteOrBlacklistItem("funblacklist", placeName, placeId)
                 }
             }
+
+        binding.placeStreetTV.setOnClickListener {
+            val address = currentPlace.street + " " +currentPlace.housenumber
+            val url = "https://www.google.com/maps/search/?api=1&query=$address"
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+            startActivity(intent)
+        }
 
         }
 
