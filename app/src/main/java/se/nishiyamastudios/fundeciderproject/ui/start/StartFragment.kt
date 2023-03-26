@@ -19,6 +19,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.net.PlacesClient
+import com.google.android.libraries.places.ktx.api.model.place
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import se.nishiyamastudios.fundeciderproject.FirebaseUtility
 import se.nishiyamastudios.fundeciderproject.PlaceDetails
@@ -125,7 +126,12 @@ class StartFragment : Fragment() {
             placeStreetTV.paintFlags = android.graphics.Paint.UNDERLINE_TEXT_FLAG
             placeStreetTV.text = placeStreet + " " +placeStreetNumber
 
+            var openingHours = placeOpeningHours?.replace(",","\n")
+            openingHours = openingHours?.replace(";","\n")
+
             binding.placeEmailTV.text = placeEmail
+            binding.placeWebsiteTV.text = placeWebsite
+            binding.placeOpeningHoursMT.setText(openingHours)
 
 
             Log.i("FUNDEBUG", "Random name: " + currentPlace.name)
@@ -214,9 +220,10 @@ class StartFragment : Fragment() {
 
         binding.placeEmailTV.setOnClickListener {
 
-            val email = "jim@jim.se"
-            val subject = "hej"
-            val body = "bord tack"
+            //TODO: gör klart så att korrekt emailinformation skrivs in här
+            val email = currentPlace.email
+            val subject = "Reservation"
+            val body = ""
             val chooserTitle = "emailintent"
 
             val uri = Uri.parse("mailto:$email")

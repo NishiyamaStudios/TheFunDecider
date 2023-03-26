@@ -143,6 +143,29 @@
             android:inputType="textEmailAddress"
             android:text="TextView"
             android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/placeWebsiteTV"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|center_vertical"
+            android:layout_marginTop="20dp"
+            android:clickable="true"
+            android:contextClickable="true"
+            android:gravity="center_horizontal"
+            android:text="TextView" />
+
+        <EditText
+            android:id="@+id/placeOpeningHoursMT"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|center_vertical"
+            android:layout_marginTop="20dp"
+            android:background="@null"
+            android:ems="10"
+            android:gravity="center_horizontal"
+            android:inputType="textMultiLine"
+            android:textSize="14sp" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
