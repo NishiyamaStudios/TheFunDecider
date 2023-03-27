@@ -3,8 +3,6 @@ package se.nishiyamastudios.fundeciderproject.ui.start
 import android.content.Intent
 import android.net.Uri
 import android.util.Log
-import androidx.compose.ui.text.substring
-import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import okhttp3.*
@@ -18,6 +16,11 @@ class StartViewModel : ViewModel() {
     var places = mutableListOf<PlaceDetails>()
 
     private val client = OkHttpClient()
+
+    //live data till felmeddelande som vi kan lyssna på i LoginFragment
+    val errorMessage: MutableLiveData<String> by lazy {
+        MutableLiveData<String>()
+    }
 
 
     fun getPlaces(url: String): MutableList<PlaceDetails> {
@@ -119,32 +122,10 @@ class StartViewModel : ViewModel() {
                         placeId
                     )
 
-                    Log.i("FUNDEBUG","currentPlaces name: " + currentPlace.name)
-                    Log.i("FUNDEBUG","currentPlaces street: " + currentPlace.street)
-                    Log.i("FUNDEBUG","currentPlaces housenumber: " + currentPlace.housenumber)
-                    Log.i("FUNDEBUG","currentPlaces street: " + currentPlace.street)
-                    Log.i("FUNDEBUG","currentPlaces placeid: " + currentPlace.placeid)
-
                     // Add the place to our mutable list of places.
                     places.add(currentPlace)
 
-
-                /*
-                    Log.i("FUNDEBUG","Namn: " + name)
-                    Log.i("FUNDEBUG","Namn2: " + properties.toString())
-                    Log.i("FUNDEBUG","Namn3: " + name3.toString())
-                    Log.i("FUNDEBUG",jsonArray.toString())
-                    Log.i("FUNDEBUG","My list: " +myMutableList[0])
-
-                    Log.i("FUNDEBUG","Vänta här nu..")
-                    Log.i("FUNDEBUG","dataSource: " + dataSource)
-                    Log.i("FUNDEBUG","rawData: " + rawData)
-                    //Log.i("FUNDEBUG","amenity: " + amenity)
-
-                */
-
                 }
-                Log.i("FUNDEBUG", "Places name one: " + places.get(0).placeid + "\n " + "Places name two: " +places.get(1).placeid)
             }
 
         })
@@ -169,51 +150,47 @@ class StartViewModel : ViewModel() {
         val geoapifyBaseURL = "https://api.geoapify.com/v2/places?categories="
         var geoapifyCategory = ""
         when (category) {
-            "Restaurant" -> geoapifyCategory = "catering."+category.lowercase()
-            "Bar" -> geoapifyCategory = "catering."+category.lowercase()
-            "Pub" -> geoapifyCategory = "catering."+category.lowercase()
-            "Cafe" -> geoapifyCategory = "catering."+category.lowercase()
+            "Restaurant" -> geoapifyCategory = "catering." + category.lowercase()
+            "Bar" -> geoapifyCategory = "catering." + category.lowercase()
+            "Pub" -> geoapifyCategory = "catering." + category.lowercase()
+            "Cafe" -> geoapifyCategory = "catering." + category.lowercase()
             "Fast Food" -> geoapifyCategory = "catering.fast_food"
             "Entertainment" -> geoapifyCategory = category.lowercase()
             else -> ""
         }
-        val geoapifyPlace = "&filter=place:51fab165f6780b2a4059a2e9e94ccbcb4b40f00101f901f3b6a20000000000c002069203064d616c6dc3b6&limit="
+        val geoapifyPlace =
+            "&filter=place:51fab165f6780b2a4059a2e9e94ccbcb4b40f00101f901f3b6a20000000000c002069203064d616c6dc3b6&limit="
         val geoapifyLimit = "20"
         val geoapifyKey = "&apiKey=d357192221064b8da71d4143f306b152"
-        val placesURL = geoapifyBaseURL+geoapifyCategory+geoapifyPlace+geoapifyLimit+geoapifyKey
 
-        return placesURL
+        return geoapifyBaseURL + geoapifyCategory + geoapifyPlace + geoapifyLimit + geoapifyKey
     }
 
-    fun buildBrowserIntent(address: String?, url: String?): Intent {
+    fun buildMapBrowserIntent (address: String, url: String): Intent {
+        return Intent(Intent.ACTION_VIEW, Uri.parse((url+address)))
+    }
+    fun buildBrowserIntent(url: String?): Intent {
         var newUrl = ""
         if (url != null) {
-            if (url.substring(0,3) == "www") {
+            if (url.substring(0, 3) == "www") {
                 newUrl = url.replace("www", "http://www")
             } else {
                 newUrl = url
             }
         }
-        if (address != "") {
-            newUrl+address
-        } else {
-            newUrl
-        }
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(newUrl))
 
-        return intent
+        return Intent(Intent.ACTION_VIEW, Uri.parse(newUrl))
     }
 
     fun buildEmailIntent(toaddress: String?, subject: String, body: String): Intent {
-        val uri = Uri.parse("mailto:"+toaddress)
+        val uri = Uri.parse("mailto:" + toaddress)
             .buildUpon()
             .appendQueryParameter("subject", subject)
             .appendQueryParameter("body", body)
-            .appendQueryParameter("to",toaddress)
+            .appendQueryParameter("to", toaddress)
             .build()
-        val intent = Intent(Intent.ACTION_SENDTO, uri)
 
-        return intent
+        return Intent(Intent.ACTION_SENDTO, uri)
     }
 
 }

@@ -12,14 +12,17 @@ import android.view.ViewGroup
 import android.widget.AdapterView.OnItemClickListener
 import android.widget.ArrayAdapter
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import com.google.android.libraries.places.api.Places
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import com.google.android.libraries.places.api.net.PlacesClient
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.snackbar.Snackbar
 import se.nishiyamastudios.fundeciderproject.FirebaseUtility
 import se.nishiyamastudios.fundeciderproject.PlaceDetails
 import se.nishiyamastudios.fundeciderproject.R
@@ -81,6 +84,27 @@ class StartFragment : Fragment() {
 
          */
 
+        //observera vårt felmeddelande
+        val errorObserver  = Observer<String> {errorMess ->
+            //Vad skall hända när det kommer ett felmeddelande
+            Toast.makeText(requireContext(),errorMess, Toast.LENGTH_LONG).show()
+        }
+
+        model.errorMessage.observe(viewLifecycleOwner, errorObserver)
+
+        val snackbarMessage: MutableLiveData<String> by lazy {
+            MutableLiveData<String>()
+        }
+
+        //TODO: Rensa upp detta, vad behövs?
+
+        val snackbarObserver  = Observer<String> {mess ->
+            Snackbar.make(requireView(),mess,Snackbar.LENGTH_LONG)
+                .setAnchorView(binding.AutoCompleteTextview)
+                .show()
+        }
+
+        snackbarMessage.observe(viewLifecycleOwner, snackbarObserver)
 
 
         val autoCompleteTextView = binding.AutoCompleteTextview
@@ -100,6 +124,10 @@ class StartFragment : Fragment() {
 
         binding.getPlacesButton.setOnClickListener {
 
+            if (autoCompleteTextView.text.toString() == "") {
+                snackbarMessage.value = "Choose a category from the drop down menu!"
+                return@setOnClickListener
+            }
             val placesUrl = model.buildGeoapifyURL(autoCompleteTextView.text.toString())
 
             Log.i("FUNDEBUG", "I Gotted IT!")
@@ -156,14 +184,6 @@ class StartFragment : Fragment() {
             OnItemClickListener { parent, view, position, id ->
                 val category = autoCompleteTextView.text.toString().lowercase()
                 binding.getPlacesButton.setText("Find your new favorite " + category +"!")
-               /*
-                Toast.makeText(
-                    ApplicationProvider.getApplicationContext<Context>(),
-                    "" + autoCompleteTextView.text.toString(),
-                    Toast.LENGTH_SHORT
-                ).show()
-
-                */
             }
 
             binding.addFavoriteButton.setOnClickListener {
@@ -189,15 +209,18 @@ class StartFragment : Fragment() {
 
         binding.placeStreetTV.setOnClickListener {
 
-            val browserIntent = model.buildBrowserIntent(currentPlace.street + " " +currentPlace.housenumber, "https://www.google.com/maps/search/?api=1&query=")
-            startActivity(browserIntent)
-
+            val browserIntent = model.buildMapBrowserIntent(currentPlace.street + " " +currentPlace.housenumber, "https://www.google.com/maps/search/?api=1&query=")
+            try {
+                startActivity(browserIntent)
+            } catch (e: Exception) {
+                snackbarMessage.value = "The website cannot be opened."
+            }
         }
 
         binding.placePhoneTV.setOnClickListener {
 
             val phoneNumber = placePhoneTV.text
-            val intent = Intent(Intent.ACTION_CALL);
+            val intent = Intent(Intent.ACTION_CALL)
             intent.data = Uri.parse("tel:$phoneNumber")
 
             val MY_PERMISSIONS_REQUEST_CALL_PHONE = 1
@@ -230,18 +253,23 @@ class StartFragment : Fragment() {
 
             val chooserTitle = "Email client"
             val emailIntent = model.buildEmailIntent(currentPlace.email, "Reservation", "")
-            startActivity(Intent.createChooser(emailIntent, chooserTitle))
+
+            try {
+                startActivity(Intent.createChooser(emailIntent, chooserTitle))
+            } catch (e: Exception) {
+                snackbarMessage.value = "Email cannot be accessed."
+            }
 
         }
 
         binding.placeWebsiteTV.setOnClickListener {
 
-            val browserIntent = model.buildBrowserIntent("", currentPlace.website)
+            val browserIntent = model.buildBrowserIntent(currentPlace.website)
 
             try {
                 startActivity(browserIntent)
             } catch (e: Exception) {
-
+                snackbarMessage.value = "The website cannot be opened."
             }
 
 

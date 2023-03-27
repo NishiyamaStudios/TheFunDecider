@@ -69,11 +69,8 @@ class LoginFragment : Fragment() {
             if (Firebase.auth.currentUser != null) {
 
                 val activity  = it.context as? AppCompatActivity
-
-                if (activity != null) {
-
-                    activity.supportFragmentManager.beginTransaction().replace(R.id.fragNavCon, StartFragment()).commit()
-                }
+                activity?.supportFragmentManager?.beginTransaction()
+                    ?.replace(R.id.fragNavCon, StartFragment())?.commit()
 
 
             }
@@ -87,7 +84,9 @@ class LoginFragment : Fragment() {
 
             if (Firebase.auth.currentUser != null) {
 
-                findNavController().navigate(R.id.action_loginFragment_to_startFragment)
+                val activity  = view.context as? AppCompatActivity
+                activity?.supportFragmentManager?.beginTransaction()
+                    ?.replace(R.id.fragNavCon, StartFragment())?.commit()
 
             }
 

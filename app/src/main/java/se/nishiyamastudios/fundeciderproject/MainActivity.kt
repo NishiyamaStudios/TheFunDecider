@@ -6,8 +6,6 @@ import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.NavOptions
-import androidx.navigation.findNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -24,8 +22,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val currentBackStackName = supportFragmentManager.saveBackStack("currentBackstack")
-
 
         val callback = object : OnBackPressedCallback(
             true // default to enabled
@@ -37,33 +33,30 @@ class MainActivity : AppCompatActivity() {
 
                 //supportFragmentManager
 
-                var backStackCount = supportFragmentManager.backStackEntryCount
+                val backStackCount = supportFragmentManager.backStackEntryCount
 
-                var backStackEntryName = ""
-
-                    try {
-                        backStackEntryName = supportFragmentManager.getBackStackEntryAt(backStackCount-1).name.toString()
-                    } catch (e : Exception) {
-                        backStackEntryName = "page0"
-                    }
+                val backStackEntryName: String = try {
+                    supportFragmentManager.getBackStackEntryAt(backStackCount - 1).name.toString()
+                } catch (e: Exception) {
+                    "page0"
+                }
 
 
-                    Log.i("FUNDEBUG3",backStackEntryName)
-                    val rId = "R.id." + backStackEntryName
+                Log.i("FUNDEBUG3", backStackEntryName)
 
-                    when(backStackEntryName) {
-                        "page0" -> bottomNavigationView.getMenu().findItem(R.id.page0).setChecked(true)
-                        "page1" -> bottomNavigationView.getMenu().findItem(R.id.page1).setChecked(true)
-                        "page2" -> bottomNavigationView.getMenu().findItem(R.id.page2).setChecked(true)
-                    }
-                    //Log.i("FUNDEBUG3",rId)
-                    //val resId = resources.getIdentifier(rId.toString(), "id", packageName)
-                    //val resID = resources.getIdentifier(rId, "id", packageName)
-                    //Log.i("FUNDEBUG3",resId.toString())
-                    //bottomNavigationView.getMenu().findItem(resId).setChecked(true)
+                when (backStackEntryName) {
+                    "page0" -> bottomNavigationView.menu.findItem(R.id.page0).isChecked = true
+                    "page1" -> bottomNavigationView.menu.findItem(R.id.page1).isChecked = true
+                    "page2" -> bottomNavigationView.menu.findItem(R.id.page2).isChecked = true
+                }
+                //Log.i("FUNDEBUG3",rId)
+                //val resId = resources.getIdentifier(rId.toString(), "id", packageName)
+                //val resID = resources.getIdentifier(rId, "id", packageName)
+                //Log.i("FUNDEBUG3",resId.toString())
+                //bottomNavigationView.getMenu().findItem(resId).setChecked(true)
 
 
-                Log.i("FUNDEBUG3",supportFragmentManager.backStackEntryCount.toString())
+                Log.i("FUNDEBUG3", supportFragmentManager.backStackEntryCount.toString())
 
             }
         }
@@ -85,18 +78,20 @@ class MainActivity : AppCompatActivity() {
 
             if (Firebase.auth.currentUser != null) {
 
-                supportFragmentManager.beginTransaction().replace(R.id.fragNavCon, StartFragment()).commit()
+                supportFragmentManager.beginTransaction().replace(R.id.fragNavCon, StartFragment())
+                    .commit()
 
             }
-            }
+        }
 
 
         val fbUtil by viewModels<FirebaseUtility>()
 
         bottomNavigationView.setOnItemSelectedListener { item ->
-            when(item.itemId) {
+            when (item.itemId) {
                 R.id.page0 -> {
-                    supportFragmentManager.beginTransaction().add(R.id.fragNavCon, StartFragment()).addToBackStack("page0").commit()
+                    supportFragmentManager.beginTransaction().add(R.id.fragNavCon, StartFragment())
+                        .addToBackStack("page0").commit()
 
                     //val sourceFragment = findNavController(R.id.fragNavCon).currentDestination?.label.toString()
                     //val targetFragment = "StartFragment"
@@ -107,7 +102,8 @@ class MainActivity : AppCompatActivity() {
                 R.id.page1 -> {
 
                     fbUtil.loadFavorites()
-                    supportFragmentManager.beginTransaction().add(R.id.fragNavCon, FavoritesFragment()).addToBackStack("page1").commit()
+                    supportFragmentManager.beginTransaction()
+                        .add(R.id.fragNavCon, FavoritesFragment()).addToBackStack("page1").commit()
 
                     /*
                     val sourceFragment = findNavController(R.id.fragNavCon).currentDestination?.label.toString()
@@ -121,7 +117,8 @@ class MainActivity : AppCompatActivity() {
                 R.id.page2 -> {
 
                     fbUtil.loadBlacklist()
-                    supportFragmentManager.beginTransaction().add(R.id.fragNavCon, BlacklistFragment()).addToBackStack("page2").commit()
+                    supportFragmentManager.beginTransaction()
+                        .add(R.id.fragNavCon, BlacklistFragment()).addToBackStack("page2").commit()
                     //val sourceFragment = findNavController(R.id.fragNavCon).currentDestination?.label.toString()
                     //val targetFragment = "fragment_blacklist"
                     //navigateAndKeepStack(sourceFragment, targetFragment)
@@ -133,8 +130,9 @@ class MainActivity : AppCompatActivity() {
                     //val currentDestinationLabel = findNavController(R.id.fragNavCon).currentDestination?.label.toString()
                     Firebase.auth.signOut()
                     //supportFragmentManager.clearBackStack(currentBackStackName.toString())        replace<ExampleFragment>(R.id.fragment_container)
-                    supportFragmentManager.beginTransaction().replace(R.id.fragNavCon, LoginFragment()).commit()
-                    bottomNavigationView.getMenu().findItem(R.id.page0).setChecked(true)
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.fragNavCon, LoginFragment()).commit()
+                    bottomNavigationView.menu.findItem(R.id.page0).isChecked = true
                     bottomNavigationView.visibility = View.GONE
                     //navigateAndClearStack(currentDestinationLabel)
 
@@ -148,45 +146,4 @@ class MainActivity : AppCompatActivity() {
         }
 
     }
-
-    fun navigateAndClearStack(currentDestinationLabel : String) {
-
-        when (currentDestinationLabel) {
-            "StartFragment" -> findNavController(R.id.fragNavCon).navigate(R.id.nav_graph,null,
-                NavOptions.Builder().setPopUpTo(findNavController(R.id.fragNavCon).graph.startDestinationId, true).build())
-            "fragment_favorites" -> findNavController(R.id.fragNavCon).navigate(R.id.nav_graph,null,
-                NavOptions.Builder().setPopUpTo(findNavController(R.id.fragNavCon).graph.startDestinationId, true).build())
-            "fragment_blacklist" -> findNavController(R.id.fragNavCon).navigate(R.id.nav_graph,null,
-                NavOptions.Builder().setPopUpTo(findNavController(R.id.fragNavCon).graph.startDestinationId, true).build())
-
-        }
-    }
-
-    fun navigateAndKeepStack(sourceFragment : String, targetFragment : String) {
-
-        when (sourceFragment) {
-
-            targetFragment -> null
-            "StartFragment" ->
-                when (targetFragment) {
-                    "fragment_favorites" -> supportFragmentManager.beginTransaction().add(R.id.fragNavCon, FavoritesFragment()).addToBackStack(null).commit()
-                        //findNavController(R.id.fragNavCon).navigate(R.id.action_startFragment_to_favoritesFragment)
-                    "fragment_blacklist" -> supportFragmentManager.beginTransaction().add(R.id.fragNavCon, BlacklistFragment()).addToBackStack(null).commit()
-                        //findNavController(R.id.fragNavCon).navigate(R.id.action_startFragment_to_blacklistFragment)
-                }
-            "fragment_favorites" ->
-                when (targetFragment) {
-                    "fragment_blacklist" -> supportFragmentManager.beginTransaction().add(R.id.fragNavCon, BlacklistFragment()).addToBackStack(null).commit()
-                        //findNavController(R.id.fragNavCon).navigate(R.id.action_favoritesFragment_to_blacklistFragment)
-                    "StartFragment" -> supportFragmentManager.beginTransaction().add(R.id.fragNavCon, StartFragment()).addToBackStack(null).commit()
-                        //findNavController(R.id.fragNavCon).navigate(R.id.action_favoritesFragment_to_startFragment)
-                }
-            "fragment_blacklist" ->
-                when (targetFragment) {
-                    "fragment_favorites" -> findNavController(R.id.fragNavCon).navigate(R.id.action_blacklistFragment_to_favoritesFragment)
-                    "StartFragment" -> findNavController(R.id.fragNavCon).navigate(R.id.action_blacklistFragment_to_startFragment)
-                }
-        }
-
-        }
-    }
+}
