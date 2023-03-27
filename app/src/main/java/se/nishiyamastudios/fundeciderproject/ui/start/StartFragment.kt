@@ -19,7 +19,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.net.PlacesClient
-import com.google.android.libraries.places.ktx.api.model.place
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import se.nishiyamastudios.fundeciderproject.FirebaseUtility
 import se.nishiyamastudios.fundeciderproject.PlaceDetails
@@ -29,8 +28,10 @@ import se.nishiyamastudios.fundeciderproject.databinding.FragmentStartBinding
 
 class StartFragment : Fragment() {
 
-    //TODO: Kategorier att använda: Catering / restaurant, pub, cafe, fast food + fler?
+    //TODO: Kategorier att använda: Catering / restaurant, pub, cafe, fast food, entertainment + fler?
     //TODO: Välja stad? Hur funkar det? Kolla med hjälp av GPS i stället?
+    //TODO: Lägg in så att inte loginrutan dyker upp vid start även fast man är inloggad.
+    //TODO: Lägg in så att de TextViews som inte har info tas bort så att det inte finns mellanrum
 
     var _binding : FragmentStartBinding? = null
     val binding get() = _binding!!
@@ -60,8 +61,7 @@ class StartFragment : Fragment() {
         _binding = FragmentStartBinding.inflate(inflater, container, false)
         return binding.root
 
-        selectedPlace = binding.selectedPlaceTV
-        placesClient = Places.createClient(requireContext())
+
 
 
     }
@@ -85,10 +85,11 @@ class StartFragment : Fragment() {
 
         val autoCompleteTextView = binding.AutoCompleteTextview
 
-        val Subjects = arrayOf("Restaurant", "Bar", "Café")
+        val Subjects = arrayOf("Restaurant", "Bar", "Pub", "Cafe", "Fast Food", "Entertainment")
 
         val adapter = ArrayAdapter(requireContext(), R.layout.dropdown_item, Subjects)
         autoCompleteTextView.setAdapter(adapter)
+
 
         // Set bottom navigation view to visible after logging in
         val activity  = view.context as? AppCompatActivity
@@ -99,10 +100,14 @@ class StartFragment : Fragment() {
 
         binding.getPlacesButton.setOnClickListener {
 
+            val placesUrl = model.buildGeoapifyURL(autoCompleteTextView.text.toString())
+
             Log.i("FUNDEBUG", "I Gotted IT!")
 
-            val myPlaces = model.getPlaces("https://api.geoapify.com/v2/places?categories=catering.restaurant&filter=place:51fab165f6780b2a4059a2e9e94ccbcb4b40f00101f901f3b6a20000000000c002069203064d616c6dc3b6&limit=20&apiKey=d357192221064b8da71d4143f306b152")
-            Thread.sleep(2_000)
+            Log.i("FUNDEBUG3", placesUrl)
+
+            val myPlaces = model.getPlaces(placesUrl)
+            Thread.sleep(3_000)
 
             val myRandomPlace = model.getRandomPlace(myPlaces)
             currentPlace = myRandomPlace
@@ -133,7 +138,7 @@ class StartFragment : Fragment() {
             binding.placeWebsiteTV.text = placeWebsite
             binding.placeOpeningHoursMT.setText(openingHours)
 
-
+        /*
             Log.i("FUNDEBUG", "Random name: " + currentPlace.name)
             Log.i("FUNDEBUG", "Random street: " + currentPlace.street + currentPlace.housenumber)
             Log.i("FUNDEBUG", "Random postcode: " + currentPlace.postcode)
@@ -142,6 +147,8 @@ class StartFragment : Fragment() {
             Log.i("FUNDEBUG", "Random website: " + currentPlace.website)
             Log.i("FUNDEBUG", "Random openinghours: " + currentPlace.openinghours)
             Log.i("FUNDEBUG", "Random placeId: " + currentPlace.placeid)
+
+        */
 
         }
 
@@ -181,13 +188,14 @@ class StartFragment : Fragment() {
             }
 
         binding.placeStreetTV.setOnClickListener {
-            val address = currentPlace.street + " " +currentPlace.housenumber
-            val url = "https://www.google.com/maps/search/?api=1&query=$address"
-            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-            startActivity(intent)
+
+            val browserIntent = model.buildBrowserIntent(currentPlace.street + " " +currentPlace.housenumber, "https://www.google.com/maps/search/?api=1&query=")
+            startActivity(browserIntent)
+
         }
 
         binding.placePhoneTV.setOnClickListener {
+
             val phoneNumber = placePhoneTV.text
             val intent = Intent(Intent.ACTION_CALL);
             intent.data = Uri.parse("tel:$phoneNumber")
@@ -220,21 +228,22 @@ class StartFragment : Fragment() {
 
         binding.placeEmailTV.setOnClickListener {
 
-            //TODO: gör klart så att korrekt emailinformation skrivs in här
-            val email = currentPlace.email
-            val subject = "Reservation"
-            val body = ""
-            val chooserTitle = "emailintent"
-
-            val uri = Uri.parse("mailto:$email")
-                .buildUpon()
-                .appendQueryParameter("subject", subject)
-                .appendQueryParameter("body", body)
-                .appendQueryParameter("to", email)
-                .build()
-
-            val emailIntent = Intent(Intent.ACTION_SENDTO, uri)
+            val chooserTitle = "Email client"
+            val emailIntent = model.buildEmailIntent(currentPlace.email, "Reservation", "")
             startActivity(Intent.createChooser(emailIntent, chooserTitle))
+
+        }
+
+        binding.placeWebsiteTV.setOnClickListener {
+
+            val browserIntent = model.buildBrowserIntent("", currentPlace.website)
+
+            try {
+                startActivity(browserIntent)
+            } catch (e: Exception) {
+
+            }
+
 
         }
 

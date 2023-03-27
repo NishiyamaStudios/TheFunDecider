@@ -11,7 +11,7 @@
     <item
         android:id="@+id/page1"
         android:enabled="true"
-        android:icon="@drawable/baseline_star_24"
+        android:icon="@drawable/baseline_favorite_24"
         android:title="Favorites">
 
     </item>

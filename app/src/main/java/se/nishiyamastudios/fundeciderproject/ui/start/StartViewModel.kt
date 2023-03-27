@@ -1,7 +1,10 @@
 package se.nishiyamastudios.fundeciderproject.ui.start
 
+import android.content.Intent
+import android.net.Uri
 import android.util.Log
 import androidx.compose.ui.text.substring
+import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import okhttp3.*
@@ -25,6 +28,9 @@ class StartViewModel : ViewModel() {
         client.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) { Log.i("FUNDEBUG",e.toString())}
             override fun onResponse(call: Call, response: Response) {
+
+                // Clear mutable list or else results get jumbled after changing category.
+                places.clear()
 
                 // Get API response as a JSON object.
                 val jsonObject = JSONTokener(response.body()?.string()).nextValue() as JSONObject
@@ -156,6 +162,58 @@ class StartViewModel : ViewModel() {
             places.shuffle()
             places[0]
         }
+    }
+
+    fun buildGeoapifyURL(category: String): String {
+
+        val geoapifyBaseURL = "https://api.geoapify.com/v2/places?categories="
+        var geoapifyCategory = ""
+        when (category) {
+            "Restaurant" -> geoapifyCategory = "catering."+category.lowercase()
+            "Bar" -> geoapifyCategory = "catering."+category.lowercase()
+            "Pub" -> geoapifyCategory = "catering."+category.lowercase()
+            "Cafe" -> geoapifyCategory = "catering."+category.lowercase()
+            "Fast Food" -> geoapifyCategory = "catering.fast_food"
+            "Entertainment" -> geoapifyCategory = category.lowercase()
+            else -> ""
+        }
+        val geoapifyPlace = "&filter=place:51fab165f6780b2a4059a2e9e94ccbcb4b40f00101f901f3b6a20000000000c002069203064d616c6dc3b6&limit="
+        val geoapifyLimit = "20"
+        val geoapifyKey = "&apiKey=d357192221064b8da71d4143f306b152"
+        val placesURL = geoapifyBaseURL+geoapifyCategory+geoapifyPlace+geoapifyLimit+geoapifyKey
+
+        return placesURL
+    }
+
+    fun buildBrowserIntent(address: String?, url: String?): Intent {
+        var newUrl = ""
+        if (url != null) {
+            if (url.substring(0,3) == "www") {
+                newUrl = url.replace("www", "http://www")
+            } else {
+                newUrl = url
+            }
+        }
+        if (address != "") {
+            newUrl+address
+        } else {
+            newUrl
+        }
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(newUrl))
+
+        return intent
+    }
+
+    fun buildEmailIntent(toaddress: String?, subject: String, body: String): Intent {
+        val uri = Uri.parse("mailto:"+toaddress)
+            .buildUpon()
+            .appendQueryParameter("subject", subject)
+            .appendQueryParameter("body", body)
+            .appendQueryParameter("to",toaddress)
+            .build()
+        val intent = Intent(Intent.ACTION_SENDTO, uri)
+
+        return intent
     }
 
 }
