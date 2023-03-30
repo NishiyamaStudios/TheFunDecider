@@ -16,6 +16,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.MutableLiveData
@@ -84,6 +85,9 @@ class StartFragment : Fragment() {
 
          */
 
+        // Hide elements on creation
+        binding.linearLayout.visibility = View.GONE
+
         //observera vårt felmeddelande
         val errorObserver  = Observer<String> {errorMess ->
             //Vad skall hända när det kommer ett felmeddelande
@@ -134,11 +138,11 @@ class StartFragment : Fragment() {
 
             Log.i("FUNDEBUG3", placesUrl)
 
-            val myPlaces = model.getPlaces(placesUrl)
-            Thread.sleep(3_000)
-
-            val myRandomPlace = model.getRandomPlace(myPlaces)
-            currentPlace = myRandomPlace
+            //val myPlaces = model.getPlaces(placesUrl)
+            //model.sleep()
+            //val myRandomPlace = model.getRandomPlace(myPlaces)
+            val myRandomPlace = model.getRandomPlace(placesUrl)
+            currentPlace = myRandomPlace as PlaceDetails
 
             val placeName = currentPlace.name
             val placeStreet = currentPlace.street
@@ -271,7 +275,15 @@ class StartFragment : Fragment() {
             } catch (e: Exception) {
                 snackbarMessage.value = "The website cannot be opened."
             }
+        }
 
+        binding.shareButton.setOnClickListener {
+
+            try {
+             startActivity(Intent.createChooser(model.sharePlace(currentPlace.name), "Share using"))
+            } catch (e: Exception) {
+                snackbarMessage.value = "The place could not be shared."
+            }
 
         }
 

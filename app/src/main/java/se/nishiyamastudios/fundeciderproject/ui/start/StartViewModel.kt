@@ -5,11 +5,15 @@ import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import okhttp3.*
 import org.json.JSONObject
 import org.json.JSONTokener
 import se.nishiyamastudios.fundeciderproject.PlaceDetails
 import java.io.IOException
+import java.util.concurrent.CountDownLatch
 
 class StartViewModel : ViewModel() {
 
@@ -23,10 +27,13 @@ class StartViewModel : ViewModel() {
     }
 
 
-    fun getPlaces(url: String): MutableList<PlaceDetails> {
+    fun getRandomPlace(url: String): Any {
+
         val request = Request.Builder()
             .url(url)
             .build()
+
+        val countDownLatch = CountDownLatch(1)
 
         client.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) { Log.i("FUNDEBUG",e.toString())}
@@ -126,20 +133,30 @@ class StartViewModel : ViewModel() {
                     places.add(currentPlace)
 
                 }
+
+                countDownLatch.countDown();
             }
 
         })
 
-        return places
+            countDownLatch.await()
+            places.shuffle()
+            return places[0]
+
+       // return places
+
+
     }
 
-    fun getRandomPlace(places: MutableList<PlaceDetails>): PlaceDetails {
+    fun getRandomPlacess(places: MutableList<PlaceDetails>): PlaceDetails {
 
         return try {
             places.shuffle()
             places[0]
-        } catch (e : Exception) {
-            Thread.sleep(1000)
+        } catch (e: Exception) {
+            viewModelScope.launch(Dispatchers.IO) {
+                Thread.sleep(1000)
+            }
             places.shuffle()
             places[0]
         }
@@ -193,4 +210,21 @@ class StartViewModel : ViewModel() {
         return Intent(Intent.ACTION_SENDTO, uri)
     }
 
+    fun sharePlace(placename: String): Intent {
+
+        val intent = Intent(Intent.ACTION_SEND)
+        intent.type = "text/plain"
+        val body = "Hey! Share this destiny with me!"
+        val sub = "Hey! Share this destiny with me!\nLet's check out $placename together.. :D"
+        intent.putExtra(Intent.EXTRA_TEXT, body)
+        intent.putExtra(Intent.EXTRA_TEXT, sub)
+
+        return intent
+
+    }
+
+    fun sleep() {
+
+        Thread.sleep(3_000)
+    }
 }
