@@ -16,7 +16,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.MutableLiveData
@@ -45,7 +44,9 @@ class StartFragment : Fragment() {
     private lateinit var placesClient: PlacesClient
     private lateinit var selectedCategory: String
     private lateinit var placeNames: MutableList<String>
+    private lateinit var myPlaces: MutableList<PlaceDetails>
     private lateinit var currentPlace: PlaceDetails
+    private lateinit var placesUrl: String
 
     val model by viewModels<StartViewModel>()
     val fbUtil by viewModels<FirebaseUtility>()
@@ -84,6 +85,10 @@ class StartFragment : Fragment() {
         }
 
          */
+
+        //TODO: Spara detaljer till databasen, fixa så att man kan få upp dessa i en detaljvy
+        // från favoriter
+        //TODO: Fixa en infoknapp på startfragment(?)
 
         // Hide elements on creation
         binding.linearLayout.visibility = View.GONE
@@ -132,17 +137,21 @@ class StartFragment : Fragment() {
                 snackbarMessage.value = "Choose a category from the drop down menu!"
                 return@setOnClickListener
             }
-            val placesUrl = model.buildGeoapifyURL(autoCompleteTextView.text.toString())
+
+            if (binding.AutoCompleteTextview.text.toString() != "") {
+                currentPlace = model.getRandomPlace(myPlaces)
+            }
+            //val placesUrl = model.buildGeoapifyURL(autoCompleteTextView.text.toString())
 
             Log.i("FUNDEBUG", "I Gotted IT!")
 
-            Log.i("FUNDEBUG3", placesUrl)
+            //Log.i("FUNDEBUG3", placesUrl)
 
             //val myPlaces = model.getPlaces(placesUrl)
             //model.sleep()
             //val myRandomPlace = model.getRandomPlace(myPlaces)
-            val myRandomPlace = model.getRandomPlace(placesUrl)
-            currentPlace = myRandomPlace as PlaceDetails
+            //val myRandomPlace = model.getRandomPlace(placesUrl)
+            //currentPlace = myRandomPlace as PlaceDetails
 
             val placeName = currentPlace.name
             val placeStreet = currentPlace.street
@@ -170,6 +179,9 @@ class StartFragment : Fragment() {
             binding.placeWebsiteTV.text = placeWebsite
             binding.placeOpeningHoursMT.setText(openingHours)
 
+            binding.linearLayout.visibility = View.VISIBLE
+            binding.animationView.visibility = View.GONE
+
         /*
             Log.i("FUNDEBUG", "Random name: " + currentPlace.name)
             Log.i("FUNDEBUG", "Random street: " + currentPlace.street + currentPlace.housenumber)
@@ -187,6 +199,9 @@ class StartFragment : Fragment() {
         binding.AutoCompleteTextview.onItemClickListener =
             OnItemClickListener { parent, view, position, id ->
                 val category = autoCompleteTextView.text.toString().lowercase()
+                val placesUrl = model.buildGeoapifyURL(autoCompleteTextView.text.toString())
+                myPlaces = model.getPlaces(placesUrl)
+                currentPlace = model.getRandomPlace(myPlaces)
                 binding.getPlacesButton.setText("Find your new favorite " + category +"!")
             }
 

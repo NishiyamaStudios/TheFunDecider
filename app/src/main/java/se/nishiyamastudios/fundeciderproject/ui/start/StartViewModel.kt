@@ -5,9 +5,6 @@ import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import okhttp3.*
 import org.json.JSONObject
 import org.json.JSONTokener
@@ -27,7 +24,7 @@ class StartViewModel : ViewModel() {
     }
 
 
-    fun getRandomPlace(url: String): Any {
+    fun getPlaces(url: String): MutableList<PlaceDetails> {
 
         val request = Request.Builder()
             .url(url)
@@ -140,23 +137,21 @@ class StartViewModel : ViewModel() {
         })
 
             countDownLatch.await()
-            places.shuffle()
-            return places[0]
+            //places.shuffle()
+            return places
 
        // return places
 
 
     }
 
-    fun getRandomPlacess(places: MutableList<PlaceDetails>): PlaceDetails {
+    fun getRandomPlace(places: MutableList<PlaceDetails>): PlaceDetails {
 
         return try {
             places.shuffle()
             places[0]
-        } catch (e: Exception) {
-            viewModelScope.launch(Dispatchers.IO) {
-                Thread.sleep(1000)
-            }
+        } catch (e : Exception) {
+            Thread.sleep(1000)
             places.shuffle()
             places[0]
         }
