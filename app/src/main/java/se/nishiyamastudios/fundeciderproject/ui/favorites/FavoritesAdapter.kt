@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import se.nishiyamastudios.fundeciderproject.R
@@ -16,11 +17,13 @@ class FavoritesAdapter : RecyclerView.Adapter<FavoritesAdapter.ViewHolder>() {
     class ViewHolder(view : View) : RecyclerView.ViewHolder(view) {
         val placeName: TextView
         val placeDelete: ImageView
+        val placeInfo: ImageView
 
         init {
 
             placeName = view.findViewById(R.id.shopNameTV)
             placeDelete = view.findViewById(R.id.favoriteDeleteImage)
+            placeInfo = view.findViewById(R.id.favoriteInfoImage)
         }
 
     }
@@ -42,6 +45,13 @@ class FavoritesAdapter : RecyclerView.Adapter<FavoritesAdapter.ViewHolder>() {
         holder.placeDelete.setOnClickListener {
             frag.fbUtil.deleteFavoriteItem(currentFavorite)
         }
+
+
+        holder.placeInfo.setOnClickListener {
+            frag.binding.linearLayoutFavoriteInfo.visibility = View.VISIBLE
+        }
+
+
 
 
         /*

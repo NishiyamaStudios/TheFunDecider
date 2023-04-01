@@ -45,6 +45,8 @@ class FavoritesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
+
         binding.favoritesRV.adapter = favoritesadapter
         binding.favoritesRV.layoutManager = LinearLayoutManager(requireContext())
 
@@ -55,6 +57,9 @@ class FavoritesFragment : Fragment() {
         fbUtil.favoritePlaces.observe(viewLifecycleOwner, favoritesObserver)
 
         fbUtil.loadFavorites()
+
+        binding.linearLayoutFavoriteInfo.visibility = View.GONE
+
 
     }
 

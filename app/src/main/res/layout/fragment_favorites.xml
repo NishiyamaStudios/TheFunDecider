@@ -7,6 +7,92 @@
     android:background="#FFFFFF"
     tools:context=".ui.favorites.FavoritesFragment">
 
+    <LinearLayout
+        android:id="@+id/linearLayoutFavoriteInfo"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/border"
+        android:orientation="vertical"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="@id/favoritesRV"
+        app:layout_constraintEnd_toEndOf="@+id/favoritesRV"
+        app:layout_constraintStart_toStartOf="@+id/favoritesRV"
+        app:layout_constraintTop_toTopOf="@+id/favoritesRV">
+
+        <TextView
+            android:id="@+id/selectedFavoritePlaceTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|center_vertical"
+            android:layout_marginTop="30dp"
+            android:paddingLeft="5dp"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            tools:text="selected place" />
+
+        <TextView
+            android:id="@+id/favoritePlaceStreetTV"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|center_vertical"
+            android:layout_marginTop="20dp"
+            android:clickable="true"
+            android:contextClickable="true"
+            android:gravity="center_horizontal"
+            android:text="Street"
+            android:textSize="18sp"
+            android:textStyle="italic" />
+
+        <TextView
+            android:id="@+id/favoritePlacePhoneTV"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|center_vertical"
+            android:layout_marginTop="20dp"
+            android:clickable="true"
+            android:contextClickable="true"
+            android:gravity="center_horizontal"
+            android:inputType="phone"
+            android:text="TextView"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/favoritePlaceEmailTV"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|center_vertical"
+            android:layout_marginTop="20sp"
+            android:clickable="true"
+            android:contextClickable="true"
+            android:gravity="center_horizontal"
+            android:inputType="textEmailAddress"
+            android:text="TextView"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/favoritePlaceWebsiteTV"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|center_vertical"
+            android:layout_marginTop="20dp"
+            android:clickable="true"
+            android:contextClickable="true"
+            android:gravity="center_horizontal"
+            android:text="TextView" />
+
+        <EditText
+            android:id="@+id/favoritePlaceOpeningHoursMT"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|center_vertical"
+            android:layout_marginTop="20dp"
+            android:background="@null"
+            android:ems="10"
+            android:gravity="center_horizontal"
+            android:inputType="textMultiLine"
+            android:textSize="14sp" />
+    </LinearLayout>
+
     <TextView
         android:id="@+id/favoritesTV"
         android:layout_width="wrap_content"
@@ -27,5 +113,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/favoritesTV" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
