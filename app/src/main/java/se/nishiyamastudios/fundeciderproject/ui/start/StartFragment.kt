@@ -225,8 +225,15 @@ class StartFragment : Fragment() {
                 if (binding.selectedPlaceTV.text != "") {
                     val placeName = currentPlace.name
                     val placeId = currentPlace.placeid
+                    val placeStreet = currentPlace.street
+                    val placeHouseNumber = currentPlace.housenumber
+                    val placePostCode = currentPlace.postcode
+                    val placePhone = currentPlace.phone
+                    val placeEmail = currentPlace.email
+                    val placeWebsite = currentPlace.website
+                    val placeOpeningHours = currentPlace.openinghours
 
-                    fbUtil.addFavoriteOrBlacklistItem("funfavorite", placeName, placeId)
+                    fbUtil.addFavoriteItem("funfavorite", placeName, placeStreet, placeHouseNumber, placePostCode, placePhone, placeEmail,placeWebsite, placeOpeningHours, placeId)
 
                 }
             }
@@ -237,7 +244,7 @@ class StartFragment : Fragment() {
                     val placeName = currentPlace.name
                     val placeId = currentPlace.placeid
 
-                    fbUtil.addFavoriteOrBlacklistItem("funblacklist", placeName, placeId)
+                    fbUtil.addBlacklistItem("funblacklist", placeName, placeId)
                 }
             }
 

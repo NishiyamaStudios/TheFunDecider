@@ -3,7 +3,6 @@ package se.nishiyamastudios.fundeciderproject.ui.blacklist
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
@@ -21,7 +20,7 @@ class BlacklistAdapter : RecyclerView.Adapter<BlacklistAdapter.ViewHolder>() {
         init {
 
             placeName = view.findViewById(R.id.shopNameTV)
-            placeDelete = view.findViewById(R.id.shopDeleteImage)
+            placeDelete = view.findViewById(R.id.favoriteDeleteImage)
         }
 
     }

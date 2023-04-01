@@ -10,12 +10,12 @@ import com.google.firebase.ktx.Firebase
 
 class  FirebaseUtility : ViewModel() {
 
-    val favoritePlaces: MutableLiveData<List<FirebaseListObject>> by lazy {
-        MutableLiveData<List<FirebaseListObject>>()
+    val favoritePlaces: MutableLiveData<List<FirebaseFavoriteListObject>> by lazy {
+        MutableLiveData<List<FirebaseFavoriteListObject>>()
     }
 
-    val blacklistPlaces: MutableLiveData<List<FirebaseListObject>> by lazy {
-        MutableLiveData<List<FirebaseListObject>>()
+    val blacklistPlaces: MutableLiveData<List<FirebaseFavoriteListObject>> by lazy {
+        MutableLiveData<List<FirebaseFavoriteListObject>>()
     }
 
     val errorMessage: MutableLiveData<String> by lazy {
@@ -31,9 +31,9 @@ class  FirebaseUtility : ViewModel() {
         Log.i("FUNDEBUG",shopRef.toString())
 
         shopRef.get().addOnSuccessListener {
-            val shoplist = mutableListOf<FirebaseListObject>()
+            val shoplist = mutableListOf<FirebaseFavoriteListObject>()
             it.children.forEach {childsnap ->
-                val tempShop = childsnap.getValue<FirebaseListObject>()!!
+                val tempShop = childsnap.getValue<FirebaseFavoriteListObject>()!!
                 Log.i("FUNDEBUG",tempShop.placename.toString())
                 tempShop.fbid = childsnap.key
                 shoplist.add(tempShop)
@@ -48,9 +48,9 @@ class  FirebaseUtility : ViewModel() {
         val database = Firebase.database
         val shopRef = database.getReference("funblacklist").child(Firebase.auth.currentUser!!.uid)
         shopRef.get().addOnSuccessListener {
-            val shoplist = mutableListOf<FirebaseListObject>()
+            val shoplist = mutableListOf<FirebaseFavoriteListObject>()
             it.children.forEach {childsnap ->
-                val tempShop = childsnap.getValue<FirebaseListObject>()!!
+                val tempShop = childsnap.getValue<FirebaseFavoriteListObject>()!!
                 tempShop.fbid = childsnap.key
                 shoplist.add(tempShop)
             }
@@ -59,13 +59,13 @@ class  FirebaseUtility : ViewModel() {
 
     }
 
-    fun loadFirebaseList(firebasepathname : String, placelist : MutableLiveData<List<FirebaseListObject>>) {
+    fun loadFirebaseList(firebasepathname : String, placelist : MutableLiveData<List<FirebaseFavoriteListObject>>) {
         val database = Firebase.database
         val listRef = database.getReference(firebasepathname).child(Firebase.auth.currentUser!!.uid)
         listRef.get().addOnSuccessListener {
-            val favoriteList = mutableListOf<FirebaseListObject>()
+            val favoriteList = mutableListOf<FirebaseFavoriteListObject>()
             it.children.forEach {childsnap ->
-                val tempShop = childsnap.getValue<FirebaseListObject>()!!
+                val tempShop = childsnap.getValue<FirebaseFavoriteListObject>()!!
                 tempShop.fbid = childsnap.key
                 favoriteList.add(tempShop)
             }
@@ -73,10 +73,19 @@ class  FirebaseUtility : ViewModel() {
         }
     }
 
-    fun addFavoriteOrBlacklistItem(firebasepathname : String, placename : String, placeid : String) {
+    fun addFavoriteItem(firebasepathname : String,
+                        placename : String,
+                        placestreet : String?,
+                        placehousenumber : String?,
+                        placepostcode : String?,
+                        placephone : String?,
+                        placeemail : String?,
+                        placewebsite : String?,
+                        placeopeninghours : String?,
+                        placeid : String) {
 
-        if(placename == "") {
-            errorMessage.value = "Place name cannot be empty, please get a new place."
+        if(placename == "" || placestreet == null) {
+            errorMessage.value = "Field cannot be empty, please get a new place."
             return
         }
 
@@ -87,7 +96,7 @@ class  FirebaseUtility : ViewModel() {
 
         errorMessage.value = ""
 
-        val tempPlaceItem = FirebaseListObject(placename, placeid)
+        val tempPlaceItem = FirebaseFavoriteListObject(placename, placestreet, placehousenumber, placepostcode, placephone, placeemail, placewebsite, placeopeninghours, placeid)
 
         val database = Firebase.database
         val listRef = database.getReference(firebasepathname).child(Firebase.auth.currentUser!!.uid)
@@ -99,7 +108,33 @@ class  FirebaseUtility : ViewModel() {
 
     }
 
-    fun deleteFavoriteItem(deleteitem : FirebaseListObject) {
+    fun addBlacklistItem(firebasepathname : String, placename : String, placeid : String) {
+
+        if(placename == "") {
+            errorMessage.value = "Field cannot be empty, please get a new place."
+            return
+        }
+
+        if(placeid == null) {
+            errorMessage.value = "Place id cannot be empty, please get a new place."
+            return
+        }
+
+        errorMessage.value = ""
+
+        val tempPlaceItem = FirebaseFavoriteListObject(placename, placeid)
+
+        val database = Firebase.database
+        val listRef = database.getReference(firebasepathname).child(Firebase.auth.currentUser!!.uid)
+        listRef.push().setValue(tempPlaceItem).addOnCompleteListener {
+            //loadShopping()
+        }
+
+        //loadShopping()
+
+    }
+
+    fun deleteFavoriteItem(deleteitem : FirebaseFavoriteListObject) {
         val database = Firebase.database
         val listRef = database.getReference("funfavorite").child(Firebase.auth.currentUser!!.uid)
 
@@ -109,7 +144,7 @@ class  FirebaseUtility : ViewModel() {
 
     }
 
-    fun deleteBlacklistItem(deleteitem : FirebaseListObject) {
+    fun deleteBlacklistItem(deleteitem : FirebaseFavoriteListObject) {
         val database = Firebase.database
         val listRef = database.getReference("funblacklist").child(Firebase.auth.currentUser!!.uid)
 
