@@ -89,9 +89,17 @@ class StartFragment : Fragment() {
         //TODO: Spara detaljer till databasen, fixa så att man kan få upp dessa i en detaljvy
         // från favoriter
         //TODO: Fixa en infoknapp på startfragment(?)
+        //TODO: Fixa en huvudanimation i mitten
+        //TODO: Fixa fler animationer till kategorierna
+        //TODO: Fixa så att detaljer i linear layout blir GONE om dem inte har något värde
+        //TODO: Fixa så att man inte kan lägga till samma ställe i favoriter och blacklist flera gånger
+        //TODO: Fixa så att ställen från blacklist inte dyker upp i resultaten
+        //TODO: Fixa så att snackbar dyker upp om man klickar på favorite, blacklist och share
+        // även om där inte finns något ställe valt
 
         // Hide elements on creation
         binding.linearLayout.visibility = View.GONE
+        binding.animationViewInfo.visibility = View.GONE
 
         //observera vårt felmeddelande
         val errorObserver  = Observer<String> {errorMess ->
@@ -122,6 +130,8 @@ class StartFragment : Fragment() {
 
         val adapter = ArrayAdapter(requireContext(), R.layout.dropdown_item, Subjects)
         autoCompleteTextView.setAdapter(adapter)
+
+        Log.i("FUNDEBUG4",autoCompleteTextView.text.toString())
 
 
         // Set bottom navigation view to visible after logging in
@@ -200,9 +210,14 @@ class StartFragment : Fragment() {
             OnItemClickListener { parent, view, position, id ->
                 val category = autoCompleteTextView.text.toString().lowercase()
                 val placesUrl = model.buildGeoapifyURL(autoCompleteTextView.text.toString())
+                binding.linearLayout.visibility = View.GONE
+                binding.animationView.setAnimation(model.selectAnimation(autoCompleteTextView.text.toString()))
+                binding.animationView.visibility = View.VISIBLE
+                binding.animationView.playAnimation()
                 myPlaces = model.getPlaces(placesUrl)
                 currentPlace = model.getRandomPlace(myPlaces)
                 binding.getPlacesButton.setText("Find your new favorite " + category +"!")
+                binding.animationViewInfo.visibility = View.VISIBLE
             }
 
             binding.addFavoriteButton.setOnClickListener {

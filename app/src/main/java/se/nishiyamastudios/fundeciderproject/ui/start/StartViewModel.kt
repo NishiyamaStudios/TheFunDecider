@@ -3,12 +3,14 @@ package se.nishiyamastudios.fundeciderproject.ui.start
 import android.content.Intent
 import android.net.Uri
 import android.util.Log
+import androidx.annotation.RawRes
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import okhttp3.*
 import org.json.JSONObject
 import org.json.JSONTokener
 import se.nishiyamastudios.fundeciderproject.PlaceDetails
+import se.nishiyamastudios.fundeciderproject.R
 import java.io.IOException
 import java.util.concurrent.CountDownLatch
 
@@ -218,8 +220,20 @@ class StartViewModel : ViewModel() {
 
     }
 
-    fun sleep() {
+    fun selectAnimation(category: String): Int {
+        var animationInt: Int = R.raw.animation_welcome
+        //var currentCategory = category.replace(" ","")
+        //currentCategory = currentCategory.lowercase()
 
-        Thread.sleep(3_000)
+        when (category) {
+            "Restaurant" -> animationInt = R.raw.animation_restaurant
+            "Bar" -> animationInt = R.raw.animation_bar
+            "Pub" -> animationInt = R.raw.animation_pub
+            "Cafe" -> animationInt = R.raw.animation_cafe
+            "Fast Food" -> animationInt = R.raw.animation_fastfood
+            "Entertainment" -> animationInt = R.raw.animation_entertainment
+        }
+
+        return animationInt
     }
 }
