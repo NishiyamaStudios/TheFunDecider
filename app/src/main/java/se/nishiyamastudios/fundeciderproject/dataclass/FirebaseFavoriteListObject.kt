@@ -1,4 +1,4 @@
-package se.nishiyamastudios.fundeciderproject
+package se.nishiyamastudios.fundeciderproject.dataclass
 
 data class FirebaseFavoriteListObject(val placename: String? = null,
                                       val placestreet: String? = null,

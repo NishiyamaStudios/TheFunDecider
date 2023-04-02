@@ -6,8 +6,11 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.RecyclerView
 import se.nishiyamastudios.fundeciderproject.R
+import se.nishiyamastudios.fundeciderproject.ui.start.StartViewModel
 
 class FavoritesAdapter : RecyclerView.Adapter<FavoritesAdapter.ViewHolder>() {
 
@@ -32,7 +35,6 @@ class FavoritesAdapter : RecyclerView.Adapter<FavoritesAdapter.ViewHolder>() {
         // viewType: Int = kan definiera olika typer av rader, produktrad, headerrad etc..
 
         val view = LayoutInflater.from(parent.context).inflate(R.layout.favorite_row, parent, false)
-
         return ViewHolder(view)
     }
 

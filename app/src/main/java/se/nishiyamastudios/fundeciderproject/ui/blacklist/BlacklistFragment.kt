@@ -8,8 +8,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
-import se.nishiyamastudios.fundeciderproject.FirebaseFavoriteListObject
-import se.nishiyamastudios.fundeciderproject.FirebaseUtility
+import se.nishiyamastudios.fundeciderproject.dataclass.FirebaseFavoriteListObject
+import se.nishiyamastudios.fundeciderproject.utilityclass.FirebaseUtility
 import se.nishiyamastudios.fundeciderproject.databinding.FragmentBlacklistBinding
 import se.nishiyamastudios.fundeciderproject.ui.login.LoginViewModel
 

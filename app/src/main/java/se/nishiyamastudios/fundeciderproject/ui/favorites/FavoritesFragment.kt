@@ -8,8 +8,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
-import se.nishiyamastudios.fundeciderproject.FirebaseFavoriteListObject
-import se.nishiyamastudios.fundeciderproject.FirebaseUtility
+import se.nishiyamastudios.fundeciderproject.dataclass.FirebaseFavoriteListObject
+import se.nishiyamastudios.fundeciderproject.utilityclass.FirebaseUtility
+import se.nishiyamastudios.fundeciderproject.utilityclass.IntentUtility
 import se.nishiyamastudios.fundeciderproject.databinding.FragmentFavoritesBinding
 
 class FavoritesFragment : Fragment() {
@@ -19,6 +20,7 @@ class FavoritesFragment : Fragment() {
 
     val viewModel by viewModels<FavoritesViewModel>()
     val fbUtil by viewModels<FirebaseUtility>()
+    val intentUtil by viewModels<IntentUtility>()
 
     var favoritesadapter = FavoritesAdapter()
 
@@ -59,6 +61,16 @@ class FavoritesFragment : Fragment() {
         fbUtil.loadFavorites()
 
         binding.linearLayoutFavoriteInfo.visibility = View.GONE
+
+        binding.favoritePlaceStreetTV.setOnClickListener {
+
+            val browserIntent = intentUtil.buildMapBrowserIntent( binding.favoritePlaceStreetTV.text.toString(), "https://www.google.com/maps/search/?api=1&query=")
+            try {
+                startActivity(browserIntent)
+            } catch (e: Exception) {
+                //snackbarMessage.value = "The website cannot be opened."
+            }
+        }
 
 
     }

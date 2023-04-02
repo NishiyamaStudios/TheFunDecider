@@ -23,8 +23,9 @@ import androidx.lifecycle.Observer
 import com.google.android.libraries.places.api.net.PlacesClient
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
-import se.nishiyamastudios.fundeciderproject.FirebaseUtility
-import se.nishiyamastudios.fundeciderproject.PlaceDetails
+import se.nishiyamastudios.fundeciderproject.utilityclass.FirebaseUtility
+import se.nishiyamastudios.fundeciderproject.utilityclass.IntentUtility
+import se.nishiyamastudios.fundeciderproject.dataclass.PlaceDetails
 import se.nishiyamastudios.fundeciderproject.R
 import se.nishiyamastudios.fundeciderproject.databinding.FragmentStartBinding
 
@@ -49,6 +50,7 @@ class StartFragment : Fragment() {
     private lateinit var placesUrl: String
 
     val model by viewModels<StartViewModel>()
+    val intentUtil by viewModels<IntentUtility>()
     val fbUtil by viewModels<FirebaseUtility>()
 
 
@@ -250,7 +252,7 @@ class StartFragment : Fragment() {
 
         binding.placeStreetTV.setOnClickListener {
 
-            val browserIntent = model.buildMapBrowserIntent(currentPlace.street + " " +currentPlace.housenumber, "https://www.google.com/maps/search/?api=1&query=")
+            val browserIntent = intentUtil.buildMapBrowserIntent(currentPlace.street + " " +currentPlace.housenumber, "https://www.google.com/maps/search/?api=1&query=")
             try {
                 startActivity(browserIntent)
             } catch (e: Exception) {
@@ -293,7 +295,7 @@ class StartFragment : Fragment() {
         binding.placeEmailTV.setOnClickListener {
 
             val chooserTitle = "Email client"
-            val emailIntent = model.buildEmailIntent(currentPlace.email, "Reservation", "")
+            val emailIntent = intentUtil.buildEmailIntent(currentPlace.email, "Reservation", "")
 
             try {
                 startActivity(Intent.createChooser(emailIntent, chooserTitle))
@@ -305,7 +307,7 @@ class StartFragment : Fragment() {
 
         binding.placeWebsiteTV.setOnClickListener {
 
-            val browserIntent = model.buildBrowserIntent(currentPlace.website)
+            val browserIntent = intentUtil.buildBrowserIntent(currentPlace.website)
 
             try {
                 startActivity(browserIntent)

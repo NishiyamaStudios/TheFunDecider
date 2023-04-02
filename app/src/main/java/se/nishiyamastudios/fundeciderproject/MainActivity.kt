@@ -13,6 +13,7 @@ import se.nishiyamastudios.fundeciderproject.ui.blacklist.BlacklistFragment
 import se.nishiyamastudios.fundeciderproject.ui.favorites.FavoritesFragment
 import se.nishiyamastudios.fundeciderproject.ui.login.LoginFragment
 import se.nishiyamastudios.fundeciderproject.ui.start.StartFragment
+import se.nishiyamastudios.fundeciderproject.utilityclass.FirebaseUtility
 
 class MainActivity : AppCompatActivity() {
 

@@ -1,15 +1,13 @@
 package se.nishiyamastudios.fundeciderproject.ui.start
 
 import android.content.Intent
-import android.net.Uri
 import android.util.Log
-import androidx.annotation.RawRes
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import okhttp3.*
 import org.json.JSONObject
 import org.json.JSONTokener
-import se.nishiyamastudios.fundeciderproject.PlaceDetails
+import se.nishiyamastudios.fundeciderproject.dataclass.PlaceDetails
 import se.nishiyamastudios.fundeciderproject.R
 import java.io.IOException
 import java.util.concurrent.CountDownLatch
@@ -178,33 +176,6 @@ class StartViewModel : ViewModel() {
         val geoapifyKey = "&apiKey=d357192221064b8da71d4143f306b152"
 
         return geoapifyBaseURL + geoapifyCategory + geoapifyPlace + geoapifyLimit + geoapifyKey
-    }
-
-    fun buildMapBrowserIntent (address: String, url: String): Intent {
-        return Intent(Intent.ACTION_VIEW, Uri.parse((url+address)))
-    }
-    fun buildBrowserIntent(url: String?): Intent {
-        var newUrl = ""
-        if (url != null) {
-            if (url.substring(0, 3) == "www") {
-                newUrl = url.replace("www", "http://www")
-            } else {
-                newUrl = url
-            }
-        }
-
-        return Intent(Intent.ACTION_VIEW, Uri.parse(newUrl))
-    }
-
-    fun buildEmailIntent(toaddress: String?, subject: String, body: String): Intent {
-        val uri = Uri.parse("mailto:" + toaddress)
-            .buildUpon()
-            .appendQueryParameter("subject", subject)
-            .appendQueryParameter("body", body)
-            .appendQueryParameter("to", toaddress)
-            .build()
-
-        return Intent(Intent.ACTION_SENDTO, uri)
     }
 
     fun sharePlace(placename: String): Intent {

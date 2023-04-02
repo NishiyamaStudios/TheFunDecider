@@ -1,4 +1,4 @@
-package se.nishiyamastudios.fundeciderproject
+package se.nishiyamastudios.fundeciderproject.utilityclass
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
@@ -7,6 +7,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.ktx.database
 import com.google.firebase.database.ktx.getValue
 import com.google.firebase.ktx.Firebase
+import se.nishiyamastudios.fundeciderproject.dataclass.FirebaseFavoriteListObject
 
 class  FirebaseUtility : ViewModel() {
 
