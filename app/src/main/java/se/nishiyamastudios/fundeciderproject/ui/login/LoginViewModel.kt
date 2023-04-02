@@ -2,11 +2,8 @@ package se.nishiyamastudios.fundeciderproject.ui.login
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.navigation.fragment.NavHostFragment.Companion.findNavController
-import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
-import se.nishiyamastudios.fundeciderproject.R
 
 class LoginViewModel : ViewModel() {
 

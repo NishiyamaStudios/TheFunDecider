@@ -20,7 +20,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
-import com.google.android.libraries.places.api.net.PlacesClient
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
 import se.nishiyamastudios.fundeciderproject.utilityclass.FirebaseUtility
@@ -120,9 +119,9 @@ class StartFragment : Fragment() {
 
         val autoCompleteTextView = binding.AutoCompleteTextview
 
-        val Subjects = arrayOf("Restaurant", "Bar", "Pub", "Cafe", "Fast Food", "Entertainment")
+        val subjects = arrayOf("Restaurant", "Bar", "Pub", "Cafe", "Fast Food", "Entertainment")
 
-        val adapter = ArrayAdapter(requireContext(), R.layout.dropdown_item, Subjects)
+        val adapter = ArrayAdapter(requireContext(), R.layout.dropdown_item, subjects)
         autoCompleteTextView.setAdapter(adapter)
 
 
@@ -159,11 +158,11 @@ class StartFragment : Fragment() {
 
             val placeStreetTV = binding.placeStreetTV
             placePhoneTV = binding.placePhoneTV
-            val phoneRegex = Regex("[^A-Za-z0-9+ ]")
+            val phoneRegex = Regex("[^A-Za-z\\d+ ]")
 
             placePhoneTV.text = placePhone?.let { it1 -> phoneRegex.replace(it1, "") }
             placeStreetTV.paintFlags = android.graphics.Paint.UNDERLINE_TEXT_FLAG
-            placeStreetTV.text = placeStreet + " " +placeStreetNumber
+            placeStreetTV.text = "$placeStreet $placeStreetNumber"
 
             var openingHours = placeOpeningHours?.replace(",","\n")
             openingHours = openingHours?.replace(";","\n")
@@ -187,7 +186,7 @@ class StartFragment : Fragment() {
                 binding.animationView.playAnimation()
                 myPlaces = model.getPlaces(placesUrl)
                 currentPlace = model.getRandomPlace(myPlaces)
-                binding.getPlacesButton.setText("Find your new favorite " + category +"!")
+                binding.getPlacesButton.text = "Find your new favorite $category!"
                 binding.animationViewInfo.visibility = View.VISIBLE
             }
 

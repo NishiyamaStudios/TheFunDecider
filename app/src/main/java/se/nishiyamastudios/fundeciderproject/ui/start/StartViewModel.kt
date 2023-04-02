@@ -131,7 +131,7 @@ class StartViewModel : ViewModel() {
 
                 }
 
-                countDownLatch.countDown();
+                countDownLatch.countDown()
             }
 
         })
@@ -168,7 +168,6 @@ class StartViewModel : ViewModel() {
             "Cafe" -> geoapifyCategory = "catering." + category.lowercase()
             "Fast Food" -> geoapifyCategory = "catering.fast_food"
             "Entertainment" -> geoapifyCategory = category.lowercase()
-            else -> ""
         }
         val geoapifyPlace =
             "&filter=place:51fab165f6780b2a4059a2e9e94ccbcb4b40f00101f901f3b6a20000000000c002069203064d616c6dc3b6&limit="

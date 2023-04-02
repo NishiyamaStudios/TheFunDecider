@@ -1,22 +1,14 @@
 package se.nishiyamastudios.fundeciderproject.ui.login
 
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.View
-import android.view.View.FOCUS_UP
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
-import androidx.navigation.findNavController
-import androidx.navigation.fragment.findNavController
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import se.nishiyamastudios.fundeciderproject.R
@@ -28,7 +20,7 @@ class LoginFragment : Fragment() {
     var _binding : FragmentLoginBinding? = null
     val binding get() = _binding!!
 
-    val viewModel by viewModels<LoginViewModel>()
+    private val viewModel by viewModels<LoginViewModel>()
 
     companion object {
         fun newInstance() = LoginFragment()

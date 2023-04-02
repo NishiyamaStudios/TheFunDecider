@@ -8,9 +8,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
-import se.nishiyamastudios.fundeciderproject.dataclass.FirebaseFavoriteListObject
 import se.nishiyamastudios.fundeciderproject.utilityclass.FirebaseUtility
 import se.nishiyamastudios.fundeciderproject.databinding.FragmentBlacklistBinding
+import se.nishiyamastudios.fundeciderproject.dataclass.FirebaseBlackListObject
 import se.nishiyamastudios.fundeciderproject.ui.login.LoginViewModel
 
 class BlacklistFragment : Fragment() {
@@ -21,7 +21,7 @@ class BlacklistFragment : Fragment() {
     val viewModel by viewModels<LoginViewModel>()
     val fbUtil = FirebaseUtility()
 
-    var blacklistadapter = BlacklistAdapter()
+    private var blacklistadapter = BlacklistAdapter()
 
     companion object {
         fun newInstance() = BlacklistFragment()
@@ -49,7 +49,7 @@ class BlacklistFragment : Fragment() {
         binding.blacklistRV.adapter = blacklistadapter
         binding.blacklistRV.layoutManager = LinearLayoutManager(requireContext())
 
-        val blacklistObserver = Observer<List<FirebaseFavoriteListObject>> {
+        val blacklistObserver = Observer<List<FirebaseBlackListObject>> {
             blacklistadapter.notifyDataSetChanged()
         }
 
