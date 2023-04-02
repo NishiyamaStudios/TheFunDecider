@@ -9,12 +9,18 @@ import org.json.JSONObject
 import org.json.JSONTokener
 import se.nishiyamastudios.fundeciderproject.dataclass.PlaceDetails
 import se.nishiyamastudios.fundeciderproject.R
+import se.nishiyamastudios.fundeciderproject.dataclass.FirebaseBlackListObject
+import se.nishiyamastudios.fundeciderproject.utilityclass.FirebaseUtility
 import java.io.IOException
 import java.util.concurrent.CountDownLatch
 
 class StartViewModel : ViewModel() {
 
     var places = mutableListOf<PlaceDetails>()
+
+    val fbUtil = FirebaseUtility()
+    var blackListedPlaces = fbUtil.loadBlacklist()
+    val blacklistNameList = mutableListOf<String>()
 
     private val client = OkHttpClient()
 
@@ -23,8 +29,22 @@ class StartViewModel : ViewModel() {
         MutableLiveData<String>()
     }
 
+    fun getListOfBlacklistedPlaceNames(blacklistedplaces : MutableLiveData<List<FirebaseBlackListObject>>): MutableList<String> {
+        for (i in 0 until blacklistedplaces.value?.size!!.toInt()) {
+            val name = blacklistedplaces.value!![i].placename
+            blacklistNameList.add(name!!)
+        }
+
+        return blacklistNameList
+    }
+
+
+
 
     fun getPlaces(url: String): MutableList<PlaceDetails> {
+
+        blackListedPlaces = fbUtil.loadBlacklist()
+        var listOfBlacklistedPlaces = getListOfBlacklistedPlaceNames(blackListedPlaces)
 
         val request = Request.Builder()
             .url(url)
@@ -126,9 +146,11 @@ class StartViewModel : ViewModel() {
                         placeId
                     )
 
-                    // Add the place to our mutable list of places.
-                    places.add(currentPlace)
-
+                    // Add the place to the list of places if it's not blacklisted.
+                    if (currentPlace.name !in listOfBlacklistedPlaces) {
+                        Log.i("FUNDEBUGBLACKLISTCHECK", "${currentPlace.name} not in blacklist!")
+                        places.add(currentPlace)
+                    }
                 }
 
                 countDownLatch.countDown()
@@ -137,12 +159,7 @@ class StartViewModel : ViewModel() {
         })
 
             countDownLatch.await()
-            //places.shuffle()
             return places
-
-       // return places
-
-
     }
 
     fun getRandomPlace(places: MutableList<PlaceDetails>): PlaceDetails {

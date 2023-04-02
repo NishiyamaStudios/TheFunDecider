@@ -44,7 +44,7 @@ class  FirebaseUtility {
 
     }
 
-    fun loadBlacklist() {
+    fun loadBlacklist(): MutableLiveData<List<FirebaseBlackListObject>> {
 
         val database = Firebase.database
         val blacklistRef = database.getReference("funblacklist").child(Firebase.auth.currentUser!!.uid)
@@ -57,6 +57,8 @@ class  FirebaseUtility {
             }
             blacklistPlaces.value = blackList
         }
+
+        return blacklistPlaces
 
     }
 

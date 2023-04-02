@@ -181,7 +181,15 @@ class StartFragment : Fragment() {
                 binding.animationView.visibility = View.VISIBLE
                 binding.animationView.playAnimation()
                 myPlaces = model.getPlaces(placesUrl)
-                currentPlace = model.getRandomPlace(myPlaces)
+
+                if (myPlaces.isEmpty()) {
+                    snackbarMessage.value = "Could not get any more places, you blacklisted them all?!"
+                    binding.getPlacesButton.isClickable = false
+                } else {
+                    currentPlace = model.getRandomPlace(myPlaces)
+                    binding.getPlacesButton.isClickable = true
+                }
+
                 binding.getPlacesButton.text = "Find your new favorite $category!"
                 binding.animationViewInfo.visibility = View.VISIBLE
             }
@@ -200,7 +208,7 @@ class StartFragment : Fragment() {
                     val placeOpeningHours = currentPlace.openinghours
 
                     fbUtil.addFavoriteItem("funfavorite", placeName, placeStreet, placeHouseNumber, placePostCode, placePhone, placeEmail,placeWebsite, placeOpeningHours, placeId)
-
+                    fbUtil.loadFavorites()
                 }
             }
 
@@ -211,6 +219,8 @@ class StartFragment : Fragment() {
                     val placeId = currentPlace.placeid
 
                     fbUtil.addBlacklistItem("funblacklist", placeName, placeId)
+                    myPlaces.remove(currentPlace)
+                    fbUtil.loadBlacklist()
                 }
             }
 
