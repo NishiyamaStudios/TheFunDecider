@@ -11,13 +11,25 @@
         android:id="@+id/linearLayoutFavoriteInfo"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@drawable/border"
+        android:background="#FFFFFF"
+        android:backgroundTintMode="src_atop"
         android:orientation="vertical"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="@id/favoritesRV"
         app:layout_constraintEnd_toEndOf="@+id/favoritesRV"
         app:layout_constraintStart_toStartOf="@+id/favoritesRV"
         app:layout_constraintTop_toTopOf="@+id/favoritesRV">
+
+        <ImageView
+            android:id="@+id/closeFavoriteInfoImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/favoriteDeleteImage"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/outline_close_24" />
 
         <TextView
             android:id="@+id/selectedFavoritePlaceTV"
@@ -29,6 +41,7 @@
             android:textSize="25sp"
             android:textStyle="bold"
             tools:text="selected place" />
+
 
         <TextView
             android:id="@+id/favoritePlaceStreetTV"

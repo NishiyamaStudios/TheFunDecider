@@ -39,8 +39,12 @@ class FavoritesAdapter : RecyclerView.Adapter<FavoritesAdapter.ViewHolder>() {
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
         val currentFavorite = frag.fbUtil.favoritePlaces.value!![position]
+        val favoritesInfo = frag.binding.linearLayoutFavoriteInfo
+        val favoritesRV = frag.binding.favoritesRV
 
         holder.placeName.text = currentFavorite.placename
+
+
 
         holder.placeDelete.setOnClickListener {
             frag.fbUtil.deleteFavoriteItem(currentFavorite)
@@ -48,7 +52,24 @@ class FavoritesAdapter : RecyclerView.Adapter<FavoritesAdapter.ViewHolder>() {
 
 
         holder.placeInfo.setOnClickListener {
-            frag.binding.linearLayoutFavoriteInfo.visibility = View.VISIBLE
+
+            frag.binding.selectedFavoritePlaceTV.setText(currentFavorite.placename)
+            frag.binding.favoritePlaceStreetTV.setText(currentFavorite.placestreet+" "+currentFavorite.housenumber)
+            frag.binding.favoritePlacePhoneTV.setText(currentFavorite.phone)
+            frag.binding.favoritePlaceEmailTV.setText(currentFavorite.email)
+            frag.binding.favoritePlaceWebsiteTV.setText(currentFavorite.website)
+            frag.binding.favoritePlaceOpeningHoursMT.setText(currentFavorite.openinghours)
+            frag.binding.selectedFavoritePlaceTV.setText(currentFavorite.placename)
+
+            favoritesInfo.bringToFront()
+            favoritesInfo.visibility = View.VISIBLE
+            frag.binding.favoritesTV.visibility = View.INVISIBLE
+        }
+
+        frag.binding.closeFavoriteInfoImage.setOnClickListener {
+            favoritesRV.bringToFront()
+            favoritesInfo.visibility = View.GONE
+            frag.binding.favoritesTV.visibility = View.VISIBLE
         }
 
 
