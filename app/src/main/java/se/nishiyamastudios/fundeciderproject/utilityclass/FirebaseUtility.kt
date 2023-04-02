@@ -9,7 +9,7 @@ import com.google.firebase.database.ktx.getValue
 import com.google.firebase.ktx.Firebase
 import se.nishiyamastudios.fundeciderproject.dataclass.FirebaseFavoriteListObject
 
-class  FirebaseUtility : ViewModel() {
+class  FirebaseUtility {
 
     val favoritePlaces: MutableLiveData<List<FirebaseFavoriteListObject>> by lazy {
         MutableLiveData<List<FirebaseFavoriteListObject>>()

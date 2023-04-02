@@ -19,8 +19,8 @@ class FavoritesFragment : Fragment() {
     val binding get() = _binding!!
 
     val viewModel by viewModels<FavoritesViewModel>()
-    val fbUtil by viewModels<FirebaseUtility>()
-    val intentUtil by viewModels<IntentUtility>()
+    val fbUtil = FirebaseUtility()
+    private val intentUtil = IntentUtility()
 
     var favoritesadapter = FavoritesAdapter()
 
@@ -68,6 +68,7 @@ class FavoritesFragment : Fragment() {
             try {
                 startActivity(browserIntent)
             } catch (e: Exception) {
+                //TODO: Fixa snackbar
                 //snackbarMessage.value = "The website cannot be opened."
             }
         }

@@ -4,7 +4,7 @@ import android.content.Intent
 import android.net.Uri
 import androidx.lifecycle.ViewModel
 
-class IntentUtility : ViewModel() {
+class IntentUtility {
 
     fun buildMapBrowserIntent (address: String, url: String): Intent {
         return Intent(Intent.ACTION_VIEW, Uri.parse((url+address)))

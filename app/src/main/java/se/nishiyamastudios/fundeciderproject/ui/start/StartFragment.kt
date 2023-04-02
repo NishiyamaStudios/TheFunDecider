@@ -40,18 +40,13 @@ class StartFragment : Fragment() {
     var _binding : FragmentStartBinding? = null
     val binding get() = _binding!!
 
-    private lateinit var selectedPlace: TextView
     private lateinit var placePhoneTV: TextView
-    private lateinit var placesClient: PlacesClient
-    private lateinit var selectedCategory: String
-    private lateinit var placeNames: MutableList<String>
     private lateinit var myPlaces: MutableList<PlaceDetails>
     private lateinit var currentPlace: PlaceDetails
-    private lateinit var placesUrl: String
 
-    val model by viewModels<StartViewModel>()
-    val intentUtil by viewModels<IntentUtility>()
-    val fbUtil by viewModels<FirebaseUtility>()
+    private val model by viewModels<StartViewModel>()
+    private val intentUtil = IntentUtility()
+    private val fbUtil = FirebaseUtility()
 
 
     companion object {
@@ -67,9 +62,6 @@ class StartFragment : Fragment() {
 
         _binding = FragmentStartBinding.inflate(inflater, container, false)
         return binding.root
-
-
-
 
     }
 
@@ -133,8 +125,6 @@ class StartFragment : Fragment() {
         val adapter = ArrayAdapter(requireContext(), R.layout.dropdown_item, Subjects)
         autoCompleteTextView.setAdapter(adapter)
 
-        Log.i("FUNDEBUG4",autoCompleteTextView.text.toString())
-
 
         // Set bottom navigation view to visible after logging in
         val activity  = view.context as? AppCompatActivity
@@ -153,17 +143,8 @@ class StartFragment : Fragment() {
             if (binding.AutoCompleteTextview.text.toString() != "") {
                 currentPlace = model.getRandomPlace(myPlaces)
             }
-            //val placesUrl = model.buildGeoapifyURL(autoCompleteTextView.text.toString())
 
             Log.i("FUNDEBUG", "I Gotted IT!")
-
-            //Log.i("FUNDEBUG3", placesUrl)
-
-            //val myPlaces = model.getPlaces(placesUrl)
-            //model.sleep()
-            //val myRandomPlace = model.getRandomPlace(myPlaces)
-            //val myRandomPlace = model.getRandomPlace(placesUrl)
-            //currentPlace = myRandomPlace as PlaceDetails
 
             val placeName = currentPlace.name
             val placeStreet = currentPlace.street
@@ -193,18 +174,6 @@ class StartFragment : Fragment() {
 
             binding.linearLayout.visibility = View.VISIBLE
             binding.animationView.visibility = View.GONE
-
-        /*
-            Log.i("FUNDEBUG", "Random name: " + currentPlace.name)
-            Log.i("FUNDEBUG", "Random street: " + currentPlace.street + currentPlace.housenumber)
-            Log.i("FUNDEBUG", "Random postcode: " + currentPlace.postcode)
-            Log.i("FUNDEBUG", "Random email: " + currentPlace.email)
-            Log.i("FUNDEBUG", "Random phone: " + currentPlace.phone)
-            Log.i("FUNDEBUG", "Random website: " + currentPlace.website)
-            Log.i("FUNDEBUG", "Random openinghours: " + currentPlace.openinghours)
-            Log.i("FUNDEBUG", "Random placeId: " + currentPlace.placeid)
-
-        */
 
         }
 

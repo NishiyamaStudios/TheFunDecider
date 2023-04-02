@@ -19,7 +19,7 @@ class BlacklistFragment : Fragment() {
     val binding get() = _binding!!
 
     val viewModel by viewModels<LoginViewModel>()
-    val fbUtil by viewModels<FirebaseUtility>()
+    val fbUtil = FirebaseUtility()
 
     var blacklistadapter = BlacklistAdapter()
 

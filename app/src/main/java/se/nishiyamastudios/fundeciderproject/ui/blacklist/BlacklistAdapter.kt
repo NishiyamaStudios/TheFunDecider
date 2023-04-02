@@ -42,27 +42,9 @@ class BlacklistAdapter : RecyclerView.Adapter<BlacklistAdapter.ViewHolder>() {
         holder.placeDelete.setOnClickListener {
             frag.fbUtil.deleteBlacklistItem(currentBlacklistItem)
         }
-
-
-        /*
-        //ligga och lyssna på om checkboxen är ikryssad eller inte
-        holder.shoppingCheckbox.setOnCheckedChangeListener { compoundButton, shopchecked ->
-            frag.model.doneShop(currentShop, shopchecked)
-        }
-
-         */
-
-        /*
-        holder.itemView.setOnClickListener {
-            // TODO: Gå till läs mer
-            frag.model.deleteShop(currentShop)
-        }
-        */
-
     }
 
     override fun getItemCount(): Int {
-        //value?.let innebär att detta utförs om value inte är null
         frag.fbUtil.blacklistPlaces.value?.let {
             return it.size
         }

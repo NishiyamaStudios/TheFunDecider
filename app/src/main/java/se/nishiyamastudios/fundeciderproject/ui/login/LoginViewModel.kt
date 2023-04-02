@@ -33,18 +33,6 @@ class LoginViewModel : ViewModel() {
                 if (!task.isSuccessful) {
                     errorMessage.value = "Fel inloggning"
                 }
-
-                /*
-                if (task.isSuccessful) {
-                    // Sign in success, update UI with the signed-in user's information
-                    //Toast.makeText(requireContext(), "Login ok.", Toast.LENGTH_SHORT).show()
-                } else {
-                    // If sign in fails, display a message to the user.
-                    //Toast.makeText(requireContext(), "Login failed.", Toast.LENGTH_SHORT).show()
-                    errorMessage.value = "Fel inloggning"
-                }
-            }
-                 */
             }
     }
 
@@ -52,12 +40,12 @@ class LoginViewModel : ViewModel() {
 
         if (email == "") {
             errorMessage.value = "Fyll i epost"
-            return //funktionen är klar, kör inte längre
+            return
         }
 
         if (password == "") {
             errorMessage.value = "Fyll i lösenord"
-            return //funktionen är klar, kör inte längre
+            return
         }
 
         Firebase.auth.createUserWithEmailAndPassword(email, password)
@@ -67,27 +55,6 @@ class LoginViewModel : ViewModel() {
                 if (!task.isSuccessful) {
                     errorMessage.value = task.exception!!.localizedMessage!!
                 }
-
-
-                /*
-            if (task.isSuccessful) {
-                // Sign in success, update UI with the signed-in user's information
-                //Toast.makeText(requireContext(), "Register ok.", Toast.LENGTH_SHORT).show()
-            } else {
-                // If sign in fails, display a message to the user.
-                //Toast.makeText(requireContext(), "Register failed.", Toast.LENGTH_SHORT).show()
-                //errorMessage.value = "Fel registrering"
-
-                errorMessage.value = task.exception!!.localizedMessage!!
-
-                /*
-                Log.i("pia11debug",task.exception!!.message!!)
-                Log.i("pia11debug",task.exception!!.localizedMessage!!)
-
-                 */
-
-             */
-
             }
     }
 }

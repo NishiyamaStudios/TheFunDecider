@@ -1,5 +1,6 @@
 package se.nishiyamastudios.fundeciderproject.dataclass
 
+// Class used to capture data from GeoApify API calls
 data class PlaceDetails(
     val name: String,
     val street: String?,
