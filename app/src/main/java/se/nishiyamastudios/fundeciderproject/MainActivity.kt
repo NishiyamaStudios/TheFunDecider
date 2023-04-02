@@ -22,6 +22,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        //TODO: Se till så att inget visas innan Login när där inte finns en user inloggad
 
         val callback = object : OnBackPressedCallback(
             true // default to enabled
@@ -40,9 +41,9 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 when (backStackEntryName) {
-                    "page0" -> bottomNavigationView.menu.findItem(R.id.page0).isChecked = true
-                    "page1" -> bottomNavigationView.menu.findItem(R.id.page1).isChecked = true
-                    "page2" -> bottomNavigationView.menu.findItem(R.id.page2).isChecked = true
+                    "page0" -> bottomNavigationView.menu.findItem(R.id.startPage).isChecked = true
+                    "page1" -> bottomNavigationView.menu.findItem(R.id.favoritesPage).isChecked = true
+                    "page2" -> bottomNavigationView.menu.findItem(R.id.blacklistPage).isChecked = true
                 }
             }
         }
@@ -52,16 +53,18 @@ class MainActivity : AppCompatActivity() {
             callback
         )
 
-
+        Log.i("FUNDEBUGLOGIN", Firebase.auth.currentUser.toString())
         bottomNavigationView = findViewById(R.id.bottom_navigation_view)
 
         Firebase.auth.addAuthStateListener {
 
             if (Firebase.auth.currentUser != null) {
 
-                supportFragmentManager.beginTransaction().replace(R.id.fragNavCon, StartFragment())
-                    .commit()
+                supportFragmentManager.beginTransaction().replace(R.id.fragNavCon, StartFragment()).commit()
 
+            } else if (Firebase.auth.currentUser == null) {
+                supportFragmentManager.beginTransaction().replace(R.id.fragNavCon, LoginFragment()).commit()
+                bottomNavigationView.visibility = View.GONE
             }
         }
 
@@ -69,13 +72,13 @@ class MainActivity : AppCompatActivity() {
 
         bottomNavigationView.setOnItemSelectedListener { item ->
             when (item.itemId) {
-                R.id.page0 -> {
+                R.id.startPage -> {
                     supportFragmentManager.beginTransaction().add(R.id.fragNavCon, StartFragment())
                         .addToBackStack("page0").commit()
 
                     true
                 }
-                R.id.page1 -> {
+                R.id.favoritesPage -> {
 
                     fbUtil.loadFavorites()
                     supportFragmentManager.beginTransaction()
@@ -83,7 +86,7 @@ class MainActivity : AppCompatActivity() {
 
                     true
                 }
-                R.id.page2 -> {
+                R.id.blacklistPage -> {
 
                     fbUtil.loadBlacklist()
                     supportFragmentManager.beginTransaction()
@@ -91,12 +94,12 @@ class MainActivity : AppCompatActivity() {
 
                     true
                 }
-                R.id.page3 -> {
+                R.id.logout -> {
 
                     Firebase.auth.signOut()
                     supportFragmentManager.beginTransaction()
                         .replace(R.id.fragNavCon, LoginFragment()).commit()
-                    bottomNavigationView.menu.findItem(R.id.page0).isChecked = true
+                    bottomNavigationView.menu.findItem(R.id.startPage).isChecked = true
                     bottomNavigationView.visibility = View.GONE
 
                     false

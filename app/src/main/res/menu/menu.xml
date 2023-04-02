@@ -2,14 +2,14 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/page0"
+        android:id="@+id/startPage"
         android:checkable="true"
         android:enabled="true"
         android:icon="@drawable/baseline_star_24"
         android:title="Start"
-        android:visible="true"></item>
+        android:visible="true" />
     <item
-        android:id="@+id/page1"
+        android:id="@+id/favoritesPage"
         android:enabled="true"
         android:icon="@drawable/baseline_favorite_24"
         android:title="Favorites">
@@ -17,7 +17,7 @@
     </item>
 
     <item
-        android:id="@+id/page2"
+        android:id="@+id/blacklistPage"
         android:enabled="true"
         android:icon="@drawable/baseline_playlist_remove_24"
         android:title="Blacklist">
@@ -25,7 +25,7 @@
     </item>
 
     <item
-        android:id="@+id/page3"
+        android:id="@+id/logout"
         android:enabled="true"
         android:icon="@drawable/round_stop_24"
         android:title="Logout">

@@ -79,16 +79,12 @@ class StartFragment : Fragment() {
 
          */
 
-        //TODO: Spara detaljer till databasen, fixa så att man kan få upp dessa i en detaljvy
-        // från favoriter
         //TODO: Fixa en infoknapp på startfragment(?)
-        //TODO: Fixa en huvudanimation i mitten
-        //TODO: Fixa fler animationer till kategorierna
         //TODO: Fixa så att detaljer i linear layout blir GONE om dem inte har något värde
         //TODO: Fixa så att man inte kan lägga till samma ställe i favoriter och blacklist flera gånger
         //TODO: Fixa så att ställen från blacklist inte dyker upp i resultaten
-        //TODO: Fixa så att snackbar dyker upp om man klickar på favorite, blacklist och share
-        // även om där inte finns något ställe valt
+        //TODO: Fixa så att snackbar dyker upp om man klickar på favorite, blacklist och share även om där inte finns något ställe valt
+        //TODO: Errorhantering, refaktorering, snackbars
 
         // Hide elements on creation
         binding.linearLayout.visibility = View.GONE

@@ -64,6 +64,8 @@ class FavoritesFragment : Fragment() {
 
         binding.favoritePlaceStreetTV.setOnClickListener {
 
+            //TODO: Fixa share button på favorite info också? Come with me to my favorite place..
+
             val browserIntent = intentUtil.buildMapBrowserIntent( binding.favoritePlaceStreetTV.text.toString(), "https://www.google.com/maps/search/?api=1&query=")
             try {
                 startActivity(browserIntent)
