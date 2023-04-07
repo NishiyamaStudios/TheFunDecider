@@ -35,4 +35,14 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/outline_info_24" />
 
+    <ImageView
+        android:id="@+id/favoriteShareImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/favoriteInfoImage"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/outline_share_24" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

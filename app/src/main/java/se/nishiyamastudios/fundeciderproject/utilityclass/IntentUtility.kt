@@ -33,4 +33,17 @@ class IntentUtility {
         return Intent(Intent.ACTION_SENDTO, uri)
     }
 
+    fun sharePlace(placename: String, subject: String, body: String): Intent {
+
+        val intent = Intent(Intent.ACTION_SEND)
+        intent.type = "text/plain"
+        val mainbody = subject
+        val sub = subject + body +" " + placename +" together.. :D"
+        intent.putExtra(Intent.EXTRA_TEXT, mainbody)
+        intent.putExtra(Intent.EXTRA_TEXT, sub)
+
+        return intent
+
+    }
+
 }

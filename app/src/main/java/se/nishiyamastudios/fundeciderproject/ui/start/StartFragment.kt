@@ -293,7 +293,8 @@ class StartFragment : Fragment() {
         binding.shareButton.setOnClickListener {
 
             try {
-             startActivity(Intent.createChooser(model.sharePlace(currentPlace.name), "Share using"))
+             startActivity(Intent.createChooser(intentUtil.sharePlace(currentPlace.name,"", "Hey! Share this destiny with me!\n" +
+                     "Let's check out"), "Share using"))
             } catch (e: Exception) {
                 snackbarMessage.value = "The place could not be shared."
             }

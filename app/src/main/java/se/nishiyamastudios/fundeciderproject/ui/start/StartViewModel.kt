@@ -194,19 +194,6 @@ class StartViewModel : ViewModel() {
         return geoapifyBaseURL + geoapifyCategory + geoapifyPlace + geoapifyLimit + geoapifyKey
     }
 
-    fun sharePlace(placename: String): Intent {
-
-        val intent = Intent(Intent.ACTION_SEND)
-        intent.type = "text/plain"
-        val body = "Hey! Share this destiny with me!"
-        val sub = "Hey! Share this destiny with me!\nLet's check out $placename together.. :D"
-        intent.putExtra(Intent.EXTRA_TEXT, body)
-        intent.putExtra(Intent.EXTRA_TEXT, sub)
-
-        return intent
-
-    }
-
     fun selectAnimation(category: String): Int {
         var animationInt: Int = R.raw.animation_welcome
         //var currentCategory = category.replace(" ","")

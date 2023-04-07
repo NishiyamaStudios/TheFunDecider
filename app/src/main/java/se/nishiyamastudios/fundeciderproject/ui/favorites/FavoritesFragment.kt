@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
@@ -16,6 +17,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
+import se.nishiyamastudios.fundeciderproject.R
 import se.nishiyamastudios.fundeciderproject.dataclass.FavoriteListObject
 import se.nishiyamastudios.fundeciderproject.utilityclass.FirebaseUtility
 import se.nishiyamastudios.fundeciderproject.utilityclass.IntentUtility
@@ -59,8 +61,8 @@ class FavoritesFragment : Fragment() {
             MutableLiveData<String>()
         }
 
-        val snackbarObserver  = Observer<String> {mess ->
-            Snackbar.make(requireView(),mess, Snackbar.LENGTH_LONG)
+        val snackbarObserver = Observer<String> { mess ->
+            Snackbar.make(requireView(), mess, Snackbar.LENGTH_LONG)
                 .setAnchorView(binding.favoritePlaceStreetTV)
                 .show()
         }
@@ -87,7 +89,10 @@ class FavoritesFragment : Fragment() {
             //TODO: Fixa share button på favorite info också? Come with me to my favorite place..
             //TODO: Lägg till alla intents
 
-            val browserIntent = intentUtil.buildMapBrowserIntent( binding.favoritePlaceStreetTV.text.toString(), "https://www.google.com/maps/search/?api=1&query=")
+            val browserIntent = intentUtil.buildMapBrowserIntent(
+                binding.favoritePlaceStreetTV.text.toString(),
+                "https://www.google.com/maps/search/?api=1&query="
+            )
             try {
                 startActivity(browserIntent)
             } catch (e: Exception) {
@@ -127,7 +132,29 @@ class FavoritesFragment : Fragment() {
             }
         }
 
+        binding.favoritePlaceEmailTV.setOnClickListener {
+            val email = binding.favoritePlaceEmailTV.text
+            val chooserTitle = "Email client"
+            val emailIntent =
+                intentUtil.buildEmailIntent(email.chars().toString(), "Reservation", "")
 
+            try {
+                startActivity(Intent.createChooser(emailIntent, chooserTitle))
+            } catch (e: Exception) {
+                snackbarMessage.value = "Email cannot be accessed."
+            }
+        }
+
+        binding.favoritePlaceWebsiteTV.setOnClickListener {
+            val website = binding.favoritePlaceWebsiteTV.text
+            val browserIntent = intentUtil.buildBrowserIntent(website.toString())
+
+            try {
+                startActivity(browserIntent)
+            } catch (e: Exception) {
+                snackbarMessage.value = "The website cannot be opened."
+            }
+        }
     }
 
 }

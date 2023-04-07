@@ -1,12 +1,20 @@
 package se.nishiyamastudios.fundeciderproject.ui.favorites
 
+import android.content.Context
+import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.libraries.places.ktx.api.model.place
 import se.nishiyamastudios.fundeciderproject.R
+import se.nishiyamastudios.fundeciderproject.utilityclass.FirebaseUtility
+import se.nishiyamastudios.fundeciderproject.utilityclass.IntentUtility
 
 class FavoritesAdapter : RecyclerView.Adapter<FavoritesAdapter.ViewHolder>() {
 
@@ -17,12 +25,14 @@ class FavoritesAdapter : RecyclerView.Adapter<FavoritesAdapter.ViewHolder>() {
         val placeName: TextView
         val placeDelete: ImageView
         val placeInfo: ImageView
+        val placeShare: ImageView
 
         init {
 
             placeName = view.findViewById(R.id.shopNameTV)
             placeDelete = view.findViewById(R.id.favoriteDeleteImage)
             placeInfo = view.findViewById(R.id.favoriteInfoImage)
+            placeShare = view.findViewById(R.id.favoriteShareImage)
         }
 
     }
@@ -38,6 +48,7 @@ class FavoritesAdapter : RecyclerView.Adapter<FavoritesAdapter.ViewHolder>() {
         val currentFavorite = frag.fbUtil.favoritePlaces.value!![position]
         val favoritesInfo = frag.binding.linearLayoutFavoriteInfo
         val favoritesRV = frag.binding.favoritesRV
+        val intentUtil = IntentUtility()
 
         holder.placeName.text = currentFavorite.placename
 
@@ -61,6 +72,23 @@ class FavoritesAdapter : RecyclerView.Adapter<FavoritesAdapter.ViewHolder>() {
             favoritesInfo.bringToFront()
             favoritesInfo.visibility = View.VISIBLE
             frag.binding.favoritesTV.visibility = View.INVISIBLE
+        }
+
+        holder.placeShare?.setOnClickListener {
+            val placeName =  currentFavorite.placename.toString()
+            val subject = "Hey! This is one of my favorite places!\n"
+            val body = "Let's check out"
+            val shareIntent = intentUtil.sharePlace(
+                placeName,
+                subject,
+                body
+            )
+            try {
+                frag.startActivity(shareIntent)
+            } catch (e: Exception) {
+
+            }
+            Log.i("FUNFUN", placeName)
         }
 
         frag.binding.closeFavoriteInfoImage.setOnClickListener {
