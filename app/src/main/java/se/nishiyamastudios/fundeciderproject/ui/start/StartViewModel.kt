@@ -9,7 +9,7 @@ import org.json.JSONObject
 import org.json.JSONTokener
 import se.nishiyamastudios.fundeciderproject.dataclass.PlaceDetails
 import se.nishiyamastudios.fundeciderproject.R
-import se.nishiyamastudios.fundeciderproject.dataclass.FirebaseBlackListObject
+import se.nishiyamastudios.fundeciderproject.dataclass.BlackListObject
 import se.nishiyamastudios.fundeciderproject.utilityclass.FirebaseUtility
 import java.io.IOException
 import java.util.concurrent.CountDownLatch
@@ -29,7 +29,7 @@ class StartViewModel : ViewModel() {
         MutableLiveData<String>()
     }
 
-    fun getListOfBlacklistedPlaceNames(blacklistedplaces : MutableLiveData<List<FirebaseBlackListObject>>): MutableList<String> {
+    fun getListOfBlacklistedPlaceNames(blacklistedplaces : MutableLiveData<List<BlackListObject>>): MutableList<String> {
         for (i in 0 until blacklistedplaces.value?.size!!.toInt()) {
             val name = blacklistedplaces.value!![i].placename
             blacklistNameList.add(name!!)

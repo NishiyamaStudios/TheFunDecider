@@ -22,8 +22,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        //TODO: Se till så att inget visas innan Login när där inte finns en user inloggad
-
         val callback = object : OnBackPressedCallback(
             true // default to enabled
         ) {

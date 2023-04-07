@@ -6,17 +6,17 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.ktx.database
 import com.google.firebase.database.ktx.getValue
 import com.google.firebase.ktx.Firebase
-import se.nishiyamastudios.fundeciderproject.dataclass.FirebaseBlackListObject
-import se.nishiyamastudios.fundeciderproject.dataclass.FirebaseFavoriteListObject
+import se.nishiyamastudios.fundeciderproject.dataclass.BlackListObject
+import se.nishiyamastudios.fundeciderproject.dataclass.FavoriteListObject
 
 class  FirebaseUtility {
 
-    val favoritePlaces: MutableLiveData<List<FirebaseFavoriteListObject>> by lazy {
-        MutableLiveData<List<FirebaseFavoriteListObject>>()
+    val favoritePlaces: MutableLiveData<List<FavoriteListObject>> by lazy {
+        MutableLiveData<List<FavoriteListObject>>()
     }
 
-    val blacklistPlaces: MutableLiveData<List<FirebaseBlackListObject>> by lazy {
-        MutableLiveData<List<FirebaseBlackListObject>>()
+    val blacklistPlaces: MutableLiveData<List<BlackListObject>> by lazy {
+        MutableLiveData<List<BlackListObject>>()
     }
 
     private val errorMessage: MutableLiveData<String> by lazy {
@@ -32,9 +32,9 @@ class  FirebaseUtility {
         Log.i("FUNDEBUG",favoritesRef.toString())
 
         favoritesRef.get().addOnSuccessListener {
-            val favoriteList = mutableListOf<FirebaseFavoriteListObject>()
+            val favoriteList = mutableListOf<FavoriteListObject>()
             it.children.forEach {childsnap ->
-                val tempFavorite = childsnap.getValue<FirebaseFavoriteListObject>()!!
+                val tempFavorite = childsnap.getValue<FavoriteListObject>()!!
                 Log.i("FUNDEBUG",tempFavorite.placename.toString())
                 tempFavorite.fbid = childsnap.key
                 favoriteList.add(tempFavorite)
@@ -44,14 +44,14 @@ class  FirebaseUtility {
 
     }
 
-    fun loadBlacklist(): MutableLiveData<List<FirebaseBlackListObject>> {
+    fun loadBlacklist(): MutableLiveData<List<BlackListObject>> {
 
         val database = Firebase.database
         val blacklistRef = database.getReference("funblacklist").child(Firebase.auth.currentUser!!.uid)
         blacklistRef.get().addOnSuccessListener {
-            val blackList = mutableListOf<FirebaseBlackListObject>()
+            val blackList = mutableListOf<BlackListObject>()
             it.children.forEach {childsnap ->
-                val tempBlacklist = childsnap.getValue<FirebaseBlackListObject>()!!
+                val tempBlacklist = childsnap.getValue<BlackListObject>()!!
                 tempBlacklist.fbid = childsnap.key
                 blackList.add(tempBlacklist)
             }
@@ -62,13 +62,13 @@ class  FirebaseUtility {
 
     }
 
-    fun loadFirebaseList(firebasepathname : String, placelist : MutableLiveData<List<FirebaseFavoriteListObject>>) {
+    fun loadFirebaseList(firebasepathname : String, placelist : MutableLiveData<List<FavoriteListObject>>) {
         val database = Firebase.database
         val listRef = database.getReference(firebasepathname).child(Firebase.auth.currentUser!!.uid)
         listRef.get().addOnSuccessListener {
-            val favoriteList = mutableListOf<FirebaseFavoriteListObject>()
+            val favoriteList = mutableListOf<FavoriteListObject>()
             it.children.forEach {childsnap ->
-                val tempBlacklist = childsnap.getValue<FirebaseFavoriteListObject>()!!
+                val tempBlacklist = childsnap.getValue<FavoriteListObject>()!!
                 tempBlacklist.fbid = childsnap.key
                 favoriteList.add(tempBlacklist)
             }
@@ -99,7 +99,7 @@ class  FirebaseUtility {
 
         errorMessage.value = ""
 
-        val tempPlaceItem = FirebaseFavoriteListObject(placename, placestreet, placehousenumber, placepostcode, placephone, placeemail, placewebsite, placeopeninghours, placeid)
+        val tempPlaceItem = FavoriteListObject(placename, placestreet, placehousenumber, placepostcode, placephone, placeemail, placewebsite, placeopeninghours, placeid)
 
         val database = Firebase.database
         val listRef = database.getReference(firebasepathname).child(Firebase.auth.currentUser!!.uid)
@@ -121,7 +121,7 @@ class  FirebaseUtility {
 
         errorMessage.value = ""
 
-        val tempPlaceItem = FirebaseFavoriteListObject(placename, placeid)
+        val tempPlaceItem = FavoriteListObject(placename, placeid)
 
         val database = Firebase.database
         val listRef = database.getReference(firebasepathname).child(Firebase.auth.currentUser!!.uid)
@@ -129,7 +129,7 @@ class  FirebaseUtility {
         }
     }
 
-    fun deleteFavoriteItem(deleteitem : FirebaseFavoriteListObject) {
+    fun deleteFavoriteItem(deleteitem : FavoriteListObject) {
         val database = Firebase.database
         val listRef = database.getReference("funfavorite").child(Firebase.auth.currentUser!!.uid)
 
@@ -139,7 +139,7 @@ class  FirebaseUtility {
 
     }
 
-    fun deleteBlacklistItem(deleteitem: FirebaseBlackListObject) {
+    fun deleteBlacklistItem(deleteitem: BlackListObject) {
         val database = Firebase.database
         val listRef = database.getReference("funblacklist").child(Firebase.auth.currentUser!!.uid)
 

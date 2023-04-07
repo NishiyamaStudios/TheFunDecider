@@ -230,7 +230,7 @@ class StartFragment : Fragment() {
             try {
                 startActivity(browserIntent)
             } catch (e: Exception) {
-                snackbarMessage.value = "The website cannot be opened."
+                snackbarMessage.value = "The map cannot be opened."
             }
         }
 

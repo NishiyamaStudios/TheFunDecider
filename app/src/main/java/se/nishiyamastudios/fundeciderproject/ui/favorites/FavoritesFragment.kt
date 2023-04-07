@@ -1,14 +1,22 @@
 package se.nishiyamastudios.fundeciderproject.ui.favorites
 
+import android.Manifest
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
-import se.nishiyamastudios.fundeciderproject.dataclass.FirebaseFavoriteListObject
+import com.google.android.material.snackbar.Snackbar
+import se.nishiyamastudios.fundeciderproject.dataclass.FavoriteListObject
 import se.nishiyamastudios.fundeciderproject.utilityclass.FirebaseUtility
 import se.nishiyamastudios.fundeciderproject.utilityclass.IntentUtility
 import se.nishiyamastudios.fundeciderproject.databinding.FragmentFavoritesBinding
@@ -47,12 +55,24 @@ class FavoritesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val snackbarMessage: MutableLiveData<String> by lazy {
+            MutableLiveData<String>()
+        }
+
+        val snackbarObserver  = Observer<String> {mess ->
+            Snackbar.make(requireView(),mess, Snackbar.LENGTH_LONG)
+                .setAnchorView(binding.favoritePlaceStreetTV)
+                .show()
+        }
+
+        snackbarMessage.observe(viewLifecycleOwner, snackbarObserver)
+
 
 
         binding.favoritesRV.adapter = favoritesadapter
         binding.favoritesRV.layoutManager = LinearLayoutManager(requireContext())
 
-        val favoritesObserver = Observer<List<FirebaseFavoriteListObject>> {
+        val favoritesObserver = Observer<List<FavoriteListObject>> {
             favoritesadapter.notifyDataSetChanged()
         }
 
@@ -71,8 +91,39 @@ class FavoritesFragment : Fragment() {
             try {
                 startActivity(browserIntent)
             } catch (e: Exception) {
-                //TODO: Fixa snackbar
-                //snackbarMessage.value = "The website cannot be opened."
+
+                snackbarMessage.value = "The map cannot be opened."
+            }
+        }
+
+        binding.favoritePlacePhoneTV.setOnClickListener {
+            val phoneNumber = binding.favoritePlacePhoneTV.text
+            val intent = Intent(Intent.ACTION_CALL)
+            intent.data = Uri.parse("tel:$phoneNumber")
+
+            val MY_PERMISSIONS_REQUEST_CALL_PHONE = 1
+
+            if (ContextCompat.checkSelfPermission(
+                    requireContext(),
+                    Manifest.permission.CALL_PHONE
+                )
+                != PackageManager.PERMISSION_GRANTED
+            ) {
+                ActivityCompat.requestPermissions(
+                    requireActivity(), arrayOf(Manifest.permission.CALL_PHONE),
+                    MY_PERMISSIONS_REQUEST_CALL_PHONE
+                )
+
+                // MY_PERMISSIONS_REQUEST_CALL_PHONE is an
+                // app-defined int constant. The callback method gets the
+                // result of the request.
+            } else {
+                //You already have permission
+                try {
+                    startActivity(intent)
+                } catch (e: SecurityException) {
+                    e.printStackTrace()
+                }
             }
         }
 

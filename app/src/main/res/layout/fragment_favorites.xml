@@ -29,7 +29,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/favoriteDeleteImage"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/outline_close_24" />
+            app:srcCompat="@drawable/outline_close_24"
+            android:contentDescription="Picture of an X"/>
 
         <TextView
             android:id="@+id/selectedFavoritePlaceTV"
@@ -52,7 +53,8 @@
             android:clickable="true"
             android:contextClickable="true"
             android:gravity="center_horizontal"
-            android:text="Street"
+            android:text=""
+            android:hint="Street"
             android:textSize="18sp"
             android:textStyle="italic" />
 
@@ -103,7 +105,9 @@
             android:ems="10"
             android:gravity="center_horizontal"
             android:inputType="textMultiLine"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            android:enabled="false"
+            android:hint="Opening hours" />
     </LinearLayout>
 
     <TextView

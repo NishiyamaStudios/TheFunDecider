@@ -10,7 +10,7 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import se.nishiyamastudios.fundeciderproject.utilityclass.FirebaseUtility
 import se.nishiyamastudios.fundeciderproject.databinding.FragmentBlacklistBinding
-import se.nishiyamastudios.fundeciderproject.dataclass.FirebaseBlackListObject
+import se.nishiyamastudios.fundeciderproject.dataclass.BlackListObject
 import se.nishiyamastudios.fundeciderproject.ui.login.LoginViewModel
 
 class BlacklistFragment : Fragment() {
@@ -49,7 +49,7 @@ class BlacklistFragment : Fragment() {
         binding.blacklistRV.adapter = blacklistadapter
         binding.blacklistRV.layoutManager = LinearLayoutManager(requireContext())
 
-        val blacklistObserver = Observer<List<FirebaseBlackListObject>> {
+        val blacklistObserver = Observer<List<BlackListObject>> {
             blacklistadapter.notifyDataSetChanged()
         }
 

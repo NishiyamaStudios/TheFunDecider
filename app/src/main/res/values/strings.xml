@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Fundecider</string>
     <string name="dropDownLabel">You choose!</string>
+    <string name="getPlacesButton">Choose a category and let destiny decide!</string>
 </resources>
