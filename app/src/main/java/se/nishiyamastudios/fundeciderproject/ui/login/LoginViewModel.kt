@@ -7,7 +7,6 @@ import com.google.firebase.ktx.Firebase
 
 class LoginViewModel : ViewModel() {
 
-    //live data till felmeddelande som vi kan lyssna på i LoginFragment
     val errorMessage: MutableLiveData<String> by lazy {
         MutableLiveData<String>()
     }
@@ -15,20 +14,20 @@ class LoginViewModel : ViewModel() {
     fun login(email : String, password : String) {
 
         if (email == "") {
-            errorMessage.value = "Fyll i epost"
-            return //funktionen är klar, kör inte längre
+            errorMessage.value = "Please enter your email."
+            return
         }
 
         if (password == "") {
-            errorMessage.value = "Fyll i lösenord"
-            return //funktionen är klar, kör inte längre
+            errorMessage.value = "Please enter your password."
+            return
         }
 
         Firebase.auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
 
                 if (!task.isSuccessful) {
-                    errorMessage.value = "Fel inloggning"
+                    errorMessage.value = "Login not successfull."
                 }
             }
     }
@@ -36,19 +35,18 @@ class LoginViewModel : ViewModel() {
     fun register(email: String, password: String) {
 
         if (email == "") {
-            errorMessage.value = "Fyll i epost"
+            errorMessage.value = "Please enter your email."
             return
         }
 
         if (password == "") {
-            errorMessage.value = "Fyll i lösenord"
+            errorMessage.value = "Please enter a password."
             return
         }
 
         Firebase.auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
 
-                //eller task.isSuccessful == false
                 if (!task.isSuccessful) {
                     errorMessage.value = task.exception!!.localizedMessage!!
                 }

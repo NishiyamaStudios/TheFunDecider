@@ -69,8 +69,6 @@ class FavoritesFragment : Fragment() {
 
         snackbarMessage.observe(viewLifecycleOwner, snackbarObserver)
 
-
-
         binding.favoritesRV.adapter = favoritesadapter
         binding.favoritesRV.layoutManager = LinearLayoutManager(requireContext())
 
@@ -85,9 +83,6 @@ class FavoritesFragment : Fragment() {
         binding.linearLayoutFavoriteInfo.visibility = View.GONE
 
         binding.favoritePlaceStreetTV.setOnClickListener {
-
-            //TODO: Fixa share button på favorite info också? Come with me to my favorite place..
-            //TODO: Lägg till alla intents
 
             val browserIntent = intentUtil.buildMapBrowserIntent(
                 binding.favoritePlaceStreetTV.text.toString(),

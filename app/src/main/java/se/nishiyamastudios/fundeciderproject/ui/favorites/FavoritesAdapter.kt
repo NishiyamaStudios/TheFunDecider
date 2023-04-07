@@ -18,21 +18,19 @@ import se.nishiyamastudios.fundeciderproject.utilityclass.IntentUtility
 
 class FavoritesAdapter : RecyclerView.Adapter<FavoritesAdapter.ViewHolder>() {
 
-
     lateinit var frag : FavoritesFragment
 
     class ViewHolder(view : View) : RecyclerView.ViewHolder(view) {
-        val placeName: TextView
-        val placeDelete: ImageView
-        val placeInfo: ImageView
-        val placeShare: ImageView
+        val favoritePlaceName: TextView
+        val deleteFavoritePlace: ImageView
+        val getFavoritePlaceInfo: ImageView
+        val shareFavoritePlace: ImageView
 
         init {
-
-            placeName = view.findViewById(R.id.shopNameTV)
-            placeDelete = view.findViewById(R.id.favoriteDeleteImage)
-            placeInfo = view.findViewById(R.id.favoriteInfoImage)
-            placeShare = view.findViewById(R.id.favoriteShareImage)
+            favoritePlaceName = view.findViewById(R.id.shopNameTV)
+            deleteFavoritePlace = view.findViewById(R.id.favoriteDeleteImage)
+            getFavoritePlaceInfo = view.findViewById(R.id.favoriteInfoImage)
+            shareFavoritePlace = view.findViewById(R.id.favoriteShareImage)
         }
 
     }
@@ -50,16 +48,16 @@ class FavoritesAdapter : RecyclerView.Adapter<FavoritesAdapter.ViewHolder>() {
         val favoritesRV = frag.binding.favoritesRV
         val intentUtil = IntentUtility()
 
-        holder.placeName.text = currentFavorite.placename
+        holder.favoritePlaceName.text = currentFavorite.placename
 
 
 
-        holder.placeDelete.setOnClickListener {
+        holder.deleteFavoritePlace.setOnClickListener {
             frag.fbUtil.deleteFavoriteItem(currentFavorite)
         }
 
 
-        holder.placeInfo.setOnClickListener {
+        holder.getFavoritePlaceInfo.setOnClickListener {
 
             frag.binding.selectedFavoritePlaceTV.setText(currentFavorite.placename)
             frag.binding.favoritePlaceStreetTV.setText(currentFavorite.placestreet+" "+currentFavorite.housenumber)
@@ -74,9 +72,9 @@ class FavoritesAdapter : RecyclerView.Adapter<FavoritesAdapter.ViewHolder>() {
             frag.binding.favoritesTV.visibility = View.INVISIBLE
         }
 
-        holder.placeShare?.setOnClickListener {
+        holder.shareFavoritePlace.setOnClickListener {
             val placeName =  currentFavorite.placename.toString()
-            val subject = "Hey! This is one of my favorite places!\n"
+            val subject = "Hey! Come with me to one of my favorite places!\n"
             val body = "Let's check out"
             val shareIntent = intentUtil.sharePlace(
                 placeName,

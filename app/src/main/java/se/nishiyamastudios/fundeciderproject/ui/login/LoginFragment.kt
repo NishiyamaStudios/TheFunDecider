@@ -26,7 +26,6 @@ class LoginFragment : Fragment() {
         fun newInstance() = LoginFragment()
     }
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

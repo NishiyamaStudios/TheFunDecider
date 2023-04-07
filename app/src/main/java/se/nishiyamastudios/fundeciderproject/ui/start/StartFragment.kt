@@ -31,11 +31,6 @@ import se.nishiyamastudios.fundeciderproject.databinding.FragmentStartBinding
 
 class StartFragment : Fragment() {
 
-    //TODO: Kategorier att använda: Catering / restaurant, pub, cafe, fast food, entertainment + fler?
-    //TODO: Välja stad? Hur funkar det? Kolla med hjälp av GPS i stället?
-    //TODO: Lägg in så att inte loginrutan dyker upp vid start även fast man är inloggad.
-    //TODO: Lägg in så att de TextViews som inte har info tas bort så att det inte finns mellanrum
-
     var _binding : FragmentStartBinding? = null
     val binding get() = _binding!!
 
@@ -51,8 +46,6 @@ class StartFragment : Fragment() {
     companion object {
         fun newInstance() = StartFragment()
     }
-
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -79,12 +72,12 @@ class StartFragment : Fragment() {
 
          */
 
-        //TODO: Fixa en infoknapp på startfragment(?)
         //TODO: Fixa så att detaljer i linear layout blir GONE om dem inte har något värde
         //TODO: Fixa så att man inte kan lägga till samma ställe i favoriter och blacklist flera gånger
-        //TODO: Fixa så att ställen från blacklist inte dyker upp i resultaten
         //TODO: Fixa så att snackbar dyker upp om man klickar på favorite, blacklist och share även om där inte finns något ställe valt
         //TODO: Errorhantering, refaktorering, snackbars
+        //TODO: Välja stad? Hur funkar det? Kolla med hjälp av GPS i stället?
+        //TODO: Skapa hjälpruta med setting för hur många resultat samt borttagning av konto.
 
         // Hide elements on creation
         binding.linearLayout.visibility = View.GONE
