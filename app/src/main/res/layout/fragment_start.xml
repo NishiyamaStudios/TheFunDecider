@@ -2,11 +2,105 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mainCL"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FFFFFF"
     tools:context=".ui.start.StartFragment">
 
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/helpCL"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="#FFFFFF"
+        app:layout_constraintBottom_toBottomOf="@+id/getPlacesButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/animationViewInfo">
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/animationViewHelp"
+            android:layout_width="160dp"
+            android:layout_height="160dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="230dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="false"
+            app:lottie_rawRes="@raw/animation_welcome" />
+
+        <TextView
+            android:id="@+id/welcomeTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="90dp"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:text="Welcome!"
+            android:textSize="35sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@+id/animationViewHelp"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/helpInfoML"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="40dp"
+            android:background="@null"
+            android:clickable="false"
+            android:contextClickable="false"
+            android:ems="10"
+            android:enabled="true"
+            android:focusable="false"
+            android:gravity="left"
+            android:inputType="textMultiLine"
+            android:linksClickable="false"
+            android:longClickable="false"
+            android:text="@string/helpInfoText"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/animationViewHelp"
+            app:layout_constraintTop_toBottomOf="@+id/welcomeTV" />
+
+        <ImageView
+            android:id="@+id/closeHelpInfoImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_marginTop="50dp"
+            android:layout_marginEnd="50dp"
+            android:contentDescription="Picture of an X"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/outline_close_24" />
+
+        <TextView
+            android:id="@+id/settingsTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:text="Settings"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/animationViewHelp" />
+
+        <TextView
+            android:id="@+id/haveFunTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/haveFunText"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/helpInfoML" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <Button
         android:id="@+id/getPlacesButton"
@@ -83,6 +177,7 @@
         android:layout_marginTop="24dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
+        android:clickable="true"
         app:layout_constraintBottom_toTopOf="@+id/TextInputLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -196,11 +291,16 @@
             android:layout_gravity="center|center_vertical"
             android:layout_marginTop="20dp"
             android:background="@null"
+            android:clickable="false"
+            android:contextClickable="false"
             android:ems="10"
+            android:enabled="true"
+            android:focusable="false"
             android:gravity="center_horizontal"
             android:inputType="textMultiLine"
-            android:textSize="14sp"
-            android:enabled="false"/>
+            android:linksClickable="false"
+            android:longClickable="false"
+            android:textSize="14sp" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

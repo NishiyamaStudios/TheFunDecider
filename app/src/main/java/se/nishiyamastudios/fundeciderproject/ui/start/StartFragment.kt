@@ -82,6 +82,7 @@ class StartFragment : Fragment() {
         // Hide elements on creation
         binding.linearLayout.visibility = View.GONE
         binding.animationViewInfo.visibility = View.GONE
+        binding.helpCL.visibility = View.GONE
 
         //observera vårt felmeddelande
         val errorObserver  = Observer<String> {errorMess ->
@@ -320,6 +321,16 @@ class StartFragment : Fragment() {
                 }
 
             }
+
+        binding.animationViewInfo.setOnClickListener {
+            binding.helpCL.visibility = View.VISIBLE
+            binding.helpCL.bringToFront()
+        }
+
+        binding.closeHelpInfoImage.setOnClickListener {
+            binding.helpCL.visibility = View.GONE
+            binding.mainCL.bringToFront()
+        }
 
             }
 
