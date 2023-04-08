@@ -77,7 +77,8 @@ class StartFragment : Fragment() {
         //TODO: Välja stad? Hur funkar det? Kolla med hjälp av GPS i stället?
         //TODO: Man borde inte kunna lägga till som favorite eller blacklist om dem redan finns i någon av listorna?
         //TODO: Lägg in geoapify reverse geocoding och hitta ställen utifrån gata och radius.
-        //TODO: Skapa hjälpruta med setting för hur många resultat samt borttagning av konto.
+        //TODO: Lägg in setting för hur många resultat man skall hämta från API
+        //TODO: Lägg in borttagning av konto.
 
         // Hide elements on creation
         binding.linearLayout.visibility = View.GONE
@@ -330,6 +331,11 @@ class StartFragment : Fragment() {
         binding.closeHelpInfoImage.setOnClickListener {
             binding.helpCL.visibility = View.GONE
             binding.mainCL.bringToFront()
+        }
+
+        binding.animationView.setOnClickListener {
+            binding.helpCL.visibility = View.VISIBLE
+            binding.helpCL.bringToFront()
         }
 
             }
