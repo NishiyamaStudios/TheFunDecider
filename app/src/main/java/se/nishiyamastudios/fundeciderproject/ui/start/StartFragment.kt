@@ -73,10 +73,10 @@ class StartFragment : Fragment() {
          */
 
         //TODO: Fixa så att detaljer i linear layout blir GONE om dem inte har något värde
-        //TODO: Fixa så att man inte kan lägga till samma ställe i favoriter och blacklist flera gånger
-        //TODO: Fixa så att snackbar dyker upp om man klickar på favorite, blacklist och share även om där inte finns något ställe valt
-        //TODO: Errorhantering, refaktorering, snackbars
+        //TODO: Errorhantering, refaktorering, snackbars, kommentera kod
         //TODO: Välja stad? Hur funkar det? Kolla med hjälp av GPS i stället?
+        //TODO: Man borde inte kunna lägga till som favorite eller blacklist om dem redan finns i någon av listorna?
+        //TODO: Lägg in geoapify reverse geocoding och hitta ställen utifrån gata och radius.
         //TODO: Skapa hjälpruta med setting för hur många resultat samt borttagning av konto.
 
         // Hide elements on creation
@@ -95,8 +95,6 @@ class StartFragment : Fragment() {
             MutableLiveData<String>()
         }
 
-        //TODO: Rensa upp detta, vad behövs?
-
         val snackbarObserver  = Observer<String> {mess ->
             Snackbar.make(requireView(),mess,Snackbar.LENGTH_LONG)
                 .setAnchorView(binding.AutoCompleteTextview)
@@ -104,7 +102,6 @@ class StartFragment : Fragment() {
         }
 
         snackbarMessage.observe(viewLifecycleOwner, snackbarObserver)
-
 
         val autoCompleteTextView = binding.AutoCompleteTextview
 
