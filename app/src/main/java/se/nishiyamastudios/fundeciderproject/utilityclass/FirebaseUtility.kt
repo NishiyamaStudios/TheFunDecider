@@ -23,7 +23,7 @@ class  FirebaseUtility {
         MutableLiveData<String>()
     }
 
-    fun loadFavorites() {
+    fun loadFavorites(): MutableLiveData<List<FavoriteListObject>> {
 
         val database = Firebase.database
         val favoritesRef = database.getReference("funfavorite").child(Firebase.auth.currentUser!!.uid)
@@ -41,7 +41,7 @@ class  FirebaseUtility {
             }
             favoritePlaces.value = favoriteList
         }
-
+        return  favoritePlaces
     }
 
     fun loadBlacklist(): MutableLiveData<List<BlackListObject>> {

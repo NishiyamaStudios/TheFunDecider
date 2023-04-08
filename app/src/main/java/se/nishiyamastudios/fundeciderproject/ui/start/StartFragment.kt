@@ -189,112 +189,142 @@ class StartFragment : Fragment() {
 
             binding.addFavoriteButton.setOnClickListener {
 
-                if (binding.selectedPlaceTV.text != "") {
-                    val placeName = currentPlace.name
-                    val placeId = currentPlace.placeid
-                    val placeStreet = currentPlace.street
-                    val placeHouseNumber = currentPlace.housenumber
-                    val placePostCode = currentPlace.postcode
-                    val placePhone = currentPlace.phone
-                    val placeEmail = currentPlace.email
-                    val placeWebsite = currentPlace.website
-                    val placeOpeningHours = currentPlace.openinghours
+                if (autoCompleteTextView.text.toString() == "") {
+                    snackbarMessage.value = "You need to find a place first."
+                    return@setOnClickListener
+                }
 
-                    fbUtil.addFavoriteItem("funfavorite", placeName, placeStreet, placeHouseNumber, placePostCode, placePhone, placeEmail,placeWebsite, placeOpeningHours, placeId)
-                    fbUtil.loadFavorites()
+                val placeNameTV = binding.selectedPlaceTV.text
+
+                if (fbUtil.loadFavorites().value.toString().contains(placeNameTV)) {
+                    snackbarMessage.value = "$placeNameTV is already a favorite."
+                } else {
+
+                    if (binding.selectedPlaceTV.text != "") {
+                        val placeName = currentPlace.name
+                        val placeId = currentPlace.placeid
+                        val placeStreet = currentPlace.street
+                        val placeHouseNumber = currentPlace.housenumber
+                        val placePostCode = currentPlace.postcode
+                        val placePhone = currentPlace.phone
+                        val placeEmail = currentPlace.email
+                        val placeWebsite = currentPlace.website
+                        val placeOpeningHours = currentPlace.openinghours
+
+                        fbUtil.addFavoriteItem("funfavorite", placeName, placeStreet, placeHouseNumber, placePostCode, placePhone, placeEmail,placeWebsite, placeOpeningHours, placeId)
+                        fbUtil.loadFavorites()
+                    }
+
                 }
             }
 
             binding.addBlacklistButton.setOnClickListener {
 
-                if (binding.selectedPlaceTV.text != "") {
-                    val placeName = currentPlace.name
-                    val placeId = currentPlace.placeid
+                if (autoCompleteTextView.text.toString() == "") {
+                    snackbarMessage.value = "You need to find a place first."
+                    return@setOnClickListener
+                }
 
-                    fbUtil.addBlacklistItem("funblacklist", placeName, placeId)
-                    myPlaces.remove(currentPlace)
-                    fbUtil.loadBlacklist()
+                val placeNameTV = binding.selectedPlaceTV.text
+
+                if (fbUtil.loadBlacklist().value.toString().contains(placeNameTV)) {
+                    snackbarMessage.value = "$placeNameTV is already blacklisted."
+                } else {
+
+                    if (binding.selectedPlaceTV.text != "") {
+                        val placeName = currentPlace.name
+                        val placeId = currentPlace.placeid
+
+                        fbUtil.addBlacklistItem("funblacklist", placeName, placeId)
+                        myPlaces.remove(currentPlace)
+                        fbUtil.loadBlacklist()
+                    }
                 }
             }
 
-        binding.placeStreetTV.setOnClickListener {
+            binding.placeStreetTV.setOnClickListener {
 
-            val browserIntent = intentUtil.buildMapBrowserIntent(currentPlace.street + " " +currentPlace.housenumber, "https://www.google.com/maps/search/?api=1&query=")
-            try {
-                startActivity(browserIntent)
-            } catch (e: Exception) {
-                snackbarMessage.value = "The map cannot be opened."
-            }
-        }
-
-        binding.placePhoneTV.setOnClickListener {
-
-            val phoneNumber = placePhoneTV.text
-            val intent = Intent(Intent.ACTION_CALL)
-            intent.data = Uri.parse("tel:$phoneNumber")
-
-            val MY_PERMISSIONS_REQUEST_CALL_PHONE = 1
-
-            if (ContextCompat.checkSelfPermission(
-                    requireContext(),
-                    CALL_PHONE
-                )
-                != PackageManager.PERMISSION_GRANTED
-            ) {
-                ActivityCompat.requestPermissions(
-                    requireActivity(), arrayOf(CALL_PHONE),
-                    MY_PERMISSIONS_REQUEST_CALL_PHONE
-                )
-
-                // MY_PERMISSIONS_REQUEST_CALL_PHONE is an
-                // app-defined int constant. The callback method gets the
-                // result of the request.
-            } else {
-                //You already have permission
+                val browserIntent = intentUtil.buildMapBrowserIntent(currentPlace.street + " " +currentPlace.housenumber, "https://www.google.com/maps/search/?api=1&query=")
                 try {
-                    startActivity(intent)
-                } catch (e: SecurityException) {
-                    e.printStackTrace()
+                    startActivity(browserIntent)
+                } catch (e: Exception) {
+                    snackbarMessage.value = "The map cannot be opened."
                 }
             }
-        }
 
-        binding.placeEmailTV.setOnClickListener {
+            binding.placePhoneTV.setOnClickListener {
 
-            val chooserTitle = "Email client"
-            val emailIntent = intentUtil.buildEmailIntent(currentPlace.email, "Reservation", "")
+                val phoneNumber = placePhoneTV.text
+                val intent = Intent(Intent.ACTION_CALL)
+                intent.data = Uri.parse("tel:$phoneNumber")
 
-            try {
-                startActivity(Intent.createChooser(emailIntent, chooserTitle))
-            } catch (e: Exception) {
-                snackbarMessage.value = "Email cannot be accessed."
+                val MY_PERMISSIONS_REQUEST_CALL_PHONE = 1
+
+                if (ContextCompat.checkSelfPermission(
+                        requireContext(),
+                        CALL_PHONE
+                    )
+                    != PackageManager.PERMISSION_GRANTED
+                ) {
+                    ActivityCompat.requestPermissions(
+                        requireActivity(), arrayOf(CALL_PHONE),
+                        MY_PERMISSIONS_REQUEST_CALL_PHONE
+                    )
+
+                    // MY_PERMISSIONS_REQUEST_CALL_PHONE is an
+                    // app-defined int constant. The callback method gets the
+                    // result of the request.
+                } else {
+                    //You already have permission
+                    try {
+                        startActivity(intent)
+                    } catch (e: SecurityException) {
+                        e.printStackTrace()
+                    }
+                }
+            }
+
+            binding.placeEmailTV.setOnClickListener {
+
+                val chooserTitle = "Email client"
+                val emailIntent = intentUtil.buildEmailIntent(currentPlace.email, "Reservation", "")
+
+                try {
+                    startActivity(Intent.createChooser(emailIntent, chooserTitle))
+                } catch (e: Exception) {
+                    snackbarMessage.value = "Email cannot be accessed."
+                }
+
+            }
+
+            binding.placeWebsiteTV.setOnClickListener {
+
+                val browserIntent = intentUtil.buildBrowserIntent(currentPlace.website)
+
+                try {
+                    startActivity(browserIntent)
+                } catch (e: Exception) {
+                    snackbarMessage.value = "The website cannot be opened."
+                }
+            }
+
+            binding.shareButton.setOnClickListener {
+
+                if (autoCompleteTextView.text.toString() == "") {
+                    snackbarMessage.value = "You need to find a place first."
+                    return@setOnClickListener
+                }
+
+                try {
+                 startActivity(Intent.createChooser(intentUtil.sharePlace(currentPlace.name,"", "Hey! Share this destiny with me!\n" +
+                         "Let's check out"), "Share using"))
+                } catch (e: Exception) {
+                    snackbarMessage.value = "The place could not be shared."
+                }
+
+            }
+
             }
 
         }
-
-        binding.placeWebsiteTV.setOnClickListener {
-
-            val browserIntent = intentUtil.buildBrowserIntent(currentPlace.website)
-
-            try {
-                startActivity(browserIntent)
-            } catch (e: Exception) {
-                snackbarMessage.value = "The website cannot be opened."
-            }
-        }
-
-        binding.shareButton.setOnClickListener {
-
-            try {
-             startActivity(Intent.createChooser(intentUtil.sharePlace(currentPlace.name,"", "Hey! Share this destiny with me!\n" +
-                     "Let's check out"), "Share using"))
-            } catch (e: Exception) {
-                snackbarMessage.value = "The place could not be shared."
-            }
-
-        }
-
-        }
-
-    }
 
