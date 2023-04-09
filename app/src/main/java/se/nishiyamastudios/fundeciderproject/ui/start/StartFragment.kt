@@ -1,10 +1,13 @@
 package se.nishiyamastudios.fundeciderproject.ui.start
 
+import android.Manifest
 import android.Manifest.permission.CALL_PHONE
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.location.Location
 import android.net.Uri
 import android.os.Bundle
+import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -20,13 +23,18 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
+import com.google.android.gms.location.LocationCallback
+import com.google.android.gms.location.LocationResult
+import com.google.android.gms.location.LocationServices
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
+import se.nishiyamastudios.fundeciderproject.MainActivity
 import se.nishiyamastudios.fundeciderproject.utilityclass.FirebaseUtility
 import se.nishiyamastudios.fundeciderproject.utilityclass.IntentUtility
 import se.nishiyamastudios.fundeciderproject.dataclass.PlaceDetails
 import se.nishiyamastudios.fundeciderproject.R
 import se.nishiyamastudios.fundeciderproject.databinding.FragmentStartBinding
+import se.nishiyamastudios.fundeciderproject.utilityclass.LocationUtility
 
 
 class StartFragment : Fragment() {
@@ -41,6 +49,7 @@ class StartFragment : Fragment() {
     private val model by viewModels<StartViewModel>()
     private val intentUtil = IntentUtility()
     private val fbUtil = FirebaseUtility()
+    private val locationUtil = LocationUtility()
 
 
     companion object {
@@ -79,6 +88,38 @@ class StartFragment : Fragment() {
         //TODO: Lägg in geoapify reverse geocoding och hitta ställen utifrån gata och radius.
         //TODO: Lägg in setting för hur många resultat man skall hämta från API
         //TODO: Lägg in borttagning av konto.
+
+        val locationCallback=object: LocationCallback(){
+            override fun onLocationResult(p0: LocationResult) {
+                var lastLocation: Location? =p0.lastLocation
+                if (lastLocation != null) {
+
+                    Log.i("FUNLOCAL", lastLocation.latitude.toString())
+                    Log.i("FUNLOCAL", lastLocation.longitude.toString())
+                }
+            }
+        }
+
+        val fusedLocation = LocationServices.getFusedLocationProviderClient(requireActivity())
+        if (ActivityCompat.checkSelfPermission(
+                requireActivity(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                requireActivity(),
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return
+        }
+        fusedLocation.requestLocationUpdates(locationUtil.RequestLocation(100000, 3000, 100), locationCallback, Looper.myLooper())
+
 
         // Hide elements on creation
         binding.linearLayout.visibility = View.GONE

@@ -1,10 +1,23 @@
 package se.nishiyamastudios.fundeciderproject
 
+import android.Manifest
+import android.content.Context
+import android.content.pm.PackageManager
+import android.location.Location
+import android.location.LocationManager
 import android.os.Bundle
+import android.os.Looper
 import android.util.Log
 import android.view.View
+import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import com.google.android.gms.location.LocationCallback
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationResult
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.Priority
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -13,6 +26,7 @@ import se.nishiyamastudios.fundeciderproject.ui.favorites.FavoritesFragment
 import se.nishiyamastudios.fundeciderproject.ui.login.LoginFragment
 import se.nishiyamastudios.fundeciderproject.ui.start.StartFragment
 import se.nishiyamastudios.fundeciderproject.utilityclass.FirebaseUtility
+import se.nishiyamastudios.fundeciderproject.utilityclass.LocationUtility
 
 class MainActivity : AppCompatActivity() {
 
@@ -21,6 +35,13 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        // Request permission to access location
+        val PERMISSION_ID = 1
+        ActivityCompat.requestPermissions(
+            this, arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION),
+            PERMISSION_ID
+        )
 
         val callback = object : OnBackPressedCallback(
             true // default to enabled
