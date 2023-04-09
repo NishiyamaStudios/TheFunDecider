@@ -10,10 +10,6 @@ import com.google.android.gms.location.Priority
 
 class LocationUtility : AppCompatActivity() {
 
-    fun LocationEnable(): Boolean {
-        var locationManager=getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
-    }
 
     fun RequestPermission() {
         ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION,

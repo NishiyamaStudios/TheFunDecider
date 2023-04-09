@@ -8,6 +8,7 @@ import android.location.Location
 import android.net.Uri
 import android.os.Bundle
 import android.os.Looper
+import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -19,6 +20,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.MutableLiveData
@@ -45,6 +47,9 @@ class StartFragment : Fragment() {
     private lateinit var placePhoneTV: TextView
     private lateinit var myPlaces: MutableList<PlaceDetails>
     private lateinit var currentPlace: PlaceDetails
+    private lateinit var latitude: String
+    private lateinit var longitude: String
+    private lateinit var myLocation: String
 
     private val model by viewModels<StartViewModel>()
     private val intentUtil = IntentUtility()
@@ -94,11 +99,28 @@ class StartFragment : Fragment() {
                 var lastLocation: Location? =p0.lastLocation
                 if (lastLocation != null) {
 
-                    Log.i("FUNLOCAL", lastLocation.latitude.toString())
-                    Log.i("FUNLOCAL", lastLocation.longitude.toString())
+                    // Did not figure out a better way to access these values
+                    binding.latitudeTV.setText(lastLocation.latitude.toString())
+                    binding.longitudeTV.setText(lastLocation.longitude.toString())
+
                 }
             }
         }
+
+        binding.latitudeTV.addTextChangedListener() {
+            Log.i("FUNLOCALE", it.toString()+"hejhej")
+            latitude = it.toString()
+        }
+
+        binding.longitudeTV.addTextChangedListener() {
+            Log.i("FUNLOCALE", it.toString()+"hejhej")
+            longitude = it.toString()
+            myLocation = latitude+","+longitude
+            Log.i("FUNLOCALE", myLocation)
+        }
+
+        val myLocation = binding.latitudeTV.text.toString()+","+binding.longitudeTV.text.toString()
+        Log.i("FUNLOCALE", myLocation)
 
         val fusedLocation = LocationServices.getFusedLocationProviderClient(requireActivity())
         if (ActivityCompat.checkSelfPermission(
@@ -119,7 +141,6 @@ class StartFragment : Fragment() {
             return
         }
         fusedLocation.requestLocationUpdates(locationUtil.RequestLocation(100000, 3000, 100), locationCallback, Looper.myLooper())
-
 
         // Hide elements on creation
         binding.linearLayout.visibility = View.GONE
