@@ -194,6 +194,29 @@ class StartViewModel : ViewModel() {
         return geoapifyBaseURL + geoapifyCategory + geoapifyPlace + geoapifyLimit + geoapifyKey
     }
 
+    fun buildGeoapifyURLWithLatAndLong(category: String, location: String, radius: String): String {
+
+        val geoapifyBaseURL = "https://api.geoapify.com/v2/places?categories="
+        var geoapifyCategory = ""
+        when (category) {
+            "Restaurant" -> geoapifyCategory = "catering." + category.lowercase()
+            "Bar" -> geoapifyCategory = "catering." + category.lowercase()
+            "Pub" -> geoapifyCategory = "catering." + category.lowercase()
+            "Cafe" -> geoapifyCategory = "catering." + category.lowercase()
+            "Fast Food" -> geoapifyCategory = "catering.fast_food"
+            "Entertainment" -> geoapifyCategory = category.lowercase()
+        }
+        val geoapifyPlace =
+            "&filter=circle:51fab165f6780b2a4059a2e9e94ccbcb4b40f00101f901f3b6a20000000000c002069203064d616c6dc3b6&limit="
+        val geoapifyStart = "&filter=circle:"
+        val geoapifyProximity = "&bias=proximity:"
+        val geoapifyLimitStart = "&limit="
+        val geoapifyLimit = "20"
+        val geoapifyKey = "&apiKey=d357192221064b8da71d4143f306b152"
+
+        return geoapifyBaseURL + geoapifyCategory + geoapifyStart + location + "," + radius + geoapifyProximity + location + geoapifyLimitStart + geoapifyLimit + geoapifyKey
+    }
+
     fun selectAnimation(category: String): Int {
         var animationInt: Int = R.raw.animation_welcome
         //var currentCategory = category.replace(" ","")

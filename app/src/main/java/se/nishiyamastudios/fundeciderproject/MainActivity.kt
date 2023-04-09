@@ -43,7 +43,7 @@ class MainActivity : AppCompatActivity() {
             return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
         }
 
-        if (LocationEnable() == false) {
+        if (!LocationEnable()) {
             val parentLayout = findViewById<View>(android.R.id.content)
             Snackbar.make(parentLayout, "Please enable location to be able to use this app.", Snackbar.LENGTH_LONG).show()
         Log.i("FUNLOCALE", "Location if off :(")

@@ -119,9 +119,6 @@ class StartFragment : Fragment() {
             Log.i("FUNLOCALE", myLocation)
         }
 
-        val myLocation = binding.latitudeTV.text.toString()+","+binding.longitudeTV.text.toString()
-        Log.i("FUNLOCALE", myLocation)
-
         val fusedLocation = LocationServices.getFusedLocationProviderClient(requireActivity())
         if (ActivityCompat.checkSelfPermission(
                 requireActivity(),
@@ -140,7 +137,7 @@ class StartFragment : Fragment() {
             // for ActivityCompat#requestPermissions for more details.
             return
         }
-        fusedLocation.requestLocationUpdates(locationUtil.RequestLocation(100000, 3000, 100), locationCallback, Looper.myLooper())
+        fusedLocation.requestLocationUpdates(locationUtil.RequestLocation(100, 3000, 100), locationCallback, Looper.myLooper())
 
         // Hide elements on creation
         binding.linearLayout.visibility = View.GONE
@@ -228,8 +225,13 @@ class StartFragment : Fragment() {
 
         binding.AutoCompleteTextview.onItemClickListener =
             OnItemClickListener { parent, view, position, id ->
+
+                val myLocation = binding.longitudeTV.text.toString()+","+binding.latitudeTV.text.toString()
+                Log.i("placesurl", myLocation)
                 val category = autoCompleteTextView.text.toString().lowercase()
-                val placesUrl = model.buildGeoapifyURL(autoCompleteTextView.text.toString())
+                //val placesUrl = model.buildGeoapifyURL(autoCompleteTextView.text.toString())
+                val placesUrl = model.buildGeoapifyURLWithLatAndLong(autoCompleteTextView.text.toString(),myLocation,"5000")
+                Log.i("placeurl", placesUrl)
                 binding.linearLayout.visibility = View.GONE
                 binding.animationView.setAnimation(model.selectAnimation(autoCompleteTextView.text.toString()))
                 binding.animationView.visibility = View.VISIBLE
