@@ -32,6 +32,9 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.android.play.core.tasks.OnCompleteListener
 import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import se.nishiyamastudios.fundeciderproject.MainActivity
 import se.nishiyamastudios.fundeciderproject.R
 import se.nishiyamastudios.fundeciderproject.databinding.FragmentStartBinding
@@ -452,15 +455,25 @@ class StartFragment : Fragment() {
 
         binding.deleteAccountAreYouSureButton.setOnClickListener {
             val currentUser = FirebaseAuth.getInstance().currentUser
+            if (currentUser != null) {
+                Log.i("FUNDELETE", currentUser.uid.toString())
+            }
 
             if (currentUser != null) {
 
+                // Delete user saved data from funfavorite and funblacklist
                 fbUtil.deleteSavedUserData()
 
                 val activity  = it.context as? AppCompatActivity
                 val bottomNavigationView = activity?.findViewById<BottomNavigationView>(R.id.bottom_navigation_view)
 
+                // Re-authenticate user before delete in case it is needed
+                var credential = EmailAuthProvider.getCredential(R.id.loginEmailET.toString(), R.id.loginPasswordET.toString())
+                currentUser.reauthenticate(credential)
+
+                // Delete user account and navigate to login
                 currentUser.delete().addOnSuccessListener {
+
                     if (activity != null) {
                         activity.supportFragmentManager.beginTransaction()
                             .replace(R.id.fragNavCon, LoginFragment()).commit()
