@@ -8,4 +8,6 @@
         <b>Secondly</b>, <i>press the button</i> to find your new favorite place!
     </string>
     <string name="haveFunText"><b>Have fun!</b> Don\'t forget to <i>Favorite</i>, <i>Blacklist</i> and <i>Share</i>!</string>
+    <string name="clickTip"><b>Tip!</b> You can check out all the place information by clicking on address, mail, phone number and website.</string>
+    <string name="savedData"><b>All saved data will also be deleted.</b></string>
 </resources>

@@ -8,7 +8,6 @@ import android.location.Location
 import android.net.Uri
 import android.os.Bundle
 import android.os.Looper
-import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -30,18 +29,22 @@ import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.play.core.tasks.OnCompleteListener
+import com.google.firebase.auth.EmailAuthProvider
+import com.google.firebase.auth.FirebaseAuth
 import se.nishiyamastudios.fundeciderproject.MainActivity
-import se.nishiyamastudios.fundeciderproject.utilityclass.FirebaseUtility
-import se.nishiyamastudios.fundeciderproject.utilityclass.IntentUtility
-import se.nishiyamastudios.fundeciderproject.dataclass.PlaceDetails
 import se.nishiyamastudios.fundeciderproject.R
 import se.nishiyamastudios.fundeciderproject.databinding.FragmentStartBinding
+import se.nishiyamastudios.fundeciderproject.dataclass.PlaceDetails
+import se.nishiyamastudios.fundeciderproject.ui.login.LoginFragment
+import se.nishiyamastudios.fundeciderproject.utilityclass.FirebaseUtility
+import se.nishiyamastudios.fundeciderproject.utilityclass.IntentUtility
 import se.nishiyamastudios.fundeciderproject.utilityclass.LocationUtility
 
 
 class StartFragment : Fragment() {
 
-    var _binding : FragmentStartBinding? = null
+    var _binding: FragmentStartBinding? = null
     val binding get() = _binding!!
 
     private lateinit var placePhoneTV: TextView
@@ -88,34 +91,37 @@ class StartFragment : Fragment() {
 
         //TODO: Fixa så att detaljer i linear layout blir GONE om dem inte har något värde
         //TODO: Errorhantering, refaktorering, snackbars, kommentera kod
-        //TODO: Välja stad? Hur funkar det? Kolla med hjälp av GPS i stället?
         //TODO: Man borde inte kunna lägga till som favorite eller blacklist om dem redan finns i någon av listorna?
-        //TODO: Lägg in geoapify reverse geocoding och hitta ställen utifrån gata och radius.
         //TODO: Lägg in setting för hur många resultat man skall hämta från API
         //TODO: Lägg in borttagning av konto.
 
-        val locationCallback=object: LocationCallback(){
+        val locationCallback = object : LocationCallback() {
             override fun onLocationResult(p0: LocationResult) {
-                var lastLocation: Location? =p0.lastLocation
+                var lastLocation: Location? = p0.lastLocation
                 if (lastLocation != null) {
 
-                    // Did not figure out a better way to access these values
-                    binding.latitudeTV.setText(lastLocation.latitude.toString())
-                    binding.longitudeTV.setText(lastLocation.longitude.toString())
+                    try {
+                        // Did not figure out a better way to access these values
+                        binding.latitudeTV.setText(lastLocation.latitude.toString())
+                        binding.longitudeTV.setText(lastLocation.longitude.toString())
+                    } catch (e : Exception) {
+                        // Do nothing, just catching issue with the binding when logging out.
+                    }
+
 
                 }
             }
         }
 
         binding.latitudeTV.addTextChangedListener() {
-            Log.i("FUNLOCALE", it.toString()+"hejhej")
+            Log.i("FUNLOCALE", it.toString() + "hejhej")
             latitude = it.toString()
         }
 
         binding.longitudeTV.addTextChangedListener() {
-            Log.i("FUNLOCALE", it.toString()+"hejhej")
+            Log.i("FUNLOCALE", it.toString() + "hejhej")
             longitude = it.toString()
-            myLocation = latitude+","+longitude
+            myLocation = latitude + "," + longitude
             Log.i("FUNLOCALE", myLocation)
         }
 
@@ -137,7 +143,11 @@ class StartFragment : Fragment() {
             // for ActivityCompat#requestPermissions for more details.
             return
         }
-        fusedLocation.requestLocationUpdates(locationUtil.RequestLocation(100, 3000, 100), locationCallback, Looper.myLooper())
+        fusedLocation.requestLocationUpdates(
+            locationUtil.RequestLocation(50000, 3000, 100),
+            locationCallback,
+            Looper.myLooper()
+        )
 
         // Hide elements on creation
         binding.linearLayout.visibility = View.GONE
@@ -145,9 +155,9 @@ class StartFragment : Fragment() {
         binding.helpCL.visibility = View.GONE
 
         //observera vårt felmeddelande
-        val errorObserver  = Observer<String> {errorMess ->
+        val errorObserver = Observer<String> { errorMess ->
             //Vad skall hända när det kommer ett felmeddelande
-            Toast.makeText(requireContext(),errorMess, Toast.LENGTH_LONG).show()
+            Toast.makeText(requireContext(), errorMess, Toast.LENGTH_LONG).show()
         }
 
         model.errorMessage.observe(viewLifecycleOwner, errorObserver)
@@ -156,8 +166,8 @@ class StartFragment : Fragment() {
             MutableLiveData<String>()
         }
 
-        val snackbarObserver  = Observer<String> {mess ->
-            Snackbar.make(requireView(),mess,Snackbar.LENGTH_LONG)
+        val snackbarObserver = Observer<String> { mess ->
+            Snackbar.make(requireView(), mess, Snackbar.LENGTH_LONG)
                 .setAnchorView(binding.AutoCompleteTextview)
                 .show()
         }
@@ -173,7 +183,7 @@ class StartFragment : Fragment() {
 
 
         // Set bottom navigation view to visible after logging in
-        val activity  = view.context as? AppCompatActivity
+        val activity = view.context as? AppCompatActivity
         if (activity != null) {
             val navView = activity.findViewById<BottomNavigationView>(R.id.bottom_navigation_view)
             navView.visibility = View.VISIBLE
@@ -211,8 +221,8 @@ class StartFragment : Fragment() {
             placeStreetTV.paintFlags = android.graphics.Paint.UNDERLINE_TEXT_FLAG
             placeStreetTV.text = "$placeStreet $placeStreetNumber"
 
-            var openingHours = placeOpeningHours?.replace(",","\n")
-            openingHours = openingHours?.replace(";","\n")
+            var openingHours = placeOpeningHours?.replace(",", "\n")
+            openingHours = openingHours?.replace(";", "\n")
 
             binding.placeEmailTV.text = placeEmail
             binding.placeWebsiteTV.text = placeWebsite
@@ -226,11 +236,16 @@ class StartFragment : Fragment() {
         binding.AutoCompleteTextview.onItemClickListener =
             OnItemClickListener { parent, view, position, id ->
 
-                val myLocation = binding.longitudeTV.text.toString()+","+binding.latitudeTV.text.toString()
+                val myLocation =
+                    binding.longitudeTV.text.toString() + "," + binding.latitudeTV.text.toString()
                 Log.i("placesurl", myLocation)
                 val category = autoCompleteTextView.text.toString().lowercase()
                 //val placesUrl = model.buildGeoapifyURL(autoCompleteTextView.text.toString())
-                val placesUrl = model.buildGeoapifyURLWithLatAndLong(autoCompleteTextView.text.toString(),myLocation,"5000")
+                val placesUrl = model.buildGeoapifyURLWithLatAndLong(
+                    autoCompleteTextView.text.toString(),
+                    myLocation,
+                    "5000"
+                )
                 Log.i("placeurl", placesUrl)
                 binding.linearLayout.visibility = View.GONE
                 binding.animationView.setAnimation(model.selectAnimation(autoCompleteTextView.text.toString()))
@@ -239,7 +254,8 @@ class StartFragment : Fragment() {
                 myPlaces = model.getPlaces(placesUrl)
 
                 if (myPlaces.isEmpty()) {
-                    snackbarMessage.value = "Could not get any more places, you blacklisted them all?!"
+                    snackbarMessage.value =
+                        "Could not get any more places, you blacklisted them all?!"
                     binding.getPlacesButton.isClickable = false
                 } else {
                     currentPlace = model.getRandomPlace(myPlaces)
@@ -250,159 +266,216 @@ class StartFragment : Fragment() {
                 binding.animationViewInfo.visibility = View.VISIBLE
             }
 
-            binding.addFavoriteButton.setOnClickListener {
+        binding.addFavoriteButton.setOnClickListener {
 
-                if (autoCompleteTextView.text.toString() == "") {
-                    snackbarMessage.value = "You need to find a place first."
-                    return@setOnClickListener
-                }
-
-                val placeNameTV = binding.selectedPlaceTV.text
-
-                if (fbUtil.loadFavorites().value.toString().contains(placeNameTV)) {
-                    snackbarMessage.value = "$placeNameTV is already a favorite."
-                } else {
-
-                    if (binding.selectedPlaceTV.text != "") {
-                        val placeName = currentPlace.name
-                        val placeId = currentPlace.placeid
-                        val placeStreet = currentPlace.street
-                        val placeHouseNumber = currentPlace.housenumber
-                        val placePostCode = currentPlace.postcode
-                        val placePhone = currentPlace.phone
-                        val placeEmail = currentPlace.email
-                        val placeWebsite = currentPlace.website
-                        val placeOpeningHours = currentPlace.openinghours
-
-                        fbUtil.addFavoriteItem("funfavorite", placeName, placeStreet, placeHouseNumber, placePostCode, placePhone, placeEmail,placeWebsite, placeOpeningHours, placeId)
-                        fbUtil.loadFavorites()
-                    }
-
-                }
+            if (autoCompleteTextView.text.toString() == "") {
+                snackbarMessage.value = "You need to find a place first."
+                return@setOnClickListener
             }
 
-            binding.addBlacklistButton.setOnClickListener {
+            val placeNameTV = binding.selectedPlaceTV.text
 
-                if (autoCompleteTextView.text.toString() == "") {
-                    snackbarMessage.value = "You need to find a place first."
-                    return@setOnClickListener
-                }
+            if (fbUtil.loadFavorites().value.toString().contains(placeNameTV)) {
+                snackbarMessage.value = "$placeNameTV is already a favorite."
+            } else {
 
-                val placeNameTV = binding.selectedPlaceTV.text
+                if (binding.selectedPlaceTV.text != "") {
+                    val placeName = currentPlace.name
+                    val placeId = currentPlace.placeid
+                    val placeStreet = currentPlace.street
+                    val placeHouseNumber = currentPlace.housenumber
+                    val placePostCode = currentPlace.postcode
+                    val placePhone = currentPlace.phone
+                    val placeEmail = currentPlace.email
+                    val placeWebsite = currentPlace.website
+                    val placeOpeningHours = currentPlace.openinghours
 
-                if (fbUtil.loadBlacklist().value.toString().contains(placeNameTV)) {
-                    snackbarMessage.value = "$placeNameTV is already blacklisted."
-                } else {
-
-                    if (binding.selectedPlaceTV.text != "") {
-                        val placeName = currentPlace.name
-                        val placeId = currentPlace.placeid
-
-                        fbUtil.addBlacklistItem("funblacklist", placeName, placeId)
-                        myPlaces.remove(currentPlace)
-                        fbUtil.loadBlacklist()
-                    }
-                }
-            }
-
-            binding.placeStreetTV.setOnClickListener {
-
-                val browserIntent = intentUtil.buildMapBrowserIntent(currentPlace.street + " " +currentPlace.housenumber, "https://www.google.com/maps/search/?api=1&query=")
-                try {
-                    startActivity(browserIntent)
-                } catch (e: Exception) {
-                    snackbarMessage.value = "The map cannot be opened."
-                }
-            }
-
-            binding.placePhoneTV.setOnClickListener {
-
-                val phoneNumber = placePhoneTV.text
-                val intent = Intent(Intent.ACTION_CALL)
-                intent.data = Uri.parse("tel:$phoneNumber")
-
-                val MY_PERMISSIONS_REQUEST_CALL_PHONE = 1
-
-                if (ContextCompat.checkSelfPermission(
-                        requireContext(),
-                        CALL_PHONE
+                    fbUtil.addFavoriteItem(
+                        "funfavorite",
+                        placeName,
+                        placeStreet,
+                        placeHouseNumber,
+                        placePostCode,
+                        placePhone,
+                        placeEmail,
+                        placeWebsite,
+                        placeOpeningHours,
+                        placeId
                     )
-                    != PackageManager.PERMISSION_GRANTED
-                ) {
-                    ActivityCompat.requestPermissions(
-                        requireActivity(), arrayOf(CALL_PHONE),
-                        MY_PERMISSIONS_REQUEST_CALL_PHONE
+                    fbUtil.loadFavorites()
+                }
+
+            }
+        }
+
+        binding.addBlacklistButton.setOnClickListener {
+
+            if (autoCompleteTextView.text.toString() == "") {
+                snackbarMessage.value = "You need to find a place first."
+                return@setOnClickListener
+            }
+
+            val placeNameTV = binding.selectedPlaceTV.text
+
+            if (fbUtil.loadBlacklist().value.toString().contains(placeNameTV)) {
+                snackbarMessage.value = "$placeNameTV is already blacklisted."
+            } else {
+
+                if (binding.selectedPlaceTV.text != "") {
+                    val placeName = currentPlace.name
+                    val placeId = currentPlace.placeid
+
+                    fbUtil.addBlacklistItem("funblacklist", placeName, placeId)
+                    myPlaces.remove(currentPlace)
+                    fbUtil.loadBlacklist()
+                }
+            }
+        }
+
+        binding.placeStreetTV.setOnClickListener {
+
+            val browserIntent = intentUtil.buildMapBrowserIntent(
+                currentPlace.street + " " + currentPlace.housenumber,
+                "https://www.google.com/maps/search/?api=1&query="
+            )
+            try {
+                startActivity(browserIntent)
+            } catch (e: Exception) {
+                snackbarMessage.value = "The map cannot be opened."
+            }
+        }
+
+        binding.placePhoneTV.setOnClickListener {
+
+            val phoneNumber = placePhoneTV.text
+            val intent = Intent(Intent.ACTION_CALL)
+            intent.data = Uri.parse("tel:$phoneNumber")
+
+            val MY_PERMISSIONS_REQUEST_CALL_PHONE = 1
+
+            if (ContextCompat.checkSelfPermission(
+                    requireContext(),
+                    CALL_PHONE
+                )
+                != PackageManager.PERMISSION_GRANTED
+            ) {
+                ActivityCompat.requestPermissions(
+                    requireActivity(), arrayOf(CALL_PHONE),
+                    MY_PERMISSIONS_REQUEST_CALL_PHONE
+                )
+
+                // MY_PERMISSIONS_REQUEST_CALL_PHONE is an
+                // app-defined int constant. The callback method gets the
+                // result of the request.
+            } else {
+                //You already have permission
+                try {
+                    startActivity(intent)
+                } catch (e: SecurityException) {
+                    e.printStackTrace()
+                }
+            }
+        }
+
+        binding.placeEmailTV.setOnClickListener {
+
+            val chooserTitle = "Email client"
+            val emailIntent = intentUtil.buildEmailIntent(currentPlace.email, "Reservation", "")
+
+            try {
+                startActivity(Intent.createChooser(emailIntent, chooserTitle))
+            } catch (e: Exception) {
+                snackbarMessage.value = "Email cannot be accessed."
+            }
+
+        }
+
+        binding.placeWebsiteTV.setOnClickListener {
+
+            val browserIntent = intentUtil.buildBrowserIntent(currentPlace.website)
+
+            try {
+                startActivity(browserIntent)
+            } catch (e: Exception) {
+                snackbarMessage.value = "The website cannot be opened."
+            }
+        }
+
+        binding.shareButton.setOnClickListener {
+
+            if (autoCompleteTextView.text.toString() == "") {
+                snackbarMessage.value = "You need to find a place first."
+                return@setOnClickListener
+            }
+
+            try {
+                startActivity(
+                    Intent.createChooser(
+                        intentUtil.sharePlace(
+                            currentPlace.name, "", "Hey! Share this destiny with me!\n" +
+                                    "Let's check out"
+                        ), "Share using"
                     )
-
-                    // MY_PERMISSIONS_REQUEST_CALL_PHONE is an
-                    // app-defined int constant. The callback method gets the
-                    // result of the request.
-                } else {
-                    //You already have permission
-                    try {
-                        startActivity(intent)
-                    } catch (e: SecurityException) {
-                        e.printStackTrace()
-                    }
-                }
+                )
+            } catch (e: Exception) {
+                snackbarMessage.value = "The place could not be shared."
             }
 
-            binding.placeEmailTV.setOnClickListener {
-
-                val chooserTitle = "Email client"
-                val emailIntent = intentUtil.buildEmailIntent(currentPlace.email, "Reservation", "")
-
-                try {
-                    startActivity(Intent.createChooser(emailIntent, chooserTitle))
-                } catch (e: Exception) {
-                    snackbarMessage.value = "Email cannot be accessed."
-                }
-
-            }
-
-            binding.placeWebsiteTV.setOnClickListener {
-
-                val browserIntent = intentUtil.buildBrowserIntent(currentPlace.website)
-
-                try {
-                    startActivity(browserIntent)
-                } catch (e: Exception) {
-                    snackbarMessage.value = "The website cannot be opened."
-                }
-            }
-
-            binding.shareButton.setOnClickListener {
-
-                if (autoCompleteTextView.text.toString() == "") {
-                    snackbarMessage.value = "You need to find a place first."
-                    return@setOnClickListener
-                }
-
-                try {
-                 startActivity(Intent.createChooser(intentUtil.sharePlace(currentPlace.name,"", "Hey! Share this destiny with me!\n" +
-                         "Let's check out"), "Share using"))
-                } catch (e: Exception) {
-                    snackbarMessage.value = "The place could not be shared."
-                }
-
-            }
+        }
 
         binding.animationViewInfo.setOnClickListener {
             binding.helpCL.visibility = View.VISIBLE
+            binding.deleteAccountAreYouSureButton.visibility = View.GONE
             binding.helpCL.bringToFront()
         }
 
         binding.closeHelpInfoImage.setOnClickListener {
+            binding.deleteAccountAreYouSureButton.visibility = View.GONE
+            binding.savedDataTV.visibility = View.GONE
+            binding.deleteAccountButton.visibility = View.VISIBLE
             binding.helpCL.visibility = View.GONE
             binding.mainCL.bringToFront()
         }
 
         binding.animationView.setOnClickListener {
             binding.helpCL.visibility = View.VISIBLE
+            binding.deleteAccountAreYouSureButton.visibility = View.GONE
             binding.helpCL.bringToFront()
         }
 
-            }
+        binding.deleteAccountButton.setOnClickListener {
 
+            binding.deleteAccountButton.visibility = View.GONE
+            binding.savedDataTV.visibility = View.VISIBLE
+            binding.deleteAccountAreYouSureButton.visibility = View.VISIBLE
         }
+
+        binding.deleteAccountAreYouSureButton.setOnClickListener {
+            val currentUser = FirebaseAuth.getInstance().currentUser
+
+            if (currentUser != null) {
+
+                fbUtil.deleteSavedUserData()
+
+                val activity  = it.context as? AppCompatActivity
+                val bottomNavigationView = activity?.findViewById<BottomNavigationView>(R.id.bottom_navigation_view)
+
+                currentUser.delete().addOnSuccessListener {
+                    if (activity != null) {
+                        activity.supportFragmentManager.beginTransaction()
+                            .replace(R.id.fragNavCon, LoginFragment()).commit()
+                    }
+                    if (bottomNavigationView != null) {
+                        bottomNavigationView.menu.findItem(R.id.startPage).isChecked = true
+                    }
+                    if (bottomNavigationView != null) {
+                        bottomNavigationView.visibility = View.GONE
+                    }
+                }
+            } else {
+                snackbarMessage.value = "Could not find any user."
+            }
+        }
+    }
+}
 

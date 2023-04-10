@@ -30,7 +30,7 @@ class StartViewModel : ViewModel() {
     }
 
     fun getListOfBlacklistedPlaceNames(blacklistedplaces : MutableLiveData<List<BlackListObject>>): MutableList<String> {
-        for (i in 0 until blacklistedplaces.value?.size!!.toInt()) {
+        for (i in 0 until (blacklistedplaces.value?.size?.toInt() ?: 0)) {
             val name = blacklistedplaces.value!![i].placename
             blacklistNameList.add(name!!)
         }
@@ -39,8 +39,7 @@ class StartViewModel : ViewModel() {
     }
 
 
-
-
+    // Get places from geoApify API depending on category, latitude, longitude and sort out places that are blacklisted.
     fun getPlaces(url: String): MutableList<PlaceDetails> {
 
         blackListedPlaces = fbUtil.loadBlacklist()
@@ -157,7 +156,6 @@ class StartViewModel : ViewModel() {
             }
 
         })
-
             countDownLatch.await()
             return places
     }
@@ -174,6 +172,7 @@ class StartViewModel : ViewModel() {
         }
     }
 
+    // Build URL to fetch API data about a specific City from geoApify unique identifier
     fun buildGeoapifyURL(category: String): String {
 
         val geoapifyBaseURL = "https://api.geoapify.com/v2/places?categories="
@@ -194,6 +193,7 @@ class StartViewModel : ViewModel() {
         return geoapifyBaseURL + geoapifyCategory + geoapifyPlace + geoapifyLimit + geoapifyKey
     }
 
+    // Build URL to fetch API data based on latitude and longitude
     fun buildGeoapifyURLWithLatAndLong(category: String, location: String, radius: String): String {
 
         val geoapifyBaseURL = "https://api.geoapify.com/v2/places?categories="
@@ -217,10 +217,9 @@ class StartViewModel : ViewModel() {
         return geoapifyBaseURL + geoapifyCategory + geoapifyStart + location + "," + radius + geoapifyProximity + location + geoapifyLimitStart + geoapifyLimit + geoapifyKey
     }
 
+    // Selects which animation to display depending on which category have been selected
     fun selectAnimation(category: String): Int {
         var animationInt: Int = R.raw.animation_welcome
-        //var currentCategory = category.replace(" ","")
-        //currentCategory = currentCategory.lowercase()
 
         when (category) {
             "Restaurant" -> animationInt = R.raw.animation_restaurant

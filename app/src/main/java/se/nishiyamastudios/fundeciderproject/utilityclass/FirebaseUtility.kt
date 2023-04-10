@@ -132,7 +132,6 @@ class  FirebaseUtility {
     fun deleteFavoriteItem(deleteitem : FavoriteListObject) {
         val database = Firebase.database
         val listRef = database.getReference("funfavorite").child(Firebase.auth.currentUser!!.uid)
-
         listRef.child(deleteitem.fbid!!).removeValue().addOnCompleteListener {
             loadFavorites()
         }
@@ -147,6 +146,20 @@ class  FirebaseUtility {
             loadBlacklist()
         }
 
+    }
+
+    fun deleteSavedUserData() {
+        val database = Firebase.database
+        val favoriteRef = database.getReference("funfavorite").child(Firebase.auth.currentUser!!.uid)
+        val blacklistRef = database.getReference("funblacklist").child(Firebase.auth.currentUser!!.uid)
+
+        if (favoriteRef != null) {
+            favoriteRef.removeValue()
+        }
+
+        if (blacklistRef != null) {
+            blacklistRef.removeValue()
+        }
     }
 
 }

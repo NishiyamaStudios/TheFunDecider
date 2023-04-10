@@ -24,11 +24,12 @@ import se.nishiyamastudios.fundeciderproject.utilityclass.LocationUtility
 class MainActivity : AppCompatActivity() {
 
     private lateinit var bottomNavigationView: BottomNavigationView
-    private val locationUtil = LocationUtility()
+    private val fbUtil = FirebaseUtility()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
 
 
         // Request permission to access location
@@ -38,22 +39,17 @@ class MainActivity : AppCompatActivity() {
             PERMISSION_ID
         )
 
-        fun LocationEnable(): Boolean {
-            var locationManager=getSystemService(Context.LOCATION_SERVICE) as LocationManager
-            return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
-        }
-
+        // Let user know if location is not enabled
         if (!LocationEnable()) {
             val parentLayout = findViewById<View>(android.R.id.content)
             Snackbar.make(parentLayout, "Please enable location to be able to use this app.", Snackbar.LENGTH_LONG).show()
-        Log.i("FUNLOCALE", "Location if off :(")
         }
 
+        // Override backpress since there where issues with how the fragments acted
         val callback = object : OnBackPressedCallback(
             true // default to enabled
         ) {
             override fun handleOnBackPressed() {
-                Log.i("FUNDEBUG3", "Backpressed!")
 
                 supportFragmentManager.popBackStackImmediate()
 
@@ -73,14 +69,13 @@ class MainActivity : AppCompatActivity() {
             }
         }
         onBackPressedDispatcher.addCallback(
-            this, // LifecycleOwner
-
+            this,
             callback
         )
 
-        Log.i("FUNDEBUGLOGIN", Firebase.auth.currentUser.toString())
         bottomNavigationView = findViewById(R.id.bottom_navigation_view)
 
+        // Set fragment to start or login depending on if user is logged in or not
         Firebase.auth.addAuthStateListener {
 
             if (Firebase.auth.currentUser != null) {
@@ -93,8 +88,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        val fbUtil = FirebaseUtility()
-
+        // Handle navigation through the bottom navigation view
         bottomNavigationView.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.startPage -> {
@@ -136,5 +130,11 @@ class MainActivity : AppCompatActivity() {
 
         }
 
+    }
+
+    // To check if location is enabled or not
+    fun LocationEnable(): Boolean {
+        var locationManager=getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
     }
 }
