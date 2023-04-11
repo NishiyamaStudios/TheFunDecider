@@ -9,7 +9,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
@@ -17,7 +16,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
-import se.nishiyamastudios.fundeciderproject.R
 import se.nishiyamastudios.fundeciderproject.dataclass.FavoriteListObject
 import se.nishiyamastudios.fundeciderproject.utilityclass.FirebaseUtility
 import se.nishiyamastudios.fundeciderproject.utilityclass.IntentUtility
@@ -25,18 +23,14 @@ import se.nishiyamastudios.fundeciderproject.databinding.FragmentFavoritesBindin
 
 class FavoritesFragment : Fragment() {
 
-    var _binding : FragmentFavoritesBinding? = null
+    private var _binding : FragmentFavoritesBinding? = null
     val binding get() = _binding!!
 
     val viewModel by viewModels<FavoritesViewModel>()
     val fbUtil = FirebaseUtility()
     private val intentUtil = IntentUtility()
 
-    var favoritesadapter = FavoritesAdapter()
-
-    companion object {
-        fun newInstance() = FavoritesFragment()
-    }
+    private var favoritesadapter = FavoritesAdapter()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

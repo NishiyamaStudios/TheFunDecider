@@ -17,14 +17,10 @@ import se.nishiyamastudios.fundeciderproject.ui.start.StartFragment
 
 class LoginFragment : Fragment() {
 
-    var _binding : FragmentLoginBinding? = null
-    val binding get() = _binding!!
+    private var _binding : FragmentLoginBinding? = null
+    private val binding get() = _binding!!
 
     private val viewModel by viewModels<LoginViewModel>()
-
-    companion object {
-        fun newInstance() = LoginFragment()
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

@@ -1,19 +1,12 @@
 package se.nishiyamastudios.fundeciderproject.ui.favorites
 
-import android.content.Context
-import android.content.Intent
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.libraries.places.ktx.api.model.place
 import se.nishiyamastudios.fundeciderproject.R
-import se.nishiyamastudios.fundeciderproject.utilityclass.FirebaseUtility
 import se.nishiyamastudios.fundeciderproject.utilityclass.IntentUtility
 
 class FavoritesAdapter : RecyclerView.Adapter<FavoritesAdapter.ViewHolder>() {
@@ -59,13 +52,13 @@ class FavoritesAdapter : RecyclerView.Adapter<FavoritesAdapter.ViewHolder>() {
 
         holder.getFavoritePlaceInfo.setOnClickListener {
 
-            frag.binding.selectedFavoritePlaceTV.setText(currentFavorite.placename)
-            frag.binding.favoritePlaceStreetTV.setText(currentFavorite.placestreet+" "+currentFavorite.housenumber)
-            frag.binding.favoritePlacePhoneTV.setText(currentFavorite.phone)
-            frag.binding.favoritePlaceEmailTV.setText(currentFavorite.email)
-            frag.binding.favoritePlaceWebsiteTV.setText(currentFavorite.website)
+            frag.binding.selectedFavoritePlaceTV.text = currentFavorite.placename
+            frag.binding.favoritePlaceStreetTV.text = currentFavorite.placestreet+" "+currentFavorite.housenumber
+            frag.binding.favoritePlacePhoneTV.text = currentFavorite.phone
+            frag.binding.favoritePlaceEmailTV.text = currentFavorite.email
+            frag.binding.favoritePlaceWebsiteTV.text = currentFavorite.website
             frag.binding.favoritePlaceOpeningHoursMT.setText(currentFavorite.openinghours)
-            frag.binding.selectedFavoritePlaceTV.setText(currentFavorite.placename)
+            frag.binding.selectedFavoritePlaceTV.text = currentFavorite.placename
 
             favoritesInfo.bringToFront()
             favoritesInfo.visibility = View.VISIBLE
@@ -84,9 +77,8 @@ class FavoritesAdapter : RecyclerView.Adapter<FavoritesAdapter.ViewHolder>() {
             try {
                 frag.startActivity(shareIntent)
             } catch (e: Exception) {
-
+                // Do nothing
             }
-            Log.i("FUNFUN", placeName)
         }
 
         frag.binding.closeFavoriteInfoImage.setOnClickListener {

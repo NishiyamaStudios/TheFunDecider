@@ -15,17 +15,13 @@ import se.nishiyamastudios.fundeciderproject.ui.login.LoginViewModel
 
 class BlacklistFragment : Fragment() {
 
-    var _binding : FragmentBlacklistBinding? = null
-    val binding get() = _binding!!
+    private var _binding : FragmentBlacklistBinding? = null
+    private val binding get() = _binding!!
 
     val viewModel by viewModels<LoginViewModel>()
     val fbUtil = FirebaseUtility()
 
     private var blacklistadapter = BlacklistAdapter()
-
-    companion object {
-        fun newInstance() = BlacklistFragment()
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -56,7 +52,6 @@ class BlacklistFragment : Fragment() {
         fbUtil.blacklistPlaces.observe(viewLifecycleOwner, blacklistObserver)
 
         fbUtil.loadBlacklist()
-
     }
 
 }

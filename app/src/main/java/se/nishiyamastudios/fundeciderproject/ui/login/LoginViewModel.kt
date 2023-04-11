@@ -27,7 +27,7 @@ class LoginViewModel : ViewModel() {
             .addOnCompleteListener { task ->
 
                 if (!task.isSuccessful) {
-                    errorMessage.value = "Login not successfull."
+                    errorMessage.value = "Login was not successfull."
                 }
             }
     }

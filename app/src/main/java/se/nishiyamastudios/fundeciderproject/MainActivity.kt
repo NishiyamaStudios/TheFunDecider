@@ -4,7 +4,6 @@ import android.Manifest
 import android.content.Context
 import android.location.LocationManager
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
@@ -18,7 +17,6 @@ import se.nishiyamastudios.fundeciderproject.ui.favorites.FavoritesFragment
 import se.nishiyamastudios.fundeciderproject.ui.login.LoginFragment
 import se.nishiyamastudios.fundeciderproject.ui.start.StartFragment
 import se.nishiyamastudios.fundeciderproject.utilityclass.FirebaseUtility
-import se.nishiyamastudios.fundeciderproject.utilityclass.LocationUtility
 
 
 class MainActivity : AppCompatActivity() {
@@ -40,7 +38,7 @@ class MainActivity : AppCompatActivity() {
         )
 
         // Let user know if location is not enabled
-        if (!LocationEnable()) {
+        if (!locationEnabled()) {
             val parentLayout = findViewById<View>(android.R.id.content)
             Snackbar.make(parentLayout, "Please enable location to be able to use this app.", Snackbar.LENGTH_LONG).show()
         }
@@ -133,8 +131,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     // To check if location is enabled or not
-    fun LocationEnable(): Boolean {
-        var locationManager=getSystemService(Context.LOCATION_SERVICE) as LocationManager
+    private fun locationEnabled(): Boolean {
+        val locationManager=getSystemService(Context.LOCATION_SERVICE) as LocationManager
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
     }
 }

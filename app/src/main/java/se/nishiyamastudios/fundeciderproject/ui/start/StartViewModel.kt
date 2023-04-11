@@ -1,6 +1,5 @@
 package se.nishiyamastudios.fundeciderproject.ui.start
 
-import android.content.Intent
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -18,19 +17,19 @@ class StartViewModel : ViewModel() {
 
     var places = mutableListOf<PlaceDetails>()
 
-    val fbUtil = FirebaseUtility()
-    var blackListedPlaces = fbUtil.loadBlacklist()
-    val blacklistNameList = mutableListOf<String>()
+    private val fbUtil = FirebaseUtility()
+    private var blackListedPlaces = fbUtil.loadBlacklist()
+    private val blacklistNameList = mutableListOf<String>()
 
     private val client = OkHttpClient()
 
-    //live data till felmeddelande som vi kan lyssna på i LoginFragment
+    //live data for error message
     val errorMessage: MutableLiveData<String> by lazy {
         MutableLiveData<String>()
     }
 
-    fun getListOfBlacklistedPlaceNames(blacklistedplaces : MutableLiveData<List<BlackListObject>>): MutableList<String> {
-        for (i in 0 until (blacklistedplaces.value?.size?.toInt() ?: 0)) {
+    private fun getListOfBlacklistedPlaceNames(blacklistedplaces : MutableLiveData<List<BlackListObject>>): MutableList<String> {
+        for (i in 0 until (blacklistedplaces.value?.size ?: 0)) {
             val name = blacklistedplaces.value!![i].placename
             blacklistNameList.add(name!!)
         }
@@ -43,7 +42,7 @@ class StartViewModel : ViewModel() {
     fun getPlaces(url: String): MutableList<PlaceDetails> {
 
         blackListedPlaces = fbUtil.loadBlacklist()
-        var listOfBlacklistedPlaces = getListOfBlacklistedPlaceNames(blackListedPlaces)
+        val listOfBlacklistedPlaces = getListOfBlacklistedPlaceNames(blackListedPlaces)
 
         val request = Request.Builder()
             .url(url)
@@ -147,7 +146,6 @@ class StartViewModel : ViewModel() {
 
                     // Add the place to the list of places if it's not blacklisted.
                     if (currentPlace.name !in listOfBlacklistedPlaces) {
-                        Log.i("FUNDEBUGBLACKLISTCHECK", "${currentPlace.name} not in blacklist!")
                         places.add(currentPlace)
                     }
                 }
@@ -206,15 +204,14 @@ class StartViewModel : ViewModel() {
             "Fast Food" -> geoapifyCategory = "catering.fast_food"
             "Entertainment" -> geoapifyCategory = category.lowercase()
         }
-        val geoapifyPlace =
-            "&filter=circle:51fab165f6780b2a4059a2e9e94ccbcb4b40f00101f901f3b6a20000000000c002069203064d616c6dc3b6&limit="
+
         val geoapifyStart = "&filter=circle:"
         val geoapifyProximity = "&bias=proximity:"
         val geoapifyLimitStart = "&limit="
         val geoapifyLimit = "20"
         val geoapifyKey = "&apiKey=d357192221064b8da71d4143f306b152"
 
-        return geoapifyBaseURL + geoapifyCategory + geoapifyStart + location + "," + radius + geoapifyProximity + location + geoapifyLimitStart + geoapifyLimit + geoapifyKey
+        return "$geoapifyBaseURL$geoapifyCategory$geoapifyStart$location,$radius$geoapifyProximity$location$geoapifyLimitStart$geoapifyLimit$geoapifyKey"
     }
 
     // Selects which animation to display depending on which category have been selected

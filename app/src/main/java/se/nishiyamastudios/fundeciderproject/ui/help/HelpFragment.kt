@@ -1,7 +1,6 @@
 package se.nishiyamastudios.fundeciderproject.ui.help
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -20,8 +19,8 @@ import se.nishiyamastudios.fundeciderproject.utilityclass.FirebaseUtility
 
 class HelpFragment : Fragment() {
 
-    var _binding : FragmentHelpBinding? = null
-    val binding get() = _binding!!
+    private var _binding : FragmentHelpBinding? = null
+    private val binding get() = _binding!!
     private val fbUtil = FirebaseUtility()
 
     override fun onCreateView(
@@ -79,16 +78,14 @@ class HelpFragment : Fragment() {
                 val bottomNavigationView = activity?.findViewById<BottomNavigationView>(R.id.bottom_navigation_view)
 
                 // Re-authenticate user before delete in case it is needed
-                var credential = EmailAuthProvider.getCredential(R.id.loginEmailET.toString(), R.id.loginPasswordET.toString())
+                val credential = EmailAuthProvider.getCredential(R.id.loginEmailET.toString(), R.id.loginPasswordET.toString())
                 currentUser.reauthenticate(credential)
 
                 // Delete user account and navigate to login
                 currentUser.delete().addOnSuccessListener {
 
-                    if (activity != null) {
-                        activity.supportFragmentManager.beginTransaction()
-                            .replace(R.id.fragNavCon, LoginFragment()).commit()
-                    }
+                    activity?.supportFragmentManager?.beginTransaction()
+                        ?.replace(R.id.fragNavCon, LoginFragment())?.commit()
                     if (bottomNavigationView != null) {
                         bottomNavigationView.menu.findItem(R.id.startPage).isChecked = true
                     }
