@@ -39,6 +39,7 @@ import se.nishiyamastudios.fundeciderproject.MainActivity
 import se.nishiyamastudios.fundeciderproject.R
 import se.nishiyamastudios.fundeciderproject.databinding.FragmentStartBinding
 import se.nishiyamastudios.fundeciderproject.dataclass.PlaceDetails
+import se.nishiyamastudios.fundeciderproject.ui.help.HelpFragment
 import se.nishiyamastudios.fundeciderproject.ui.login.LoginFragment
 import se.nishiyamastudios.fundeciderproject.utilityclass.FirebaseUtility
 import se.nishiyamastudios.fundeciderproject.utilityclass.IntentUtility
@@ -85,18 +86,13 @@ class StartFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        /*
-        val placesObserver = Observer<List<Places>> {
-            binding.selectedPlaceTV.text = myPlaces[0].name
-        }
-
-         */
-
         //TODO: Fixa så att detaljer i linear layout blir GONE om dem inte har något värde
         //TODO: Errorhantering, refaktorering, snackbars, kommentera kod
         //TODO: Man borde inte kunna lägga till som favorite eller blacklist om dem redan finns i någon av listorna?
-        //TODO: Lägg in setting för hur många resultat man skall hämta från API
-        //TODO: Lägg in borttagning av konto.
+        //TODO: Lägg in setting för hur många resultat man skall hämta från API(?)
+        //TODO: Skapa README på github
+
+        val activity  = view.context as? AppCompatActivity
 
         val locationCallback = object : LocationCallback() {
             override fun onLocationResult(p0: LocationResult) {
@@ -155,7 +151,6 @@ class StartFragment : Fragment() {
         // Hide elements on creation
         binding.linearLayout.visibility = View.GONE
         binding.animationViewInfo.visibility = View.GONE
-        binding.helpCL.visibility = View.GONE
 
         //observera vårt felmeddelande
         val errorObserver = Observer<String> { errorMess ->
@@ -186,7 +181,6 @@ class StartFragment : Fragment() {
 
 
         // Set bottom navigation view to visible after logging in
-        val activity = view.context as? AppCompatActivity
         if (activity != null) {
             val navView = activity.findViewById<BottomNavigationView>(R.id.bottom_navigation_view)
             navView.visibility = View.VISIBLE
@@ -427,66 +421,17 @@ class StartFragment : Fragment() {
         }
 
         binding.animationViewInfo.setOnClickListener {
-            binding.helpCL.visibility = View.VISIBLE
-            binding.deleteAccountAreYouSureButton.visibility = View.GONE
-            binding.helpCL.bringToFront()
+            if (activity != null) {
+                activity.supportFragmentManager.beginTransaction().add(R.id.fragNavCon, HelpFragment())
+                    .addToBackStack("Help").commit()
+            }
         }
 
-        binding.closeHelpInfoImage.setOnClickListener {
-            binding.deleteAccountAreYouSureButton.visibility = View.GONE
-            binding.savedDataTV.visibility = View.GONE
-            binding.deleteAccountButton.visibility = View.VISIBLE
-            binding.helpCL.visibility = View.GONE
-            binding.mainCL.bringToFront()
-        }
 
         binding.animationView.setOnClickListener {
-            binding.helpCL.visibility = View.VISIBLE
-            binding.deleteAccountAreYouSureButton.visibility = View.GONE
-            binding.helpCL.bringToFront()
-        }
-
-        binding.deleteAccountButton.setOnClickListener {
-
-            binding.deleteAccountButton.visibility = View.GONE
-            binding.savedDataTV.visibility = View.VISIBLE
-            binding.deleteAccountAreYouSureButton.visibility = View.VISIBLE
-        }
-
-        binding.deleteAccountAreYouSureButton.setOnClickListener {
-            val currentUser = FirebaseAuth.getInstance().currentUser
-            if (currentUser != null) {
-                Log.i("FUNDELETE", currentUser.uid.toString())
-            }
-
-            if (currentUser != null) {
-
-                // Delete user saved data from funfavorite and funblacklist
-                fbUtil.deleteSavedUserData()
-
-                val activity  = it.context as? AppCompatActivity
-                val bottomNavigationView = activity?.findViewById<BottomNavigationView>(R.id.bottom_navigation_view)
-
-                // Re-authenticate user before delete in case it is needed
-                var credential = EmailAuthProvider.getCredential(R.id.loginEmailET.toString(), R.id.loginPasswordET.toString())
-                currentUser.reauthenticate(credential)
-
-                // Delete user account and navigate to login
-                currentUser.delete().addOnSuccessListener {
-
-                    if (activity != null) {
-                        activity.supportFragmentManager.beginTransaction()
-                            .replace(R.id.fragNavCon, LoginFragment()).commit()
-                    }
-                    if (bottomNavigationView != null) {
-                        bottomNavigationView.menu.findItem(R.id.startPage).isChecked = true
-                    }
-                    if (bottomNavigationView != null) {
-                        bottomNavigationView.visibility = View.GONE
-                    }
-                }
-            } else {
-                snackbarMessage.value = "Could not find any user."
+            if (activity != null) {
+                activity.supportFragmentManager.beginTransaction().add(R.id.fragNavCon, HelpFragment())
+                    .addToBackStack("Help").commit()
             }
         }
     }
