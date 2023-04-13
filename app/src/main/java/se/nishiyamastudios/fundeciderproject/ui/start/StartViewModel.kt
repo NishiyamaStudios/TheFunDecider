@@ -38,7 +38,7 @@ class StartViewModel : ViewModel() {
     }
 
 
-    // Get places from geoApify API depending on category, latitude, longitude and sort out places that are blacklisted.
+    // Get places from geoApify API depending on category, latitude, longitude and ignore places that are blacklisted.
     fun getPlaces(url: String): MutableList<PlaceDetails> {
 
         blackListedPlaces = fbUtil.loadBlacklist()
@@ -48,6 +48,7 @@ class StartViewModel : ViewModel() {
             .url(url)
             .build()
 
+        // Used for await to prevent a random place being selected without the API call being finished.
         val countDownLatch = CountDownLatch(1)
 
         client.newCall(request).enqueue(object : Callback {
@@ -208,7 +209,7 @@ class StartViewModel : ViewModel() {
         val geoapifyStart = "&filter=circle:"
         val geoapifyProximity = "&bias=proximity:"
         val geoapifyLimitStart = "&limit="
-        val geoapifyLimit = "20"
+        val geoapifyLimit = "30"
         val geoapifyKey = "&apiKey=d357192221064b8da71d4143f306b152"
 
         return "$geoapifyBaseURL$geoapifyCategory$geoapifyStart$location,$radius$geoapifyProximity$location$geoapifyLimitStart$geoapifyLimit$geoapifyKey"

@@ -70,10 +70,9 @@ class StartFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        //TODO: Fixa så att detaljer i linear layout blir GONE om dem inte har något värde
         //TODO: Errorhantering, refaktorering, snackbars, kommentera kod
         //TODO: Man borde inte kunna lägga till som favorite eller blacklist om dem redan finns i någon av listorna?
-        //TODO: Lägg in setting för hur många resultat man skall hämta från API(?)
+        //TODO: Förbättring: Lägg in setting för hur många resultat man skall hämta från API.
         //TODO: Skapa README på github
 
         val activity  = view.context as? AppCompatActivity
@@ -96,11 +95,6 @@ class StartFragment : Fragment() {
             }
         }
 
-        binding.longitudeTV.addTextChangedListener {
-
-            Log.i("FUNLOCALE", binding.latitudeTV.text.toString()+","+binding.longitudeTV.text.toString())
-        }
-
         val fusedLocation = LocationServices.getFusedLocationProviderClient(requireActivity())
         if (ActivityCompat.checkSelfPermission(
                 requireActivity(),
@@ -110,13 +104,6 @@ class StartFragment : Fragment() {
                 Manifest.permission.ACCESS_COARSE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED
         ) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
             return
         }
         fusedLocation.requestLocationUpdates(
@@ -174,7 +161,12 @@ class StartFragment : Fragment() {
                 currentPlace = model.getRandomPlace(myPlaces)
             }
 
-            Log.i("FUNDEBUG", "I Gotted IT!")
+            // Make sure textviews are visible, needed if there were empty values in the previous place details
+            binding.placeStreetTV.visibility = View.VISIBLE
+            binding.placePhoneTV.visibility = View.VISIBLE
+            binding.placeEmailTV.visibility = View.VISIBLE
+            binding.placeWebsiteTV.visibility = View.VISIBLE
+            binding.placeOpeningHoursMT.visibility = View.VISIBLE
 
             val placeName = currentPlace.name
             val placeStreet = currentPlace.street
@@ -202,9 +194,26 @@ class StartFragment : Fragment() {
             binding.placeWebsiteTV.text = placeWebsite
             binding.placeOpeningHoursMT.setText(openingHours)
 
+            // Show place layout and remove main animation
             binding.linearLayout.visibility = View.VISIBLE
             binding.animationView.visibility = View.GONE
 
+            // Remove place details if they are empty
+            if (binding.placeStreetTV.text.toString() == null || binding.placeStreetTV.text.toString() == "") {
+                binding.placeStreetTV.visibility = View.GONE
+            }
+            if (binding.placePhoneTV.text.toString() == null || binding.placePhoneTV.text.toString() == "") {
+                binding.placePhoneTV.visibility = View.GONE
+            }
+            if (binding.placeEmailTV.text.toString() == null || binding.placeEmailTV.text.toString() == "") {
+                binding.placeEmailTV.visibility = View.GONE
+            }
+            if (binding.placeWebsiteTV.text.toString() == null || binding.placeWebsiteTV.text.toString() == "") {
+                binding.placeWebsiteTV.visibility = View.GONE
+            }
+            if (binding.placeOpeningHoursMT.text.toString() == null || binding.placeOpeningHoursMT.text.toString() == "") {
+                binding.placeOpeningHoursMT.visibility = View.GONE
+            }
         }
 
         binding.AutoCompleteTextview.onItemClickListener =
@@ -212,7 +221,6 @@ class StartFragment : Fragment() {
 
                 val myLocation =
                     binding.longitudeTV.text.toString() + "," + binding.latitudeTV.text.toString()
-                Log.i("placesurl", myLocation)
                 val category = autoCompleteTextView.text.toString().lowercase()
                 //val placesUrl = model.buildGeoapifyURL(autoCompleteTextView.text.toString())
                 val placesUrl = model.buildGeoapifyURLWithLatAndLong(
@@ -220,7 +228,6 @@ class StartFragment : Fragment() {
                     myLocation,
                     "5000"
                 )
-                Log.i("placeurl", placesUrl)
                 binding.linearLayout.visibility = View.GONE
                 binding.animationView.setAnimation(model.selectAnimation(autoCompleteTextView.text.toString()))
                 binding.animationView.visibility = View.VISIBLE
@@ -229,7 +236,7 @@ class StartFragment : Fragment() {
 
                 if (myPlaces.isEmpty()) {
                     snackbarMessage.value =
-                        "Could not get any more places, you blacklisted them all?!"
+                        "Could not get any places."
                     binding.getPlacesButton.isClickable = false
                 } else {
                     currentPlace = model.getRandomPlace(myPlaces)
@@ -407,6 +414,14 @@ class StartFragment : Fragment() {
             activity?.supportFragmentManager?.beginTransaction()?.add(R.id.fragNavCon, HelpFragment())
                 ?.addToBackStack("Help")?.commit()
         }
+
+        // Request permission to access location
+        // Code placed here to avoid issues with loading start fragment after accepting permission
+        val PERMISSION_ID = 1
+        ActivityCompat.requestPermissions(
+            requireActivity(), arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION),
+            PERMISSION_ID
+        )
     }
 }
 

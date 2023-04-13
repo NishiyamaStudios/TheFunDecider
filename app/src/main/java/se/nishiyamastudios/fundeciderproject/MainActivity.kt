@@ -28,7 +28,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-
+        // TODO: Ta bort det kommenterade om det löstes genom att flytta koden till StartFragment
+        /*
 
         // Request permission to access location
         val PERMISSION_ID = 1
@@ -37,13 +38,15 @@ class MainActivity : AppCompatActivity() {
             PERMISSION_ID
         )
 
+         */
+
         // Let user know if location is not enabled
         if (!locationEnabled()) {
             val parentLayout = findViewById<View>(android.R.id.content)
             Snackbar.make(parentLayout, "Please enable location to be able to use this app.", Snackbar.LENGTH_LONG).show()
         }
 
-        // Override backpress since there where issues with how the fragments acted
+        // Override backpress since there was an issue with the bottom navigation button highlighting when backpressing
         val callback = object : OnBackPressedCallback(
             true // default to enabled
         ) {
