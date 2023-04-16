@@ -11,4 +11,6 @@
     <string name="clickTip"><b>Tip!</b> You can check out all the place information by clicking on address, mail, phone number and website.</string>
     <string name="savedData"><b>All saved data will also be deleted.</b></string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="find_favorite">Find your new favorite %1$s!</string>
+    <string name="placeStreet">%1$s %2$s</string>
 </resources>

@@ -5,20 +5,17 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import se.nishiyamastudios.fundeciderproject.utilityclass.FirebaseUtility
 import se.nishiyamastudios.fundeciderproject.databinding.FragmentBlacklistBinding
 import se.nishiyamastudios.fundeciderproject.dataclass.BlackListObject
-import se.nishiyamastudios.fundeciderproject.ui.login.LoginViewModel
 
 class BlacklistFragment : Fragment() {
 
     private var _binding : FragmentBlacklistBinding? = null
     private val binding get() = _binding!!
 
-    val viewModel by viewModels<LoginViewModel>()
     val fbUtil = FirebaseUtility()
 
     private var blacklistadapter = BlacklistAdapter()

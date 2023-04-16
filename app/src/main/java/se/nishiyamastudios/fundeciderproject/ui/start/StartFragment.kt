@@ -8,7 +8,6 @@ import android.location.Location
 import android.net.Uri
 import android.os.Bundle
 import android.os.Looper
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,7 +18,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.MutableLiveData
@@ -70,10 +68,10 @@ class StartFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // Förbättringar:
         //TODO: Errorhantering, refaktorering, snackbars, kommentera kod
         //TODO: Man borde inte kunna lägga till som favorite eller blacklist om dem redan finns i någon av listorna?
-        //TODO: Förbättring: Lägg in setting för hur många resultat man skall hämta från API.
-        //TODO: Skapa README på github
+        //TODO: Lägg in setting för hur många resultat man skall hämta från API.
 
         val activity  = view.context as? AppCompatActivity
 
@@ -161,7 +159,7 @@ class StartFragment : Fragment() {
                 currentPlace = model.getRandomPlace(myPlaces)
             }
 
-            // Make sure textviews are visible, needed if there were empty values in the previous place details
+            // Make sure text views are visible, needed if there were empty values in the previous place details
             binding.placeStreetTV.visibility = View.VISIBLE
             binding.placePhoneTV.visibility = View.VISIBLE
             binding.placeEmailTV.visibility = View.VISIBLE
@@ -185,7 +183,8 @@ class StartFragment : Fragment() {
 
             placePhoneTV.text = placePhone?.let { it1 -> phoneRegex.replace(it1, "") }
             placeStreetTV.paintFlags = android.graphics.Paint.UNDERLINE_TEXT_FLAG
-            placeStreetTV.text = "$placeStreet $placeStreetNumber"
+            val placeStreetText = getString(R.string.placeStreet, placeStreet, placeStreetNumber)
+            placeStreetTV.text = placeStreetText
 
             var openingHours = placeOpeningHours?.replace(",", "\n")
             openingHours = openingHours?.replace(";", "\n")
@@ -199,30 +198,29 @@ class StartFragment : Fragment() {
             binding.animationView.visibility = View.GONE
 
             // Remove place details if they are empty
-            if (binding.placeStreetTV.text.toString() == null || binding.placeStreetTV.text.toString() == "") {
+            if (binding.placeStreetTV.text.toString() == "") {
                 binding.placeStreetTV.visibility = View.GONE
             }
-            if (binding.placePhoneTV.text.toString() == null || binding.placePhoneTV.text.toString() == "") {
+            if (binding.placePhoneTV.text.toString() == "") {
                 binding.placePhoneTV.visibility = View.GONE
             }
-            if (binding.placeEmailTV.text.toString() == null || binding.placeEmailTV.text.toString() == "") {
+            if (binding.placeEmailTV.text.toString() == "") {
                 binding.placeEmailTV.visibility = View.GONE
             }
-            if (binding.placeWebsiteTV.text.toString() == null || binding.placeWebsiteTV.text.toString() == "") {
+            if (binding.placeWebsiteTV.text.toString() == "") {
                 binding.placeWebsiteTV.visibility = View.GONE
             }
-            if (binding.placeOpeningHoursMT.text.toString() == null || binding.placeOpeningHoursMT.text.toString() == "") {
+            if (binding.placeOpeningHoursMT.text.toString() == "") {
                 binding.placeOpeningHoursMT.visibility = View.GONE
             }
         }
 
         binding.AutoCompleteTextview.onItemClickListener =
-            OnItemClickListener { parent, view, position, id ->
+            OnItemClickListener { _, _, _, _ ->
 
                 val myLocation =
                     binding.longitudeTV.text.toString() + "," + binding.latitudeTV.text.toString()
                 val category = autoCompleteTextView.text.toString().lowercase()
-                //val placesUrl = model.buildGeoapifyURL(autoCompleteTextView.text.toString())
                 val placesUrl = model.buildGeoapifyURLWithLatAndLong(
                     autoCompleteTextView.text.toString(),
                     myLocation,
@@ -235,15 +233,16 @@ class StartFragment : Fragment() {
                 myPlaces = model.getPlaces(placesUrl)
 
                 if (myPlaces.isEmpty()) {
-                    snackbarMessage.value =
-                        "Could not get any places."
+                    snackbarMessage.value = "Could not get any places."
                     binding.getPlacesButton.isClickable = false
                 } else {
                     currentPlace = model.getRandomPlace(myPlaces)
                     binding.getPlacesButton.isClickable = true
                 }
 
-                binding.getPlacesButton.text = "Find your new favorite $category!"
+                val findFavorite = getString(R.string.find_favorite, category)
+
+                binding.getPlacesButton.text = findFavorite
                 binding.animationViewInfo.visibility = View.VISIBLE
             }
 

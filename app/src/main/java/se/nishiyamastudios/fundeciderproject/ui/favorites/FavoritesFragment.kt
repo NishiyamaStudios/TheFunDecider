@@ -11,7 +11,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -26,7 +25,6 @@ class FavoritesFragment : Fragment() {
     private var _binding : FragmentFavoritesBinding? = null
     val binding get() = _binding!!
 
-    val viewModel by viewModels<FavoritesViewModel>()
     val fbUtil = FirebaseUtility()
     private val intentUtil = IntentUtility()
 
