@@ -39,9 +39,8 @@ class LoginFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        //observera vårt felmeddelande
+        //Observe error
         val errorObserver  = Observer<String> {errorMess ->
-            //Vad skall hända när det kommer ett felmeddelande
             Toast.makeText(requireContext(),errorMess, Toast.LENGTH_LONG).show()
         }
 

@@ -20,7 +20,7 @@ class FavoritesAdapter : RecyclerView.Adapter<FavoritesAdapter.ViewHolder>() {
         val shareFavoritePlace: ImageView
 
         init {
-            favoritePlaceName = view.findViewById(R.id.shopNameTV)
+            favoritePlaceName = view.findViewById(R.id.rowNameTV)
             deleteFavoritePlace = view.findViewById(R.id.favoriteDeleteImage)
             getFavoritePlaceInfo = view.findViewById(R.id.favoriteInfoImage)
             shareFavoritePlace = view.findViewById(R.id.favoriteShareImage)

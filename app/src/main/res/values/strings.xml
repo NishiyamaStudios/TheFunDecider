@@ -1,16 +1,36 @@
 <resources>
-    <string name="app_name">Fundecider</string>
-    <string name="dropDownLabel">You choose!</string>
+    <string name="app_name">The Fun Decider</string>
     <string name="getPlacesButton">Choose a category and let destiny decide!</string>
     <string name="helpInfoText">Having trouble deciding? Need some inspiration?
         We got you! <b>First off</b>, Destiny needs some help, so
         just <i>choose a category</i> from the drop down menu.
         <b>Secondly</b>, <i>press the button</i> to find your new favorite place!
     </string>
-    <string name="haveFunText"><b>Have fun!</b> Don\'t forget to <i>Favorite</i>, <i>Blacklist</i> and <i>Share</i>!</string>
+
     <string name="clickTip"><b>Tip!</b> You can check out all the place information by clicking on address, mail, phone number and website.</string>
     <string name="savedData"><b>All saved data will also be deleted.</b></string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="find_favorite">Find your new favorite %1$s!</string>
     <string name="placeStreet">%1$s %2$s</string>
+
+    <string name="favorite_delete_CD">Press to delete this favorite</string>
+    <string name="favorite_info_CD">Press to see more info on this favorite</string>
+    <string name="favorite_share_CD">Press to share this favorite</string>
+    <string name="favorite_header">Favorite Places</string>
+
+    <string name="blacklist_header">Blacklisted Places</string>
+
+    <string name="help_welcome">Welcome!</string>
+    <string name="help_delete">Delete account</string>
+    <string name="help_delete_sure">Press again to delete your account</string>
+    <string name="help_close_CD">Press to close the help screen.</string>
+    <string name="help_haveFunText"><b>Have fun!</b> Don\'t forget to <i>Favorite</i>, <i>Blacklist</i> and <i>Share</i>!</string>
+
+    <string name="login_header">Please Login or Register a new account</string>
+    <string name="login_login">Login</string>
+    <string name="login_register">Register</string>
+    <string name="login_email">E-mail</string>
+    <string name="login_password">Password</string>
+
+    <string name="start_destiny">Destiny needs a little help</string>
 </resources>

@@ -19,7 +19,7 @@ class BlacklistAdapter : RecyclerView.Adapter<BlacklistAdapter.ViewHolder>() {
 
         init {
 
-            placeName = view.findViewById(R.id.shopNameTV)
+            placeName = view.findViewById(R.id.rowNameTV)
             placeDelete = view.findViewById(R.id.favoriteDeleteImage)
         }
 

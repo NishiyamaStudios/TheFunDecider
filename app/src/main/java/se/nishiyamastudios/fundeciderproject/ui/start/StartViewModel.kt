@@ -194,7 +194,7 @@ class StartViewModel : ViewModel() {
         return "$geoapifyBaseURL$geoapifyCategory$geoapifyStart$location,$radius$geoapifyProximity$location$geoapifyLimitStart$geoapifyLimit$geoapifyKey"
     }
 
-    // Selects which animation to display depending on which category have been selected
+    // Selects which animation to display depending on which category has been selected
     fun selectAnimation(category: String): Int {
         var animationInt: Int = R.raw.animation_welcome
 

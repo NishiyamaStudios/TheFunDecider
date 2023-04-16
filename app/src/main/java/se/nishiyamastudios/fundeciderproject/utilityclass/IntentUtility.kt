@@ -11,6 +11,7 @@ class IntentUtility {
     fun buildBrowserIntent(url: String?): Intent {
         var newUrl = ""
         if (url != null) {
+            // Handle URLs without http://
             newUrl = if (url.substring(0, 3) == "www") {
                 url.replace("www", "http://www")
             } else {
