@@ -171,27 +171,6 @@ class StartViewModel : ViewModel() {
         }
     }
 
-    // Build URL to fetch API data about a specific City from geoApify unique identifier
-    fun buildGeoapifyURL(category: String): String {
-
-        val geoapifyBaseURL = "https://api.geoapify.com/v2/places?categories="
-        var geoapifyCategory = ""
-        when (category) {
-            "Restaurant" -> geoapifyCategory = "catering." + category.lowercase()
-            "Bar" -> geoapifyCategory = "catering." + category.lowercase()
-            "Pub" -> geoapifyCategory = "catering." + category.lowercase()
-            "Cafe" -> geoapifyCategory = "catering." + category.lowercase()
-            "Fast Food" -> geoapifyCategory = "catering.fast_food"
-            "Entertainment" -> geoapifyCategory = category.lowercase()
-        }
-        val geoapifyPlace =
-            "&filter=place:51fab165f6780b2a4059a2e9e94ccbcb4b40f00101f901f3b6a20000000000c002069203064d616c6dc3b6&limit="
-        val geoapifyLimit = "20"
-        val geoapifyKey = "&apiKey=d357192221064b8da71d4143f306b152"
-
-        return geoapifyBaseURL + geoapifyCategory + geoapifyPlace + geoapifyLimit + geoapifyKey
-    }
-
     // Build URL to fetch API data based on latitude and longitude
     fun buildGeoapifyURLWithLatAndLong(category: String, location: String, radius: String): String {
 
