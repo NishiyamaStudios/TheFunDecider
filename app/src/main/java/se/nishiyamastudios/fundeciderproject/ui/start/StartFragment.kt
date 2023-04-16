@@ -414,14 +414,6 @@ class StartFragment : Fragment() {
             activity?.supportFragmentManager?.beginTransaction()?.add(R.id.fragNavCon, HelpFragment())
                 ?.addToBackStack("Help")?.commit()
         }
-
-        // Request permission to access location
-        // Code placed here to avoid issues with loading start fragment after accepting permission
-        val PERMISSION_ID = 1
-        ActivityCompat.requestPermissions(
-            requireActivity(), arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION),
-            PERMISSION_ID
-        )
     }
 }
 

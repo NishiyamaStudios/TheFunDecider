@@ -40,12 +40,6 @@ class MainActivity : AppCompatActivity() {
 
          */
 
-        // Let user know if location is not enabled
-        if (!locationEnabled()) {
-            val parentLayout = findViewById<View>(android.R.id.content)
-            Snackbar.make(parentLayout, "Please enable location to be able to use this app.", Snackbar.LENGTH_LONG).show()
-        }
-
         // Override backpress since there was an issue with the bottom navigation button highlighting when backpressing
         val callback = object : OnBackPressedCallback(
             true // default to enabled
@@ -129,6 +123,20 @@ class MainActivity : AppCompatActivity() {
                 }
             }
 
+        }
+
+        // Request permission to access location
+        // Code placed here to avoid issues with loading start fragment after accepting permission
+        val PERMISSION_ID = 1
+        ActivityCompat.requestPermissions(
+            this, arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION),
+            PERMISSION_ID
+        )
+
+        // Let user know if location is not enabled
+        if (!locationEnabled()) {
+            val parentLayout = findViewById<View>(android.R.id.content)
+            Snackbar.make(parentLayout, "Please enable location to be able to use this app.", Snackbar.LENGTH_LONG).show()
         }
 
     }
