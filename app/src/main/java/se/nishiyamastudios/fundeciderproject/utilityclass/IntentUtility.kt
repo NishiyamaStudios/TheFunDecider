@@ -2,7 +2,6 @@ package se.nishiyamastudios.fundeciderproject.utilityclass
 
 import android.content.Intent
 import android.net.Uri
-import androidx.lifecycle.ViewModel
 
 class IntentUtility {
 
@@ -12,10 +11,10 @@ class IntentUtility {
     fun buildBrowserIntent(url: String?): Intent {
         var newUrl = ""
         if (url != null) {
-            if (url.substring(0, 3) == "www") {
-                newUrl = url.replace("www", "http://www")
+            newUrl = if (url.substring(0, 3) == "www") {
+                url.replace("www", "http://www")
             } else {
-                newUrl = url
+                url
             }
         }
 
@@ -23,7 +22,7 @@ class IntentUtility {
     }
 
     fun buildEmailIntent(toaddress: String?, subject: String, body: String): Intent {
-        val uri = Uri.parse("mailto:" + toaddress)
+        val uri = Uri.parse("mailto:$toaddress")
             .buildUpon()
             .appendQueryParameter("subject", subject)
             .appendQueryParameter("body", body)
@@ -37,9 +36,8 @@ class IntentUtility {
 
         val intent = Intent(Intent.ACTION_SEND)
         intent.type = "text/plain"
-        val mainbody = subject
-        val sub = subject + body +" " + placename +" together.. :D"
-        intent.putExtra(Intent.EXTRA_TEXT, mainbody)
+        val sub = "$subject$body $placename together.. :D"
+        intent.putExtra(Intent.EXTRA_TEXT, subject)
         intent.putExtra(Intent.EXTRA_TEXT, sub)
 
         return intent

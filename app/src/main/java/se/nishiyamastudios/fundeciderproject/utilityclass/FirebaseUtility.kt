@@ -62,20 +62,6 @@ class  FirebaseUtility {
 
     }
 
-    fun loadFirebaseList(firebasepathname : String, placelist : MutableLiveData<List<FavoriteListObject>>) {
-        val database = Firebase.database
-        val listRef = database.getReference(firebasepathname).child(Firebase.auth.currentUser!!.uid)
-        listRef.get().addOnSuccessListener {
-            val favoriteList = mutableListOf<FavoriteListObject>()
-            it.children.forEach {childsnap ->
-                val tempBlacklist = childsnap.getValue<FavoriteListObject>()!!
-                tempBlacklist.fbid = childsnap.key
-                favoriteList.add(tempBlacklist)
-            }
-            placelist.value = favoriteList
-        }
-    }
-
     fun addFavoriteItem(firebasepathname : String,
                         placename : String,
                         placestreet : String?,

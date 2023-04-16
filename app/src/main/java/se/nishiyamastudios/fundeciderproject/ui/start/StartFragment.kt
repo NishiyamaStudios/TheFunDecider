@@ -8,6 +8,7 @@ import android.location.Location
 import android.net.Uri
 import android.os.Bundle
 import android.os.Looper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -68,10 +69,10 @@ class StartFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Förbättringar:
-        //TODO: Errorhantering, refaktorering, snackbars, kommentera kod
-        //TODO: Man borde inte kunna lägga till som favorite eller blacklist om dem redan finns i någon av listorna?
-        //TODO: Lägg in setting för hur många resultat man skall hämta från API.
+        // Improvements:
+        //TODO: Error handling, refactoring, snackbars, code comments
+        //TODO: Should not be able to add favorite to blacklist and vice versa if they already exist?
+        //TODO: Add setting for number of results to fetch from API.
 
         val activity  = view.context as? AppCompatActivity
 
@@ -84,6 +85,7 @@ class StartFragment : Fragment() {
                         // Did not figure out a better way to access these values
                         binding.latitudeTV.setText(lastLocation.latitude.toString())
                         binding.longitudeTV.setText(lastLocation.longitude.toString())
+                        //Log.i("LOCATIONDEBUG", lastLocation.latitude.toString() + " "+ lastLocation.longitude.toString())
                     } catch (e : Exception) {
                         // Do nothing, just catching issue with the binding when logging out.
                     }
@@ -92,6 +94,7 @@ class StartFragment : Fragment() {
                 }
             }
         }
+
 
         val fusedLocation = LocationServices.getFusedLocationProviderClient(requireActivity())
         if (ActivityCompat.checkSelfPermission(
@@ -105,7 +108,7 @@ class StartFragment : Fragment() {
             return
         }
         fusedLocation.requestLocationUpdates(
-            locationUtil.RequestLocation(30000, 3000, 100),
+            locationUtil.requestLocation(20000, 300, 100),
             locationCallback,
             Looper.myLooper()
         )
@@ -114,9 +117,8 @@ class StartFragment : Fragment() {
         binding.linearLayout.visibility = View.GONE
         binding.animationViewInfo.visibility = View.GONE
 
-        //observera vårt felmeddelande
+        //Error observer
         val errorObserver = Observer<String> { errorMess ->
-            //Vad skall hända när det kommer ett felmeddelande
             Toast.makeText(requireContext(), errorMess, Toast.LENGTH_LONG).show()
         }
 

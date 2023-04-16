@@ -28,19 +28,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // TODO: Ta bort det kommenterade om det löstes genom att flytta koden till StartFragment
-        /*
-
-        // Request permission to access location
-        val PERMISSION_ID = 1
-        ActivityCompat.requestPermissions(
-            this, arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION),
-            PERMISSION_ID
-        )
-
-         */
-
-        // Override backpress since there was an issue with the bottom navigation button highlighting when backpressing
+        // Override back press since there was an issue with the bottom navigation button highlighting when back pressing
         val callback = object : OnBackPressedCallback(
             true // default to enabled
         ) {
